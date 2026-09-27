@@ -1,7 +1,6 @@
 # Jordy Channel — instrucciones para Claude Code
 
-Este repo es la fábrica de shorts de noticias de **Jordy en Vivo** (Jordy Cannella, periodista,
-director de Stereo). La rutina completa está en `RUTINA.md`; los prompts en `prompts/`.
+Este repo es la fábrica de shorts de noticias de un canal de noticias de Jordy, periodista. La rutina completa está en `RUTINA.md`; los prompts en `prompts/`.
 
 Cuando Jordy diga algo como "hagamos el short de hoy", seguí `RUTINA.md` paso a paso:
 1. Creá `episodios/AAAA-MM-DD-slug/` (fecha de hoy).

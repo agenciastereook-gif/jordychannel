@@ -1,6 +1,6 @@
 # jordychannel
 
-Rutina y herramientas para producir shorts de noticias de **Jordy en Vivo** con voz propia e
+Rutina y herramientas para producir shorts de noticias de un canal de noticias con voz propia e
 ilustraciones generadas por IA, sincronizadas por marca de tiempo.
 
 - `RUTINA.md` — la rutina diaria paso a paso (empezá acá).

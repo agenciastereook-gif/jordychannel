@@ -1,7 +1,7 @@
 # Rutina diaria — Shorts de noticias con ilustraciones IA
 
 Adaptación del método del canal "Zen" (dibujos simples que cambian cada 2–3 segundos,
-sincronizados con la voz) a **Jordy en Vivo**: noticias con voz y criterio propios.
+sincronizados con la voz) a un canal de noticias propio: voz y criterio de periodista.
 
 **Meta:** 1 short por día (2 si hay un día muy cargado de noticias, 0 si no hay nada que valga).
 **Tiempo objetivo:** 35–45 min por short una vez que la rutina está aceitada.
@@ -45,7 +45,7 @@ Filtro rápido — tiene que cumplir las tres:
 - **¿Tengo una fuente que puedo nombrar?**
 
 Si es algo para investigar o explicar a fondo → no es short: va al **video largo quincenal**.
-Si el valor es un clip de otro → es **El Recorte**, no este formato.
+Si el valor es solo un clip de otro medio → no es para este formato.
 
 ### 2. Guion (5–10 min)
 Creá la carpeta del día: `episodios/AAAA-MM-DD-slug/`.
@@ -90,12 +90,11 @@ Para el video largo: agregá `--formato horizontal`.
 
 ### 8. Publicar y reciclar (5 min)
 Pegá `prompts/03_publicacion.md` + el guion → títulos, descripción, texto de Reel y post de X.
-Un mismo short rinde en: **YouTube Shorts** (Jordy) + **Reel IG** (Jordy o collab con El Hit si
-es noticia de interés general) + **X** de El Hit con el dato. Adaptar no es duplicar.
+Un mismo short rinde en: **YouTube Shorts** + **Reels de IG** + **TikTok** + un post en **X** con el dato.
 
 ---
 
-## Ritmo semanal (encaja con el piloto Estrategia 2026)
+## Ritmo semanal
 
 | Día | Qué |
 |-----|-----|
@@ -103,8 +102,7 @@ es noticia de interés general) + **X** de El Hit con el dato. Adaptar no es dup
 | Sáb | Opcional: short "lo que pasó en la semana" (3 noticias, 60 s) reusando imágenes |
 | Dom (semanas pares) | **Video largo** de YouTube con este mismo método en 16:9: el guion es la investigación; las imágenes cambian cada 3–5 s. Acá es donde está la plata de YouTube. |
 
-Anotá en la base **Producción — Estrategia 2026** de Notion cada short publicado, así entra
-en las revisiones quincenales (4/10, 18/10, 1/11).
+Cada dos semanas mirá qué shorts funcionaron (retención y suscriptores ganados) y ajustá temas y ritmo.
 
 ---
 
@@ -120,4 +118,4 @@ en las revisiones quincenales (4/10, 18/10, 1/11).
 
 ## Cuándo no publicar
 Si en el paso 1 ninguna noticia pasa el filtro, no hay short ese día. Mejor 5 buenos por semana
-que 7 flojos: el piloto dice "constancia antes que reinvención", no "volumen antes que criterio".
+que 7 flojos.
