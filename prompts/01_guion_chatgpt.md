@@ -27,16 +27,14 @@ cada 2–4 segundos):
 
 | # | Texto (lo que leo) | Qué mostrar | Tipo |
 |---|---|---|---|
-| 1 | ... | Lula firmando el decreto | FOTO |
-| 2 | ... | Momento del anuncio en conferencia | VIDEO |
-| 3 | ... | Persona apostando en el celular | FOTO |
+| 1 | <frase> | <descripción concreta de la imagen o el video que hay que conseguir> | <tipo> |
 
 Tipo = `FOTO`, `VIDEO`, `VIDEO+AUDIO` (se escucha el sonido original, ver sección 11 del manual) o `IA` (solo cuando no existe material real posible: una idea abstracta).
 Para personas reales, siempre FOTO o VIDEO, nunca IA.
 
 Debajo de la tabla:
 1. **Lista de búsqueda**: todo lo que tengo que conseguir, agrupado, con dónde buscarlo
-   (ej. "Lula firmando — fotos oficiales Planalto / Agência Brasil").
+   (qué buscar y en qué tipo de fuente se consigue).
 2. **3 títulos** posibles (máx. 60 caracteres).
 3. Lista de `[VERIFICAR]` pendientes.
 
