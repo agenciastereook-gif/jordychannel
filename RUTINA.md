@@ -22,7 +22,8 @@ Doble clic en **`INSTALAR.bat`**. Si instala Python, cerrá la ventana y abrilo 
 La transcripción corre gratis en tu compu (reemplaza a TurboScribe). La primera vez baja el modelo
 de voz, unos 500 MB.
 
-**IA (opcional, para más adelante):** si una frase no tiene material, en el guion va como `IA`.
+**IA (opcional, para más adelante):** si una frase no tiene material, en el plan visual y en
+`asignacion.txt` va como `IA`.
 Mientras no haya herramienta, queda la imagen anterior en pantalla. El día que la haya, la imagen
 o animación se guarda en `material/` y se cambia esa línea en `asignacion.txt`. Nada más cambia.
 
@@ -37,7 +38,7 @@ Nunca fotos de agencia (Reuters, AFP, Getty) sin licencia. Crédito en la descri
 | Short de la noticia (lun–vie) | 1 por día | 1 por día | IG collab El Hit + Jordy · YouTube Shorts Jordy · dato a X de El Hit |
 | El Hit extra (placa, carrusel, breaking) | 1 por día | 2 por día | IG El Hit (`prompts/04_el_hit.md`) |
 | El Recorte | 1 clip por día | 2 por día | IG El Recorte, collab con El Hit si es noticia, X de El Hit (`prompts/05_recorte.md`) |
-| Video largo | 1 por semana | 1 por semana | YouTube Jordy (`prompts/06_video_largo.md`, mismos 7 pasos en `--formato horizontal`) |
+| Video largo | 1 por semana | 1 por semana | YouTube Jordy (`prompts/06_video_largo.md`, mismos pasos con `--formato horizontal`) |
 | Clips del largo (finde) | 1 | 2+ | Stock para Reels/Shorts (`prompts/07_clips.md` + `--desde/--hasta`) |
 
 El piso es obligatorio; el ideal, si hay tiempo. Semana complicada: short 3 días y se usa el stock.

@@ -1,7 +1,8 @@
 # Prompt 1b — Búsqueda visual (ChatGPT con búsqueda web)
 
 Se usa **después** de tener el guion final (ya revisado y ajustado por Jordy, el que se va a leer).
-Pegá lo que está debajo de la línea en un chat nuevo y agregá el guion al final.
+Va en las Instrucciones del GPT "Buscador visual Jordy" (con Búsqueda web activada). En cada chat
+nuevo le pasás el guion final.
 Guardá la respuesta como `visual.md` en la carpeta del short.
 
 ---

@@ -1,6 +1,7 @@
 # Prompt 0 — Investigación (ChatGPT con búsqueda web)
 
-Pegá lo que está debajo de la línea en un chat nuevo y agregá el tema al final.
+Va en las Instrucciones del GPT "Investigador Jordy" (con Búsqueda web activada). En cada chat
+nuevo le pasás el tema.
 El resultado es el material que después va en el prompt 1.
 
 ---

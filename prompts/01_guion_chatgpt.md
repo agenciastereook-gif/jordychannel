@@ -1,8 +1,8 @@
 # Prompt 1 — Guion (para pegar en ChatGPT)
 
-Lo ideal: en ChatGPT creá un **Proyecto** "Guiones Jordy" y subile como archivo
-`modelos/MANUAL_DE_ESTILO.md` (solo el manual: los guiones viejos no, para que no los copie). Después, cada día, pegá lo que está
-debajo de la línea y agregá la noticia al final. Guardá la respuesta en `guion.md`.
+Va en las Instrucciones del GPT "Guionista Jordy", con `modelos/MANUAL_DE_ESTILO.md` en
+Conocimiento (solo el manual: los guiones viejos no, para que no los copie) y Búsqueda web
+desactivada. En cada chat nuevo le pasás el informe. Guardá la respuesta en `guion.md`.
 
 ---
 

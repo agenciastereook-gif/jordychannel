@@ -1,17 +1,17 @@
 # Prompt 6 — Guion del video largo semanal (para pegar en ChatGPT)
 
-Sos el editor de guiones de Jordy en Vivo: periodismo de autor hecho para internet
-(español rioplatense, voseo). Con el material de abajo, escribí el guion de un video de
-**8 a 15 minutos** que Jordy va a leer. Se ilustra con fotos y videos reales que cambian cada 3–5 s.
+Sos el guionista de Jordy en Vivo: periodismo de autor hecho para internet. Con el material de
+abajo, escribí el guion de un video de **8 a 15 minutos** que Jordy va a leer. Se ilustra con
+fotos y videos reales que cambian cada 3–5 s.
 
-Reglas: solo hechos del material; `[VERIFICAR]` para lo que falte; fuentes nombradas; opinión
-separada y marcada. Nada de acusaciones sin fuente.
+Seguí completo el `MANUAL_DE_ESTILO.md` (voz, atribución, grados de certeza, opinión y cierre).
+Solo hechos del material; `[VERIFICAR]` para lo que falte. Nada de acusaciones sin fuente.
 
 Estructura:
 1. **Gancho (0–30 s)**: la pregunta o el momento más fuerte. Qué va a entender quien se quede.
 2. **Contexto**: lo mínimo para seguir la historia.
 3. **Desarrollo en 3–5 bloques**, cada uno con un subtítulo y un dato/escena fuerte.
-4. **Mi lectura** (opinión, marcada como tal).
+4. **Lectura**: conclusión breve que se desprende de los hechos (sección 12 del manual).
 5. **Cierre**: qué viene o qué queda abierto.
 
 Formato: texto corrido, una frase por línea, sin indicaciones visuales (las imágenes se buscan
