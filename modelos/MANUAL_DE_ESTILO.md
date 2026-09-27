@@ -10,7 +10,7 @@ anteriores: se aplica el criterio a cada noticia nueva.
 ## 1. Qué es un guion de Jordy
 
 1.1. Es periodismo de actualidad narrado. Su trabajo es contar qué pasó, en qué orden, quién lo
-dice y qué se sabe y qué no. No es un comentario, no es un editorial, no es entretenimiento con
+dice cuando eso importa, y qué se sabe y qué no. No es un comentario, no es un editorial, no es entretenimiento con
 datos de relleno.
 
 1.2. Se escribe para ser escuchado, no leído. Cada frase tiene que entenderse a la primera, en voz
@@ -132,25 +132,47 @@ entienda y no está, se marca como pendiente de verificación; no se completa po
 
 ## 6. Atribución de fuentes
 
-6.1. Todo lo que Jordy no constató personalmente se atribuye. La atribución es parte del texto
-narrado, no una nota al pie.
+6.1. Principio: se nombra una fuente cuando su identidad le importa al público, no para mostrar de
+dónde se sacó la información. El material de base (las notas de otros medios que se usaron para
+armar el guion) no se cita por el solo hecho de haberse usado.
 
-6.2. Se nombra el medio, la institución o la persona que dio la información. Si la fuente es
+6.2. **No se atribuye** la información que ya es de dominio público o que publicaron muchos
+medios a partir de un mismo origen. Si varios medios cuentan lo mismo, ese dato se narra como un
+hecho, sin nombrar a ninguno.
+
+6.3. **Se atribuye** en estos casos:
+- **Fuente oficial o protagonista**: gobiernos, ministerios, organismos, fuerzas de seguridad,
+  justicia, empresas involucradas, familiares, representantes y protagonistas del hecho. Su
+  palabra es parte de la noticia: quién lo dice cambia el peso de lo dicho.
+- **Dato exclusivo**: información importante que publicó un solo medio y que no tiene otro
+  origen (una primicia, un documento propio, una fuente anónima que habló solo con ese medio).
+  Se nombra ese medio.
+- **El medio como parte de la noticia**: cuando una publicación es protagonista del hecho o lo
+  desencadenó (la nota que destapó el caso, la entrevista que generó la polémica). Ahí el medio se
+  nombra porque es parte de lo que se cuenta.
+- **Versiones enfrentadas**: cuando hay que distinguir quién sostiene cada versión.
+- **Información no confirmada**: todo lo preliminar o discutido se atribuye a quien lo dijo,
+  para que el público sepa que no es un hecho establecido.
+
+6.4. En caso de duda, la pregunta es: si se saca el nombre de la fuente, ¿el público pierde algo
+importante para entender o para dimensionar el dato? Si la respuesta es no, no se nombra.
+
+6.5. Cuando se atribuye, se nombra el medio, la institución o la persona. Si es una fuente
 anónima, se dice que es una fuente y a qué medio le habló.
 
-6.3. Cuando dos fuentes dicen cosas distintas, cada una se atribuye por separado, en su propia
+6.6. Cuando dos fuentes dicen cosas distintas, cada una se atribuye por separado, en su propia
 frase, y con el alcance exacto de lo que dijo. No se funden en un "se dice".
 
-6.4. Los verbos de atribución son neutros y precisos: indicar, decir, informar, confirmar,
+6.7. Los verbos de atribución son neutros y precisos: indicar, decir, informar, confirmar,
 advertir, sostener, repetir. Se evitan los verbos que juzgan (admitir, reconocer, confesar,
 deslizar) salvo que el hecho lo justifique con claridad.
 
-6.5. La falta de respuesta también es información: si el entorno de la persona o la institución
+6.8. La falta de respuesta también es información: si el entorno de la persona o la institución
 evitó hablar, se dice en esos términos, sin interpretarlo.
 
-6.6. Las construcciones impersonales sin fuente se usan solo para describir un fenómeno público y
-verificable en sí mismo (por ejemplo, que algo circuló masivamente en redes), nunca para
-introducir información sin origen.
+6.9. Las construcciones impersonales sin fuente sirven para narrar hechos de dominio público y
+fenómenos verificables en sí mismos. Nunca para introducir un dato dudoso, exclusivo o
+controvertido sin decir de dónde viene.
 
 ---
 
@@ -331,7 +353,8 @@ rellena.
 
 - Inventar o completar datos, cifras, fechas, citas o nombres.
 - Presentar como confirmado algo preliminar.
-- Atribuir de forma vaga o no atribuir.
+- Atribuir de forma vaga lo que necesita fuente, o citar medios por datos que son de dominio
+  público.
 - Hablarle al público o pedirle algo.
 - Saludar, presentarse o despedirse.
 - Opinar en primera persona.
@@ -345,7 +368,8 @@ rellena.
 
 1. ¿La primera frase tiene el hecho central y la identificación de la persona?
 2. ¿Está claro a qué tipo de guion pertenece y respeta su estructura?
-3. ¿Cada dato que no es propio está atribuido a una fuente concreta?
+3. ¿Se nombran solo las fuentes que importan (oficiales, protagonistas, exclusivas, parte de la
+   noticia) y no los medios de los que se sacó información general?
 4. ¿Se distingue lo confirmado, lo preliminar y lo que no se sabe?
 5. ¿El orden es cronológico y las transiciones temporales están explícitas?
 6. ¿Los recursos de estilo (frase de realidad, enumeración de impacto, frase narrativa) se usan

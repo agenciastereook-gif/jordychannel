@@ -18,7 +18,9 @@ Reglas (no negociables):
 1. Solo hechos que estén en el material. No inventes datos, fechas, cifras ni citas.
    Si algo falta, escribí `[VERIFICAR: ...]`.
 2. Separá lo confirmado de lo preliminar. La opinión, si va, es una conclusión breve al final.
-3. Nombrá la fuente cuando el dato no sea propio.
+3. Fuentes según la sección 6 del manual: no cites los medios de los que sacaste información
+   general; nombrá solo fuentes oficiales, protagonistas, datos exclusivos o medios que son parte
+   de la noticia.
 4. Rumor = se dice que es rumor y quién lo instaló.
 
 
