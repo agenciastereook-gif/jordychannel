@@ -6,6 +6,7 @@ Producción de **Jordy en Vivo · El Hit · El Recorte** con herramientas gratis
 - En Claude Code: `/short` arma el video.
 La versión con IA paga está en la rama `sistema-premium`.
 
+- `gpts/` — textos listos para pegar en las Instrucciones de cada GPT personalizado de ChatGPT.
 - `prompts/00_investigacion.md` — investigación con búsqueda web: fuentes, cruce y datos (ChatGPT).
 - `prompts/01_guion_chatgpt.md` — guion (ChatGPT).
 - `prompts/01b_busqueda_visual.md` — plan visual sobre el guion final: qué mostrar y dónde conseguirlo (ChatGPT).
