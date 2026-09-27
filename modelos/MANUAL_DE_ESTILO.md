@@ -1,380 +1,386 @@
 # Manual de estilo — guiones de Jordy en Vivo
 
-Este manual define cómo se escriben los guiones de los videos de Jordy. Es la referencia única:
-quien escriba un guion (una persona o una IA) debe seguirlo completo. Se construyó a partir de
-guiones reales de Jordy y describe criterios, no plantillas. No se deben copiar frases de guiones
-anteriores: se aplica el criterio a cada noticia nueva.
+Este manual define cómo se escriben los guiones de los videos de Jordy. Es la referencia única
+para cualquier persona o sistema que escriba un guion. Describe criterios, no casos: no contiene
+ejemplos a propósito, para que cada criterio se aplique razonando sobre la noticia concreta y no
+imitando textos anteriores. Cuando una situación no esté prevista, se resuelve aplicando el
+principio de la sección más cercana.
 
 ---
 
-## 1. Qué es un guion de Jordy
+## 1. Naturaleza del guion
 
-1.1. Es periodismo de actualidad narrado. Su trabajo es contar qué pasó, en qué orden, quién lo
-dice cuando eso importa, y qué se sabe y qué no. No es un comentario, no es un editorial, no es entretenimiento con
-datos de relleno.
+1.1. El guion es periodismo de actualidad narrado. Su función es que el público entienda qué
+ocurrió, en qué secuencia, con qué consecuencias, quién sostiene cada afirmación cuando eso es
+relevante, y cuál es el grado de certeza de cada parte de la información.
 
-1.2. Se escribe para ser escuchado, no leído. Cada frase tiene que entenderse a la primera, en voz
-alta, sin volver atrás. El texto final es lo que Jordy va a decir palabra por palabra.
+1.2. El guion se escribe para el oído. El texto final es exactamente lo que Jordy va a decir.
+Toda decisión de redacción se evalúa por cómo suena y por si se entiende en una única escucha,
+sin posibilidad de volver atrás.
 
-1.3. La voz es la de un narrador informado, sereno y preciso, que se mete en la historia pero no
-se pone por delante de ella. La emoción la producen los hechos y los detalles, no los adjetivos.
+1.3. La voz narrativa es la de alguien informado, sereno y preciso, que está involucrado con la
+historia pero no se pone por delante de ella. El narrador no es personaje del relato.
 
-1.4. La credibilidad es el activo principal. Ante la duda entre impacto y precisión, siempre
-precisión.
+1.4. El impacto emocional lo producen los hechos y los detalles concretos, nunca la adjetivación
+ni el énfasis del narrador.
+
+1.5. La credibilidad es el activo principal. Cuando precisión e impacto entran en tensión, se
+elige precisión sin excepción.
 
 ---
 
-## 2. Tipos de guion y su estructura
+## 2. Clasificación de la noticia y estructura
 
-Antes de escribir, se define a cuál de estos tres tipos pertenece la noticia. Cada uno tiene su
-arquitectura. No se mezclan salvo que la noticia lo exija claramente.
+Antes de escribir se determina qué tipo de relato requiere la noticia. El tipo no depende del
+tema sino de qué necesita el público para entenderla. Cada tipo tiene una arquitectura propia.
+Si una noticia combina rasgos de más de un tipo, se elige el que corresponde a su núcleo y se
+toman del otro solo los elementos indispensables.
 
-### 2.1. Historia humana (el caso que se viraliza)
-Para historias protagonizadas por personas, con un desarrollo en el tiempo y un fondo humano o
-social.
-1. El hecho que generó la conversación, con la persona identificada por lo que el público conoce.
-2. La acción de los involucrados: qué hizo cada uno, en orden.
-3. El momento de audio original, si existe (ver sección 11).
-4. El giro: lo que cambió el rumbo de la historia, contado con detalles concretos.
-5. La explicación de fondo, con la voz de quienes conocen el caso de cerca (familia, allegados,
-   profesionales), atribuida.
-6. El cierre reflexivo, que nombra el problema de fondo sin moralizar.
+### 2.1. Historia humana
+Corresponde cuando el interés principal está en lo que les ocurre a personas a lo largo de un
+tiempo, y detrás del hecho visible hay una situación de fondo que lo explica.
+1. El hecho que puso la historia en conversación pública, con el protagonista identificado.
+2. Las acciones de los involucrados, en el orden en que ocurrieron.
+3. El registro sonoro original, si existe y aporta (sección 11).
+4. El punto de giro: el hecho que alteró el rumbo de la historia, narrado con detalle concreto.
+5. La explicación de fondo, a cargo de quienes tienen conocimiento directo de la situación.
+6. El cierre, que nombra el problema de fondo sin moralizar.
 
-### 2.2. Último momento con información preliminar
-Para muertes, accidentes, detenciones y cualquier hecho en el que la información todavía se está
-construyendo.
-1. El hecho central y la identificación de la persona, en la primera frase.
-2. Los datos duros básicos: edad, lugar exacto, momento.
-3. Quién es la persona, en una o dos frases de contexto.
-4. La secuencia oficial conocida: quién intervino y qué constató.
-5. Lo que dicen las fuentes, cada una atribuida por separado y con su propio alcance.
-6. La aclaración explícita de qué no está confirmado y por qué.
-7. Quién tiene que confirmar la información y en qué instancia.
-8. La respuesta, o la falta de respuesta, del entorno de la persona.
+### 2.2. Último momento
+Corresponde cuando el hecho es reciente y la información sobre él todavía está en construcción,
+de modo que convive lo confirmado con lo que no lo está.
+1. El hecho central y la identificación del protagonista, juntos al comienzo.
+2. Los datos básicos que sitúan el hecho: quién, dónde, cuándo, en su forma más precisa.
+3. El contexto mínimo sobre el protagonista para que el público dimensione el hecho.
+4. La secuencia conocida por vía oficial.
+5. La información adicional disponible, con la atribución que corresponda (sección 6).
+6. La delimitación explícita entre lo confirmado y lo que no lo está (sección 7).
+7. Qué instancia debe confirmar lo que falta.
+8. La posición, o la falta de posición, de quienes rodean al protagonista.
 
-### 2.3. Reconstrucción ("cómo fue")
-Para hechos complejos que necesitan ser explicados paso a paso: accidentes, operativos,
-catástrofes, procesos.
-1. La pregunta que el video responde, planteada al comienzo.
-2. Las coordenadas completas: día, hora, lugar, actores involucrados, magnitudes.
-3. La secuencia paso a paso, con tiempos y distancias, en estricto orden cronológico.
-4. El momento crítico, narrado con el mayor nivel de detalle.
+### 2.3. Reconstrucción
+Corresponde cuando el hecho es complejo y el público necesita entender cómo se produjo, paso a
+paso, para poder comprenderlo.
+1. La pregunta que el relato va a responder, planteada al comienzo.
+2. Las coordenadas completas del hecho: tiempo, lugar, actores y magnitudes relevantes.
+3. La secuencia de acontecimientos en estricto orden, con las referencias de tiempo y de espacio
+   que permiten seguirla.
+4. El momento crítico, narrado con el mayor nivel de detalle de todo el guion.
 5. La consecuencia humana inmediata.
-6. El balance provisorio, marcado como provisorio.
-7. La versión oficial, con sus argumentos ordenados y numerados si son varios.
-8. El contrapunto documentado: antecedentes, advertencias o registros que tensionan la versión
-   oficial.
-9. El cierre, que deja planteada la tensión entre esas versiones sin resolverla por opinión.
+6. El balance, identificado como provisorio si puede cambiar.
+7. La explicación oficial del hecho, con sus argumentos ordenados.
+8. Los elementos documentados que tensionan o contradicen esa explicación, si existen.
+9. El cierre, que deja planteada esa tensión sin resolverla por opinión.
 
 ---
 
 ## 3. El arranque
 
-3.1. La primera frase contiene el hecho central. No hay saludo, presentación, contexto previo,
-anuncio de lo que se va a contar ni frase de relleno.
+3.1. La primera frase contiene el núcleo de la noticia. No se antepone nada: ni saludo, ni
+presentación, ni contexto, ni anuncio de lo que se va a contar.
 
-3.2. Hay tres formas válidas de arrancar, según el tipo de guion:
-- con el hecho, usando un verbo fuerte al principio de la frase (historias y último momento);
-- con el fenómeno de la viralización, cuando lo que generó la noticia es la circulación en redes;
-- con la pregunta que el video va a responder (reconstrucciones).
+3.2. La forma del arranque depende del tipo de relato: en la historia humana y en el último
+momento se abre con el hecho, poniendo la acción al principio de la frase; cuando lo que convirtió
+el hecho en noticia fue su circulación pública, se abre con esa circulación; en la reconstrucción
+se abre con la pregunta que el relato responde.
 
-3.3. Cuando el protagonista es menos conocido que alguien de su entorno, la primera mención se
-ancla en la persona famosa y en su vínculo con ella, y recién después se da el nombre del
-protagonista.
+3.3. Cuando el protagonista es menos reconocible para el público que otra persona de su entorno,
+la primera mención se ancla en quien es más reconocible y en el vínculo entre ambos, y el nombre
+del protagonista llega inmediatamente después.
 
-3.4. La primera frase no supera las 25 palabras. Si necesita más, se parte en dos.
+3.4. La primera frase es breve. Si necesita más de una idea, se divide.
 
-3.5. En las reconstrucciones, la segunda frase aporta inmediatamente las coordenadas (día, hora,
-lugar). En los otros tipos, esas coordenadas llegan en las dos o tres frases siguientes.
+3.5. Las coordenadas de tiempo y lugar llegan pronto: en la reconstrucción, en la frase siguiente
+a la pregunta; en los demás tipos, dentro de las primeras frases.
 
 ---
 
-## 4. Identificación de personas e instituciones
+## 4. Identificación de personas y entidades
 
-4.1. Primera mención: nombre y apellido completos, más la referencia por la que el público lo
-reconoce (la obra, el rol, el cargo o el vínculo familiar con alguien famoso). La referencia se
-elige por lo que la audiencia conoce, no por lo que es más importante en su biografía.
+4.1. En la primera mención, cada persona se presenta con nombre completo y con la referencia que
+permite al público reconocerla. Esa referencia se elige por lo que la audiencia conoce de ella, no
+por lo que es más relevante en su trayectoria.
 
-4.2. Menciones siguientes: por el apellido o por el nombre de pila, de forma consistente dentro
-del guion. Si dos personas comparten apellido o pueden confundirse, se repite el nombre completo o
-el rol.
+4.2. En las menciones siguientes se usa una única forma abreviada, siempre la misma dentro del
+guion.
 
-4.3. Funcionarios: cargo y nombre en la primera mención. Instituciones y empresas: nombre
-completo y, si hace falta, qué son (su nacionalidad, su rubro).
+4.3. Cuando existe riesgo de confusión entre personas, o cuando un pronombre podría remitir a más
+de una, se repite la identificación en lugar de usar el pronombre.
 
-4.4. Edad, cuando es relevante, se da en la primera o segunda frase que habla de la persona.
+4.4. Quien habla o actúa en nombre de una entidad se presenta con su función y su nombre. Las
+entidades se nombran completas y, si el público puede no conocerlas, se explica en pocas palabras
+qué son.
 
-4.5. Cuando el sujeto de una frase puede resultar ambiguo al oído, se repite el nombre en lugar de
-usar un pronombre.
+4.5. Los datos personales que dimensionan el hecho, como la edad, se dan cerca de la primera
+mención. Los que no aportan a la comprensión, se omiten.
 
 ---
 
 ## 5. Datos y precisión
 
-5.1. Se prefieren siempre los datos concretos a las generalidades: día de la semana y fecha,
-hora exacta con indicación del huso horario cuando el hecho ocurrió en otro país, nombre del
-lugar hasta el nivel más preciso disponible (ciudad, localidad, provincia, edificio), cantidades
-exactas.
+5.1. Siempre se prefiere el dato concreto a la generalidad. Tiempo, lugar y cantidad se expresan
+con el mayor nivel de precisión que el material permite. Cuando el hecho ocurrió en otra zona
+horaria, se indica a qué hora local corresponde la referencia.
 
-5.2. Las cifras aproximadas se dicen como aproximadas, con expresiones orales naturales. Nunca se
-redondea una cifra para que suene mejor.
+5.2. Lo aproximado se dice como aproximado, con giros propios del habla. Ninguna cifra se redondea,
+se agranda ni se achica para que suene mejor.
 
-5.3. Las cifras que pueden cambiar (víctimas, heridos, detenidos, montos en investigación) se
-presentan siempre como provisorias, indicando que corresponden al momento del relato.
+5.3. Toda magnitud que puede cambiar con el paso del tiempo se presenta como vigente al momento
+del relato.
 
-5.4. Las magnitudes técnicas (velocidades, distancias, tiempos, alturas) se incluyen cuando
-ayudan a entender la secuencia, y se expresan en unidades que el público entiende al oído.
+5.4. Las magnitudes técnicas se incluyen cuando ayudan a entender la secuencia o la escala, y se
+expresan de la forma en que el público las entiende al escucharlas.
 
-5.5. Cada dato debe estar en el material de base. Si un dato es necesario para que la historia se
-entienda y no está, se marca como pendiente de verificación; no se completa por deducción.
-
----
-
-## 6. Atribución de fuentes
-
-6.1. Principio: se nombra una fuente cuando su identidad le importa al público, no para mostrar de
-dónde se sacó la información. El material de base (las notas de otros medios que se usaron para
-armar el guion) no se cita por el solo hecho de haberse usado.
-
-6.2. **No se atribuye** la información que ya es de dominio público o que publicaron muchos
-medios a partir de un mismo origen. Si varios medios cuentan lo mismo, ese dato se narra como un
-hecho, sin nombrar a ninguno.
-
-6.3. **Se atribuye** en estos casos:
-- **Fuente oficial o protagonista**: gobiernos, ministerios, organismos, fuerzas de seguridad,
-  justicia, empresas involucradas, familiares, representantes y protagonistas del hecho. Su
-  palabra es parte de la noticia: quién lo dice cambia el peso de lo dicho.
-- **Dato exclusivo**: información importante que publicó un solo medio y que no tiene otro
-  origen (una primicia, un documento propio, una fuente anónima que habló solo con ese medio).
-  Se nombra ese medio.
-- **El medio como parte de la noticia**: cuando una publicación es protagonista del hecho o lo
-  desencadenó (la nota que destapó el caso, la entrevista que generó la polémica). Ahí el medio se
-  nombra porque es parte de lo que se cuenta.
-- **Versiones enfrentadas**: cuando hay que distinguir quién sostiene cada versión.
-- **Información no confirmada**: todo lo preliminar o discutido se atribuye a quien lo dijo,
-  para que el público sepa que no es un hecho establecido.
-
-6.4. En caso de duda, la pregunta es: si se saca el nombre de la fuente, ¿el público pierde algo
-importante para entender o para dimensionar el dato? Si la respuesta es no, no se nombra.
-
-6.5. Cuando se atribuye, se nombra el medio, la institución o la persona. Si es una fuente
-anónima, se dice que es una fuente y a qué medio le habló.
-
-6.6. Cuando dos fuentes dicen cosas distintas, cada una se atribuye por separado, en su propia
-frase, y con el alcance exacto de lo que dijo. No se funden en un "se dice".
-
-6.7. Los verbos de atribución son neutros y precisos: indicar, decir, informar, confirmar,
-advertir, sostener, repetir. Se evitan los verbos que juzgan (admitir, reconocer, confesar,
-deslizar) salvo que el hecho lo justifique con claridad.
-
-6.8. La falta de respuesta también es información: si el entorno de la persona o la institución
-evitó hablar, se dice en esos términos, sin interpretarlo.
-
-6.9. Las construcciones impersonales sin fuente sirven para narrar hechos de dominio público y
-fenómenos verificables en sí mismos. Nunca para introducir un dato dudoso, exclusivo o
-controvertido sin decir de dónde viene.
+5.5. Todo dato tiene que estar en el material de base. Si falta un dato necesario para entender
+la historia, se marca como pendiente de verificación. Nunca se completa por deducción, por
+probabilidad ni por conocimiento general.
 
 ---
 
-## 7. Lo confirmado, lo preliminar y lo que no se sabe
+## 6. Atribución
 
-7.1. Cada guion distingue de manera explícita tres niveles: lo confirmado oficialmente, lo que
-dicen fuentes sin confirmación oficial, y lo que todavía no se sabe.
+6.1. Principio rector. Se atribuye cuando la identidad de quien afirma algo forma parte de lo que
+el público necesita saber. No se atribuye para mostrar de dónde se obtuvo la información. El
+material usado para investigar no es, por sí mismo, una fuente que deba nombrarse.
 
-7.2. Cuando una información es preliminar, el guion lo dice y explica por qué lo es. Si hay un
-término técnico o procesal que puede malinterpretarse, se traduce a lenguaje común en la misma
-frase.
+6.2. Información compartida. Lo que es de conocimiento público, o lo que circula de manera
+coincidente en múltiples publicaciones que se nutren de un mismo origen, se narra como hecho, sin
+atribución.
 
-7.3. Se dice quién va a confirmar lo que falta y en qué instancia (autopsia, pericia, informe
-oficial, resolución judicial). Esto le da al público una forma de entender cuándo habrá una
-respuesta.
+6.3. Criterios para atribuir. Se nombra la fuente cuando se cumple al menos una de estas
+condiciones:
+- **Autoridad sobre el hecho**: la fuente tiene la capacidad formal de establecer, confirmar o
+  decidir sobre lo que se informa, de modo que su palabra define el estado de la cuestión.
+- **Implicación directa**: la fuente es parte de la historia, o está en relación directa con
+  quienes lo son, y su posición es en sí misma un elemento de la noticia.
+- **Exclusividad**: el dato es relevante y proviene de una única fuente, sin otro origen
+  verificable. En ese caso se nombra a quien lo obtuvo o lo publicó.
+- **Participación en el hecho**: la fuente, o una publicación suya, es parte de la cadena de
+  acontecimientos que se relata, porque la originó, la modificó o la hizo pública.
+- **Controversia**: existen versiones distintas y es necesario distinguir quién sostiene cada una.
+- **Falta de confirmación**: la afirmación no está establecida y la atribución es lo que permite
+  al público saber que depende de quien la hizo.
 
-7.4. Nunca se cierra una causa, una culpa o un motivo que no fue determinado oficialmente, aunque
-el material sugiera una hipótesis. Las hipótesis se presentan como hipótesis y con su fuente.
+6.4. Prueba de necesidad. Si al eliminar la mención de la fuente el público no pierde nada para
+entender o para dimensionar el dato, la mención se elimina.
 
-7.5. La marca temporal de lo provisorio ("por ahora", "hasta el momento" y equivalentes) se usa
-cada vez que corresponde, no una sola vez para todo el guion.
+6.5. Forma de la atribución. La atribución es parte de la narración, no un agregado. Se identifica
+a la fuente con la precisión necesaria para que el público la reconozca. Cuando la fuente no tiene
+identidad pública, se indica que es una fuente reservada y a través de quién se conoció su
+información.
+
+6.6. Fuentes divergentes. Cuando dos fuentes dicen cosas distintas, cada una se atribuye por
+separado, con el alcance exacto de lo que afirmó. Nunca se fusionan en una formulación impersonal.
+
+6.7. Verbos. Los verbos de atribución describen el acto de comunicar, no lo juzgan. Se evitan los
+verbos que atribuyen intención, culpa o reticencia, salvo que el hecho lo acredite.
+
+6.8. Silencio. La negativa o la omisión de una fuente implicada en responder es información y se
+consigna como tal, sin interpretarla.
+
+6.9. Límite de lo impersonal. Las construcciones sin sujeto sirven para narrar lo que es de
+conocimiento público o verificable en sí mismo. Nunca para introducir algo dudoso, exclusivo o
+controvertido sin decir de dónde proviene.
+
+---
+
+## 7. Grados de certeza
+
+7.1. Todo guion distingue explícitamente tres niveles de información: lo establecido por quien
+tiene autoridad para establecerlo, lo afirmado sin esa confirmación, y lo que todavía no se sabe.
+El público tiene que poder identificar en qué nivel está cada afirmación.
+
+7.2. Cuando algo es preliminar, se dice que lo es y se explica por qué. Si el carácter preliminar
+depende de un procedimiento o de un término técnico, se lo traduce a lenguaje común en el mismo
+lugar.
+
+7.3. Cuando falta una confirmación, se dice qué instancia debe producirla. Esto le da al público
+un horizonte para entender cuándo y cómo se va a saber.
+
+7.4. Nunca se da por establecida una causa, una responsabilidad o una motivación que no haya sido
+determinada por quien tiene la autoridad para hacerlo. Las hipótesis se presentan como hipótesis,
+con su origen.
+
+7.5. Cada afirmación provisoria lleva su propia marca de provisoriedad. No alcanza con advertirlo
+una vez para todo el guion.
 
 ---
 
 ## 8. Narración y ritmo
 
-8.1. Tercera persona siempre. El narrador no le habla al público, no lo interpela, no le hace
-preguntas retóricas en el cuerpo del texto (la única pregunta posible es la de apertura en una
-reconstrucción).
+8.1. El narrador habla siempre en tercera persona y nunca se dirige al público. La única pregunta
+admitida es la que abre una reconstrucción.
 
-8.2. Orden cronológico estricto. Si hace falta un antecedente, se introduce de forma clara como
-antecedente y se vuelve al presente del relato.
+8.2. El relato sigue el orden en que ocurrieron los hechos. Si hace falta un antecedente, se
+introduce marcado como tal y el relato vuelve después al punto en que estaba.
 
-8.3. Una idea por frase. Frases de largo medio, alternando con frases cortas para marcar los
-momentos importantes. Se evitan las cadenas de subordinadas y los incisos largos.
+8.3. Cada frase contiene una sola idea. Se alternan frases de extensión media con frases breves,
+que se reservan para los momentos que necesitan peso. Se evitan las subordinadas encadenadas y los
+incisos.
 
-8.4. Las transiciones temporales están siempre explícitas: cuánto tiempo pasó entre un hecho y el
-siguiente, qué ocurrió primero y qué después. El público debe poder seguir la secuencia sin ver
-imágenes.
+8.4. Las relaciones de tiempo entre un hecho y el siguiente se explicitan siempre: qué pasó antes,
+qué después y cuánto tiempo transcurrió, de modo que la secuencia se pueda seguir sin imágenes.
 
-8.5. En el momento crítico de una secuencia se puede pasar al presente histórico para dar
-inmediatez, y volver después al pasado.
+8.5. En el momento culminante de una secuencia puede usarse el presente para dar inmediatez,
+volviendo luego al pasado.
 
-8.6. Para describir una escena de impacto se puede usar una enumeración de detalles concretos, sin
-verbos o con verbos mínimos. El recurso se usa una sola vez por guion.
+8.6. Para transmitir una escena de impacto puede usarse, una sola vez por guion, una sucesión de
+detalles concretos con verbos mínimos o sin verbos.
 
-8.7. Los cambios de etapa del relato se marcan con conectores de contraste o de giro al comienzo
-de la frase. Se varían: no se repite el mismo conector dos veces seguidas.
+8.7. Los cambios de etapa del relato se marcan con un conector de contraste o de giro al comienzo
+de la frase. Los conectores se varían y no se repite el mismo en frases cercanas.
 
-8.8. Jordy tiene un recurso propio para bajar a tierra el relato: una frase que empieza
-anunciando cuál es la realidad de la situación, después del giro, y que ordena lo que realmente
-se sabe o lo que realmente está en juego. Se usa como máximo una vez por guion.
+8.8. Recurso propio de Jordy: después del giro, una frase que se presenta como la constatación de
+cómo es realmente la situación, y que ordena lo que efectivamente se sabe o lo que está en juego.
+Se usa como máximo una vez por guion.
 
-8.9. Cuando hay varios argumentos, causas o datos del mismo nivel, se enumeran con números dichos
-en voz alta, anunciando antes cuántos son.
+8.9. Cuando hay varios elementos del mismo nivel que deben diferenciarse, se anuncia cuántos son y
+se enumeran de forma explícita en voz alta.
 
 ---
 
-## 9. Tono, registro y adjetivos
+## 9. Tono, registro y adjetivación
 
-9.1. Registro informativo, sobrio y claro. Español neutro de base con léxico rioplatense natural
-cuando es la palabra que diría Jordy en una conversación. Sin lunfardo forzado, sin modismos
-de redes, sin anglicismos innecesarios.
+9.1. Registro informativo, sobrio y claro. La base es un español neutro, con el léxico rioplatense
+que usaría Jordy de forma natural en una conversación. Se evitan la jerga de redes, el lunfardo
+forzado y los extranjerismos innecesarios.
 
-9.2. Sin exclamaciones, sin mayúsculas enfáticas, sin preguntas de intriga artificial, sin
-fórmulas de clickbait ("no vas a creer", "lo que pasó después", "impactante").
+9.2. No se usan exclamaciones, énfasis tipográficos, suspensos artificiales ni fórmulas que
+prometen algo para retener la atención. La atención se sostiene con información.
 
-9.3. Adjetivos mínimos. Los valorativos o intensificadores se reservan para uno o dos momentos del
-guion en los que el hecho los justifica, y nunca para describir a las personas, sino a los hechos.
+9.3. La adjetivación es mínima. Los adjetivos valorativos o intensificadores se reservan para uno o
+dos momentos del guion en que el hecho los justifica, y califican hechos, nunca personas.
 
-9.4. Se permite, como máximo, una frase de tono narrativo o literario por guion, ubicada en el
-momento de mayor carga humana, que dé clima sin agregar información nueva ni exagerar.
+9.4. Se admite, como máximo, una frase de carácter narrativo o literario por guion, ubicada en el
+momento de mayor carga humana, que genere clima sin agregar información y sin exagerar.
 
-9.5. Nada de ironía sobre víctimas, personas vulnerables o tragedias.
+9.5. No hay ironía ni humor sobre víctimas, personas vulnerables o hechos trágicos.
 
 ---
 
 ## 10. Temas sensibles
 
-10.1. Muertes: se usan formulaciones sobrias y exactas. Se informa lo que constataron las
-autoridades y los servicios médicos. No se describen detalles del cuerpo más allá de lo que la
-información oficial o la fuente consignan y de lo estrictamente necesario.
+10.1. Principio general. Cuando la noticia involucra muerte, daño, enfermedad, vulnerabilidad o
+sufrimiento, se informa lo necesario para comprender el hecho y nada más. La dignidad de las
+personas involucradas prevalece sobre el impacto.
 
-10.2. Suicidio: no se menciona el método ni se especula. Si una fuente descarta o sugiere esa
-posibilidad, se consigna con lenguaje cuidado y atribuido.
+10.2. Muerte. Se usan formulaciones sobrias y exactas, y se informa únicamente lo constatado por
+quien tiene autoridad para constatarlo. No se describen aspectos físicos más allá de lo
+estrictamente necesario para entender el hecho.
 
-10.3. Consumo de sustancias y sobredosis: nunca se afirma como causa sin confirmación oficial. Se
-aclara el carácter preliminar de cualquier mención.
+10.3. Autolesión. No se describen métodos ni se especula sobre motivos. Si una fuente menciona esa
+posibilidad, se consigna con lenguaje cuidado y atribuida.
 
-10.4. Salud mental: se usan los términos que usa la familia o los profesionales, atribuidos, sin
-etiquetas estigmatizantes ni diagnósticos propios. La enfermedad explica, no define a la persona.
+10.4. Causas no determinadas. Ninguna causa de muerte, enfermedad o daño se afirma sin
+confirmación de quien tiene autoridad para establecerla. Toda mención previa se marca como
+preliminar.
 
-10.5. Personas en situación de calle, adicciones y vulnerabilidad: se narra con respeto y sin
-exposición innecesaria. El foco está en la situación y en lo que la rodea, no en la humillación.
+10.5. Salud mental y condiciones médicas. Se usan los términos de quienes tienen conocimiento
+directo o profesional de la situación, atribuidos. No se formulan diagnósticos propios ni se usan
+etiquetas estigmatizantes. La condición explica una situación; no define a la persona.
 
-10.6. Tragedias con víctimas: el sufrimiento se transmite con un detalle concreto y respetuoso, no
-con descripciones morbosas.
+10.6. Vulnerabilidad. El foco está en la situación y en lo que la rodea, no en la exposición de la
+persona.
 
-10.7. Menores: no se identifican víctimas ni acusados menores de edad.
+10.7. Sufrimiento. Se transmite con un detalle concreto y respetuoso, nunca con acumulación de
+detalles morbosos.
+
+10.8. Menores de edad. No se identifica a menores involucrados como víctimas ni como acusados.
 
 ---
 
-## 11. Audio original
+## 11. Registro sonoro original
 
-11.1. Cuando existe un video del hecho con audio relevante (un diálogo, una declaración, un
-sonido del momento), el guion le hace lugar: se corta la narración y se indica que entra el audio
+11.1. Cuando existe un registro del hecho cuyo sonido aporta algo que la narración no puede
+transmitir, el guion le hace lugar: la narración se interrumpe y se indica la entrada del sonido
 original.
 
-11.2. El fragmento es breve y se ubica en el punto de la historia donde ocurre. El guion transcribe
-lo que se escucha, en el idioma original, marcado como audio original.
+11.2. El fragmento es breve y se ubica en el punto del relato en que ocurrió. El guion transcribe
+lo que se escucha, en el idioma original, identificado como sonido original.
 
-11.3. La narración previa deja claro qué se va a escuchar, para que el fragmento se entienda sin
-traducción. Si el contenido es imprescindible y está en otro idioma, se resume después en una
-frase.
+11.3. La narración inmediatamente anterior prepara al público para entender el fragmento. Si su
+contenido es imprescindible y está en otro idioma, se sintetiza después en una frase.
 
 ---
 
 ## 12. Opinión y conclusión
 
-12.1. La opinión no es el producto. Aparece solo si suma y siempre al final o en el punto de
-giro, como conclusión que se desprende de los hechos ya narrados.
+12.1. La opinión no es el producto. Aparece solo si agrega comprensión, y siempre como conclusión
+que se desprende de los hechos ya narrados, en el giro o en el cierre.
 
-12.2. Nunca en primera persona. Se formula como una lectura general de la situación, breve y
-firme.
+12.2. Nunca se formula en primera persona. Se expresa como lectura general de la situación, breve
+y firme.
 
-12.3. No se toma partido político ni se califican intenciones. Cuando hay versiones enfrentadas,
-la conclusión surge de mostrar la tensión entre ellas con datos, no de declarar quién tiene razón.
+12.3. No se toma partido político ni se atribuyen intenciones. Cuando hay versiones enfrentadas,
+la conclusión surge de exponer con datos la tensión entre ellas, no de declarar cuál es correcta.
 
 ---
 
-## 13. El cierre
+## 13. Cierre
 
-13.1. El guion termina con una de estas dos opciones:
-- una síntesis reflexiva de una sola frase, que nombra el problema de fondo y deja la historia
+13.1. El guion termina de una de estas formas:
+- una síntesis reflexiva en una sola frase, que nombra el problema de fondo y deja la historia
   abierta;
-- un último dato documentado que resignifica todo lo anterior (típico de las reconstrucciones con
-  versión oficial y contrapunto).
+- un último elemento documentado que obliga a releer todo lo anterior;
+- en hechos en desarrollo, el estado actual de la información: qué falta y quién debe determinarlo.
 
-13.2. En noticias en desarrollo, el cierre puede ser el estado actual de la información: qué falta
-y quién lo va a determinar.
-
-13.3. Nunca se cierra con saludos, pedidos de seguir la cuenta, preguntas al público, resúmenes de
-lo ya dicho ni frases de despedida.
+13.2. Nunca se cierra con saludo, despedida, pedido al público, pregunta, ni resumen de lo ya dicho.
 
 ---
 
 ## 14. Oralidad
 
-14.1. Sin paréntesis, sin abreviaturas, sin siglas no explicadas (en la primera mención se dice
-qué son), sin símbolos.
+14.1. No se usan paréntesis, abreviaturas ni símbolos. Toda sigla se explica en su primera mención.
 
-14.2. Números: escritos de forma que se lean sin dudar. Horas, fechas y cifras grandes, como se
-dicen en voz alta.
+14.2. Números, horas y fechas se escriben de manera que se lean sin vacilar, tal como se dicen.
 
-14.3. Nombres extranjeros: se escriben correctamente. Si la pronunciación no es evidente, se
-agrega entre corchetes una indicación de cómo se dice, solo para Jordy (no se lee).
+14.3. Los nombres propios extranjeros se escriben correctamente. Si su pronunciación no es
+evidente, se agrega una indicación entre corchetes, destinada solo a quien lee, que no se
+pronuncia.
 
-14.4. Se evitan las palabras que se traban al leerlas juntas, las rimas involuntarias y la
-repetición de la misma palabra en frases seguidas.
+14.4. Se evitan las combinaciones de palabras difíciles de pronunciar, las rimas involuntarias y la
+repetición de una misma palabra en frases cercanas.
 
-14.5. Gramática y concordancia impecables: el guion se revisa antes de entregarlo.
-
----
-
-## 15. Largo
-
-15.1. Historia humana y último momento: entre 60 y 90 segundos de lectura (aproximadamente 150 a
-220 palabras).
-
-15.2. Reconstrucción: hasta 3 minutos (aproximadamente 450 palabras).
-
-15.3. El largo lo define la historia: si se cuenta completa en menos, se cuenta en menos. No se
-rellena.
+14.5. La gramática y la concordancia son impecables.
 
 ---
 
-## 16. Lo que nunca se hace
+## 15. Extensión
 
-- Inventar o completar datos, cifras, fechas, citas o nombres.
-- Presentar como confirmado algo preliminar.
-- Atribuir de forma vaga lo que necesita fuente, o citar medios por datos que son de dominio
-  público.
-- Hablarle al público o pedirle algo.
+15.1. Historia humana y último momento: entre 60 y 90 segundos de lectura, aproximadamente entre
+150 y 220 palabras.
+
+15.2. Reconstrucción: hasta 3 minutos, aproximadamente 450 palabras.
+
+15.3. La extensión la determina la historia. Si se puede contar completa en menos, se cuenta en
+menos. Nunca se rellena.
+
+---
+
+## 16. Prohibiciones
+
+- Inventar, completar o deducir datos, cifras, tiempos, lugares, citas o identidades.
+- Presentar como establecido lo que no lo está.
+- Omitir la atribución cuando la sección 6 la exige, o atribuir cuando no la exige.
+- Dirigirse al público o pedirle algo.
 - Saludar, presentarse o despedirse.
 - Opinar en primera persona.
-- Usar lenguaje de clickbait, exclamaciones o intriga artificial.
-- Exponer de forma morbosa a víctimas o personas vulnerables.
-- Copiar frases de guiones anteriores.
+- Recurrir a fórmulas de retención, exclamaciones o suspenso artificial.
+- Exponer de manera morbosa a víctimas o a personas vulnerables.
+- Reproducir frases de guiones anteriores.
 
 ---
 
-## 17. Control antes de entregar
+## 17. Control previo a la entrega
 
-1. ¿La primera frase tiene el hecho central y la identificación de la persona?
-2. ¿Está claro a qué tipo de guion pertenece y respeta su estructura?
-3. ¿Se nombran solo las fuentes que importan (oficiales, protagonistas, exclusivas, parte de la
-   noticia) y no los medios de los que se sacó información general?
-4. ¿Se distingue lo confirmado, lo preliminar y lo que no se sabe?
-5. ¿El orden es cronológico y las transiciones temporales están explícitas?
-6. ¿Los recursos de estilo (frase de realidad, enumeración de impacto, frase narrativa) se usan
-   como máximo una vez cada uno?
-7. ¿El cierre es una síntesis o un dato que resignifica, sin despedida ni pedido?
-8. ¿Se entiende todo al oído, en una sola escucha?
-9. ¿Está dentro del largo del tipo de guion?
+1. ¿La primera frase contiene el núcleo de la noticia y la identificación del protagonista?
+2. ¿El tipo de relato elegido es el adecuado y se respeta su estructura?
+3. ¿Cada atribución cumple al menos un criterio de la sección 6, y no hay atribuciones que no lo
+   cumplan?
+4. ¿El público puede identificar el grado de certeza de cada afirmación?
+5. ¿La secuencia es cronológica y las relaciones de tiempo están explícitas?
+6. ¿Cada recurso de uso limitado aparece como máximo una vez?
+7. ¿El cierre corresponde a una de las formas de la sección 13?
+8. ¿Todo se entiende en una única escucha?
+9. ¿La extensión corresponde al tipo de relato?
 10. ¿Los pendientes de verificación están marcados?
