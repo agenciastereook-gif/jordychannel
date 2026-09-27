@@ -4,12 +4,13 @@ Es el método del video original (voz propia + imágenes que cambian cada 2–4 
 su segundo exacto), con herramientas gratis. Una persona. La versión con IA paga está guardada en
 la rama `sistema-premium`, para cuando esto sea rentable.
 
-## Los 7 pasos del short (siempre iguales)
+## Los pasos del short (siempre iguales)
 
 Carpeta del día: `episodios/AAAA-MM-DD-slug/`
 
 | # | Paso | Herramienta | Quién | Queda guardado |
 |---|---|---|---|---|
+| 0 | Investigación: fuentes, cruce y datos | ChatGPT con `prompts/00_investigacion.md` | ChatGPT (vos revisás) | `investigacion.md` |
 | 1 | Guion + qué mostrar en cada frase | ChatGPT con `prompts/01_guion_chatgpt.md` | ChatGPT (vos verificás) | `guion.md` |
 | 2 | Grabar la voz | Celular o micrófono | Vos | `voz.mp3` |
 | 3 | Marcas de tiempo | TurboScribe → exportar SRT | Vos | `voz.srt` |

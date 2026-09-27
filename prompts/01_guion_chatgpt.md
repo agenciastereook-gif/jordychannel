@@ -39,4 +39,4 @@ Debajo de la tabla:
 3. Lista de `[VERIFICAR]` pendientes.
 
 MATERIAL:
-<pegá acá la nota / link / apuntes>
+<pegá acá el informe de investigación del prompt 0 (o la nota / apuntes)>
