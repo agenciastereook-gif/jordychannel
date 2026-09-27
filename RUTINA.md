@@ -44,7 +44,7 @@ Filtro rápido — tiene que cumplir las tres:
 - **¿Lo puedo contar en 60 segundos sin perder lo importante?**
 - **¿Tengo una fuente que puedo nombrar?**
 
-Si es algo para investigar o explicar a fondo → no es short: va al **video largo quincenal**.
+Si es algo para investigar o explicar a fondo → no es short: guardalo para un video largo.
 Si el valor es solo un clip de otro medio → no es para este formato.
 
 ### 2. Guion (5–10 min)
@@ -100,7 +100,7 @@ Un mismo short rinde en: **YouTube Shorts** + **Reels de IG** + **TikTok** + un 
 |-----|-----|
 | Lun–Vie | 1 short de noticia del día |
 | Sáb | Opcional: short "lo que pasó en la semana" (3 noticias, 60 s) reusando imágenes |
-| Dom (semanas pares) | **Video largo** de YouTube con este mismo método en 16:9: el guion es la investigación; las imágenes cambian cada 3–5 s. Acá es donde está la plata de YouTube. |
+| Dom | Descanso. Más adelante, opcional: un video largo con este mismo método en 16:9 (es lo que más paga en YouTube). |
 
 Cada dos semanas mirá qué shorts funcionaron (retención y suscriptores ganados) y ajustá temas y ritmo.
 
@@ -110,8 +110,7 @@ Cada dos semanas mirá qué shorts funcionaron (retención y suscriptores ganado
 
 - Los **$61.000/mes** del video son una estimación de vidIQ sobre **videos largos** en inglés
   con 7M de vistas. Los Shorts pagan mucho menos por vista (centavos cada mil). Los shorts
-  sirven para **crecer y traer suscriptores**; la monetización fuerte llega con el video largo,
-  sponsors y reutilización en IG.
+  sirven para **crecer y traer suscriptores**; la monetización fuerte llega con el video largo y los sponsors.
 - Lo que sí es copiable: el **ritmo visual** (imagen nueva cada 2–3 s), el **estilo reconocible**
   y la **velocidad de producción**.
 - Tu ventaja sobre un canal sin rostro: credibilidad. No la gastes en un título falso.
