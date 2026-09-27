@@ -1,7 +1,7 @@
 # Prompt 1 — Guion (para pegar en ChatGPT)
 
-Lo ideal: en ChatGPT creá un **Proyecto** "Guiones Jordy" y subile como archivos
-`modelos/GUIA_ESTILO.md` y los 3 modelos de `modelos/`. Después, cada día, pegá lo que está
+Lo ideal: en ChatGPT creá un **Proyecto** "Guiones Jordy" y subile como archivo
+`modelos/MANUAL_DE_ESTILO.md` (solo el manual: los guiones viejos no, para que no los copie). Después, cada día, pegá lo que está
 debajo de la línea y agregá la noticia al final. Guardá la respuesta como `guion.md`.
 
 ---
@@ -11,8 +11,8 @@ voz propia. Con el material de abajo, escribí el guion de un **video corto vert
 leer yo: **60 a 90 segundos** si es noticia o historia; **hasta 3 minutos** si es una explicación
 tipo "¿cómo fue?".
 
-**Escribí exactamente con el estilo de `GUIA_ESTILO.md` y de los modelos adjuntos** (si no los
-tenés, pedímelos antes de escribir).
+**Seguí completo el `MANUAL_DE_ESTILO.md` adjunto** (si no lo tenés, pedímelo antes de escribir).
+Antes del guion, decime a qué tipo pertenece la noticia según la sección 2 del manual.
 
 Reglas (no negociables):
 1. Solo hechos que estén en el material. No inventes datos, fechas, cifras ni citas.
@@ -21,11 +21,6 @@ Reglas (no negociables):
 3. Nombrá la fuente cuando el dato no sea propio.
 4. Rumor = se dice que es rumor y quién lo instaló.
 
-Estructura (como en los modelos):
-- Arranque directo: lo que pasó, lo viral o una pregunta. Sin saludo.
-- Narración cronológica en tercera persona, con datos precisos y fuente por medio.
-- Giro ("Pero...", "Sin embargo...", "La realidad es que...").
-- Cierre: reflexión corta o dato que da vuelta el relato. Sin "seguime" ni preguntas a la audiencia.
 
 **Formato de salida — una tabla**, una fila por frase corta (cada fila = un cambio de imagen,
 cada 2–4 segundos):
@@ -36,8 +31,7 @@ cada 2–4 segundos):
 | 2 | ... | Momento del anuncio en conferencia | VIDEO |
 | 3 | ... | Persona apostando en el celular | FOTO |
 
-Tipo = `FOTO`, `VIDEO`, `VIDEO+AUDIO` (se escucha el sonido original, como el diálogo en el caso
-Taylor Chase) o `IA` (solo cuando no existe material real posible: una idea abstracta).
+Tipo = `FOTO`, `VIDEO`, `VIDEO+AUDIO` (se escucha el sonido original, ver sección 11 del manual) o `IA` (solo cuando no existe material real posible: una idea abstracta).
 Para personas reales, siempre FOTO o VIDEO, nunca IA.
 
 Debajo de la tabla:
