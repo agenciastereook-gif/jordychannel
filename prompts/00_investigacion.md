@@ -47,9 +47,7 @@ conocimiento público.
 5. **Lo que no se sabe**: preguntas abiertas y qué instancia debería responderlas.
 6. **Fuentes consultadas**: lista con nombre, enlace, fecha y si es primaria o secundaria.
    Indicá cuáles son independientes entre sí.
-7. **Material visual disponible**: registros audiovisuales o fotográficos del hecho que existan,
-   con dónde encontrarlos, y si alguno tiene sonido original relevante.
-8. **Alertas**: contradicciones, datos dudosos, información limitada o cualquier riesgo para la
+7. **Alertas**: contradicciones, datos dudosos, información limitada o cualquier riesgo para la
    precisión.
 
 No agregues interpretación ni opinión. No completes ningún dato por deducción. Si un dato no

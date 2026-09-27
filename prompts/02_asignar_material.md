@@ -10,7 +10,8 @@ Carpeta del día: `episodios/<carpeta>/`.
 1. Corré `python3 scripts/srt_a_marcas.py episodios/<carpeta>/voz.srt > episodios/<carpeta>/marcas.txt`.
 2. Mirá cada archivo de `material/` (las imágenes abrilas; de cada video sacá un fotograma con
    ffmpeg) y hacé una lista corta: archivo → qué se ve.
-3. Asigná un archivo a cada marca de `marcas.txt`, usando la columna "Qué mostrar" de `guion.md`:
+3. Asigná un archivo a cada marca de `marcas.txt`, según lo que se dice en cada frase y, si existe,
+   el plan de `visual.md`:
    - Si falta material para una marca, poné `IA` (queda en pantalla la imagen anterior).
    - Para no cortar, usá `=` (sigue la imagen anterior).
    - Un mismo archivo no más de 2 marcas seguidas.

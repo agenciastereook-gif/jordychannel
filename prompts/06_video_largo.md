@@ -14,9 +14,8 @@ Estructura:
 4. **Mi lectura** (opinión, marcada como tal).
 5. **Cierre**: qué viene o qué queda abierto.
 
-Formato: la misma tabla del prompt 1 (# · Texto · Qué mostrar · Tipo FOTO/VIDEO/IA), una fila
-por frase corta. Al final:
-- Lista de búsqueda agrupada, con dónde buscar cada cosa.
+Formato: texto corrido, una frase por línea, sin indicaciones visuales (las imágenes se buscan
+después con `prompts/01b_busqueda_visual.md`). Al final:
 - 3 títulos (máx. 60 caracteres) y una idea de miniatura.
 - **2 o 3 tramos que funcionen solos como clip vertical** de 30–60 s (qué bloque y por qué),
   para cortarlos el domingo.

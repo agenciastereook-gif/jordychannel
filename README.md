@@ -7,7 +7,8 @@ Producción de **Jordy en Vivo · El Hit · El Recorte** con herramientas gratis
 La versión con IA paga está en la rama `sistema-premium`.
 
 - `prompts/00_investigacion.md` — investigación con búsqueda web: fuentes, cruce y datos (ChatGPT).
-- `prompts/01_guion_chatgpt.md` — guion + qué mostrar (se usa en ChatGPT).
+- `prompts/01_guion_chatgpt.md` — guion (ChatGPT).
+- `prompts/01b_busqueda_visual.md` — plan visual sobre el guion final: qué mostrar y dónde conseguirlo (ChatGPT).
 - `modelos/MANUAL_DE_ESTILO.md` — manual de estilo de los guiones (se sube al Proyecto de ChatGPT). Los guiones reales quedan en `modelos/` como archivo, no se le pasan a ChatGPT.
 - `prompts/02_asignar_material.md` — Claude asigna tus fotos/videos a cada segundo.
 - `prompts/03`–`07` — publicación, El Hit, El Recorte, video largo, clips.

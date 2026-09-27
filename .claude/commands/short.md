@@ -11,7 +11,7 @@ En Windows usá `python` (o `py` si `python` no existe).
 3. Si no existe `voz.srt`: `python scripts/transcribir.py <carpeta>/voz.<ext>`.
    Si falla por falta de faster-whisper, decile a Jordy que corra `INSTALAR.bat`.
 4. `python scripts/srt_a_marcas.py <carpeta>/voz.srt > <carpeta>/marcas.txt`
-5. Seguí `prompts/02_asignar_material.md` desde el paso 2: mirá el material, escribí
+5. Seguí `prompts/02_asignar_material.md` desde el paso 2 (usá `visual.md` si existe): mirá el material, escribí
    `asignacion.txt`, mostrá la asignación en una tabla corta y **esperá el OK de Jordy**.
 6. Con el OK: `python scripts/asignar_material.py <carpeta>/asignacion.txt` y después
    `python scripts/armar_video.py --audio <carpeta>/voz.<ext> --imagenes <carpeta>/imagenes --subs <carpeta>/voz.srt --salida <carpeta>/short.mp4`

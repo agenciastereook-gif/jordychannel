@@ -11,9 +11,10 @@ Doble clic en **`INSTALAR.bat`**. Si instala Python, cerrá la ventana y abrilo 
 
 | # | Qué | Quién |
 |---|---|---|
-| 1 | Investigación y guion en tus GPT de ChatGPT (Investigador → Guionista) | ChatGPT (vos revisás) |
+| 1 | Investigación y guion en ChatGPT (Investigador → Guionista) | ChatGPT (vos revisás) |
+| 1b | Con el guion final, plan visual: qué mostrar en cada frase y dónde conseguirlo (Buscador visual, `prompts/01b_busqueda_visual.md`) | ChatGPT |
 | 2 | Doble clic en **`NUEVO SHORT.bat`**, escribís el tema → se crea y se abre la carpeta | PC |
-| 3 | Pegás el guion en `guion.md`, tirás tu grabación en la carpeta y las fotos/videos en `material/` (cualquier nombre) | Vos |
+| 3 | Pegás el guion en `guion.md` y el plan en `visual.md`, tirás tu grabación en la carpeta y las fotos/videos en `material/` (cualquier nombre) | Vos |
 | 4 | En Claude Code escribís **`/short`** | Vos |
 | 5 | Transcribe la voz, asigna el material a cada segundo y te pide OK | PC (Claude) |
 | 6 | Arma `short.mp4` y escribe `textos.md` con caption, título y post de X | PC (Claude) |

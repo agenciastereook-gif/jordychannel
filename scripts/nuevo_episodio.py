@@ -49,8 +49,10 @@ def main():
     (carpeta / "guion.md").write_text(
         f"# {tema}\n\n(Borrá esta línea y pegá acá el guion completo de ChatGPT, con la tabla.)\n",
         encoding="utf-8")
+    (carpeta / "visual.md").write_text(
+        "(Pegá acá el plan visual del Buscador visual. Es opcional.)\n", encoding="utf-8")
     (carpeta / "LEEME.txt").write_text(
-        "1. Pegá el guion en guion.md y guardalo.\n"
+        "1. Pegá el guion en guion.md y el plan visual en visual.md.\n"
         "2. Tirá tu grabación de voz en esta carpeta (cualquier nombre: mp3, m4a, wav...).\n"
         "3. Tirá las fotos y videos en la carpeta material (cualquier nombre).\n"
         "4. En Claude Code escribí: /short\n",

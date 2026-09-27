@@ -2,7 +2,7 @@
 
 Lo ideal: en ChatGPT creá un **Proyecto** "Guiones Jordy" y subile como archivo
 `modelos/MANUAL_DE_ESTILO.md` (solo el manual: los guiones viejos no, para que no los copie). Después, cada día, pegá lo que está
-debajo de la línea y agregá la noticia al final. Guardá la respuesta como `guion.md`.
+debajo de la línea y agregá la noticia al final. Guardá la respuesta en `guion.md`.
 
 ---
 
@@ -22,21 +22,13 @@ Reglas (no negociables):
 4. Rumor = se dice que es rumor y quién lo instaló.
 
 
-**Formato de salida — una tabla**, una fila por frase corta (cada fila = un cambio de imagen,
-cada 2–4 segundos):
+**Formato de salida:**
+1. El guion como texto corrido, listo para leer, con una frase por línea.
+2. Si corresponde un fragmento de sonido original (sección 11 del manual), marcalo en su línea como
+   `[SONIDO ORIGINAL]` con la transcripción.
+3. Debajo: 3 títulos posibles (máx. 60 caracteres) y la lista de `[VERIFICAR]` pendientes.
 
-| # | Texto (lo que leo) | Qué mostrar | Tipo |
-|---|---|---|---|
-| 1 | <frase> | <descripción concreta de la imagen o el video que hay que conseguir> | <tipo> |
-
-Tipo = `FOTO`, `VIDEO`, `VIDEO+AUDIO` (se escucha el sonido original, ver sección 11 del manual) o `IA` (solo cuando no existe material real posible: una idea abstracta).
-Para personas reales, siempre FOTO o VIDEO, nunca IA.
-
-Debajo de la tabla:
-1. **Lista de búsqueda**: todo lo que tengo que conseguir, agrupado, con dónde buscarlo
-   (qué buscar y en qué tipo de fuente se consigue).
-2. **3 títulos** posibles (máx. 60 caracteres).
-3. Lista de `[VERIFICAR]` pendientes.
+No incluyas indicaciones visuales: las imágenes se buscan en un paso aparte, sobre el guion final.
 
 MATERIAL:
 <pegá acá el informe de investigación del prompt 0 (o la nota / apuntes)>
