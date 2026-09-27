@@ -4,15 +4,15 @@ según un archivo de asignación que arma Claude (y que vos podés corregir a ma
 
 Formato de asignacion.txt (una línea por marca; lo que va después de | es solo referencia):
     [0.00] material/lula_congreso.jpg | Lula firmó hoy el decreto...
-    [3.40] DIBUJO | Las apuestas online movían millones...
+    [3.40] IA | Las apuestas online movían millones...
     [6.10] material/celular_apuestas.mp4 | Desde el lunes...
     [9.00] = | (repite el archivo anterior: no genera corte)
 
     python3 scripts/asignar_material.py episodios/<carpeta>/asignacion.txt
 
-Las rutas son relativas a la carpeta del episodio. Las marcas con DIBUJO se listan al final
-para generarlas con Higgsfield (prompts/02_imagenes.md). Las marcas con "=" se saltean, así
-el archivo anterior sigue en pantalla.
+Las rutas son relativas a la carpeta del episodio. Las marcas con "=" o "IA" se saltean, así
+el archivo anterior sigue en pantalla. Las IA se listan al final: si algún día generás esa
+imagen o animación, guardala en material/ y cambiá la línea por su ruta.
 """
 import re
 import shutil
@@ -30,7 +30,7 @@ def main():
     destino = episodio / "imagenes"
     destino.mkdir(exist_ok=True)
 
-    dibujos, faltan, copiados = [], [], 0
+    pendientes_ia, faltan, copiados = [], [], 0
     for n, linea in enumerate(asignacion.read_text(encoding="utf-8").splitlines(), 1):
         if not linea.strip() or linea.lstrip().startswith("#"):
             continue
@@ -41,8 +41,8 @@ def main():
         marca, archivo = f"{float(m.group(1)):.2f}", m.group(2)
         if archivo == "=":
             continue
-        if archivo.upper() == "DIBUJO":
-            dibujos.append(linea.strip())
+        if archivo.upper() in ("IA", "DIBUJO"):
+            pendientes_ia.append(linea.strip())
             continue
         origen = episodio / archivo
         if not origen.exists():
@@ -56,9 +56,9 @@ def main():
     print(f"Copiados {copiados} archivos a {destino}/")
     if faltan:
         print("\nNo encontré estos archivos:\n  " + "\n  ".join(faltan))
-    if dibujos:
-        print(f"\nFaltan {len(dibujos)} dibujos (pasáselos a prompts/02_imagenes.md):")
-        print("\n".join(d.replace(" DIBUJO |", "").replace("DIBUJO", "") for d in dibujos))
+    if pendientes_ia:
+        print(f"\n{len(pendientes_ia)} marcas IA (opcional; mientras tanto sigue la imagen anterior):")
+        print("\n".join(pendientes_ia))
 
 
 if __name__ == "__main__":

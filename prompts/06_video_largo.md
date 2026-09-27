@@ -1,8 +1,8 @@
-# Prompt 6 — Guion del video largo semanal (YouTube Jordy en Vivo)
+# Prompt 6 — Guion del video largo semanal (para pegar en ChatGPT)
 
 Sos el editor de guiones de Jordy en Vivo: periodismo de autor hecho para internet
 (español rioplatense, voseo). Con el material de abajo, escribí el guion de un video de
-**8 a 15 minutos** que Jordy va a leer. Se va a ilustrar con dibujos que cambian cada 3–5 s.
+**8 a 15 minutos** que Jordy va a leer. Se ilustra con fotos y videos reales que cambian cada 3–5 s.
 
 Reglas: solo hechos del material; `[VERIFICAR]` para lo que falte; fuentes nombradas; opinión
 separada y marcada. Nada de acusaciones sin fuente.
@@ -14,7 +14,9 @@ Estructura:
 4. **Mi lectura** (opinión, marcada como tal).
 5. **Cierre**: qué viene o qué queda abierto.
 
-Frases cortas, una por línea. Al final:
+Formato: la misma tabla del prompt 1 (# · Texto · Qué mostrar · Tipo FOTO/VIDEO/IA), una fila
+por frase corta. Al final:
+- Lista de búsqueda agrupada, con dónde buscar cada cosa.
 - 3 títulos (máx. 60 caracteres) y una idea de miniatura.
 - **2 o 3 tramos que funcionen solos como clip vertical** de 30–60 s (qué bloque y por qué),
   para cortarlos el domingo.

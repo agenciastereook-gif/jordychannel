@@ -3,7 +3,7 @@
 nombrados por su marca de tiempo (en segundos).
 
 Cada archivo queda en pantalla desde su marca hasta la marca del siguiente;
-el último dura hasta el final del audio. Se pueden mezclar dibujos, fotos reales
+el último dura hasta el final del audio. Se pueden mezclar fotos reales, imágenes
 y videos en la misma carpeta. Los videos van sin su audio (manda la voz en off)
 y si son más cortos que su tramo, se repiten.
 
