@@ -1,22 +1,24 @@
 #!/usr/bin/env python3
-"""Arma un video a partir de una voz en off y una carpeta de imágenes
-nombradas por su marca de tiempo (en segundos).
+"""Arma un video a partir de una voz en off y una carpeta de imágenes y/o videos
+nombrados por su marca de tiempo (en segundos).
 
-Cada imagen queda en pantalla desde su marca hasta la marca de la siguiente;
-la última dura hasta el final del audio. Reemplaza el paso manual de
-arrastrar imágenes en el editor.
+Cada archivo queda en pantalla desde su marca hasta la marca del siguiente;
+el último dura hasta el final del audio. Se pueden mezclar dibujos, fotos reales
+y videos en la misma carpeta. Los videos van sin su audio (manda la voz en off)
+y si son más cortos que su tramo, se repiten.
 
-Nombres válidos para las imágenes (png/jpg/webp):
-    0.00.png   7.png   15.5.jpg      -> segundos
-    00-07.png  01-15.50.png          -> minutos-segundos
+Nombres válidos (png/jpg/webp · mp4/mov/webm/m4v):
+    0.00.png   7.png   15.5.jpg   22.mp4   -> segundos
+    00-07.png  01-15.50.mov                -> minutos-segundos
 
 Uso:
     python3 scripts/armar_video.py --audio voz.mp3 --imagenes imgs/ --salida short.mp4
     python3 scripts/armar_video.py ... --formato horizontal   # video largo 16:9
     python3 scripts/armar_video.py ... --subs voz.srt         # subtítulos quemados
+    python3 scripts/armar_video.py ... --fondo white          # relleno blanco en vez de desenfocado
 
-Clip vertical de un tramo del video largo (reusa las mismas imágenes y el audio):
-    python3 scripts/armar_video.py --audio voz.mp3 --imagenes imgs/ --subs voz.srt \
+Clip vertical de un tramo del video largo (reusa los mismos archivos y el audio):
+    python3 scripts/armar_video.py --audio voz.mp3 --imagenes imgs/ --subs voz.srt \\
         --desde 02-10 --hasta 03-05 --salida clip1.mp4
 """
 import argparse
@@ -27,8 +29,11 @@ import sys
 import tempfile
 from pathlib import Path
 
-EXTENSIONES = {".png", ".jpg", ".jpeg", ".webp"}
+IMAGENES = {".png", ".jpg", ".jpeg", ".webp"}
+VIDEOS = {".mp4", ".mov", ".webm", ".m4v"}
 FORMATOS = {"vertical": (1080, 1920), "horizontal": (1920, 1080)}
+FPS = 30
+SRT_TIEMPO = re.compile(r"(\d+):(\d+):(\d+)[,.](\d+)\s*-->\s*(\d+):(\d+):(\d+)[,.](\d+)")
 
 
 def ffmpeg_bin():
@@ -49,9 +54,6 @@ def marca_de_nombre(nombre):
         return int(m.group(1)) * 60 + float(m.group(2))
     m = re.fullmatch(r"\d+(?:\.\d+)?", nombre)
     return float(nombre) if m else None
-
-
-SRT_TIEMPO = re.compile(r"(\d+):(\d+):(\d+)[,.](\d+)\s*-->\s*(\d+):(\d+):(\d+)[,.](\d+)")
 
 
 def fmt_srt(s):
@@ -82,88 +84,132 @@ def recortar_srt(origen, desde, hasta):
     return Path(tmp.name)
 
 
-def duracion_audio(ffmpeg, audio):
-    salida = subprocess.run([ffmpeg, "-i", str(audio)], capture_output=True, text=True).stderr
+def duracion(ffmpeg, archivo):
+    salida = subprocess.run([ffmpeg, "-i", str(archivo)], capture_output=True, text=True).stderr
     m = re.search(r"Duration: (\d+):(\d+):(\d+(?:\.\d+)?)", salida)
     if not m:
-        sys.exit(f"No pude leer la duración de {audio}")
+        sys.exit(f"No pude leer la duración de {archivo}")
     h, mi, s = m.groups()
     return int(h) * 3600 + int(mi) * 60 + float(s)
+
+
+def filtro_encuadre(ancho, alto, fondo):
+    """Encaja cualquier imagen/video en el cuadro: fondo desenfocado o color liso."""
+    fin = f"setsar=1,fps={FPS},format=yuv420p"
+    if fondo == "blur":
+        return (f"split[a][b];"
+                f"[a]scale={ancho}:{alto}:force_original_aspect_ratio=increase,crop={ancho}:{alto},"
+                f"boxblur=30:3[bg];"
+                f"[b]scale={ancho}:{alto}:force_original_aspect_ratio=decrease[fg];"
+                f"[bg][fg]overlay=(W-w)/2:(H-h)/2,{fin}")
+    return (f"scale={ancho}:{alto}:force_original_aspect_ratio=decrease,"
+            f"pad={ancho}:{alto}:(ow-iw)/2:(oh-ih)/2:color={fondo},{fin}")
+
+
+def render_tramo(ffmpeg, archivo, dur, offset, salida, vf):
+    """Renderiza un tramo mudo de `dur` segundos con un solo archivo."""
+    if archivo.suffix.lower() in VIDEOS:
+        largo = duracion(ffmpeg, archivo)
+        entrada = ["-ss", f"{offset % largo:.3f}"] if offset else []
+        entrada += ["-stream_loop", "-1", "-i", str(archivo)]
+    else:
+        entrada = ["-loop", "1", "-framerate", str(FPS), "-i", str(archivo)]
+    cmd = [ffmpeg, "-y", *entrada, "-t", f"{dur:.3f}", "-filter_complex", vf, "-an",
+           "-c:v", "libx264", "-preset", "veryfast", "-crf", "18", str(salida)]
+    r = subprocess.run(cmd, capture_output=True, text=True)
+    if r.returncode != 0:
+        print(r.stderr[-1500:])
+        sys.exit(f"Falló el tramo de {archivo.name}")
 
 
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--audio", required=True, type=Path)
-    p.add_argument("--imagenes", required=True, type=Path)
+    p.add_argument("--imagenes", required=True, type=Path, help="carpeta con imágenes y/o videos")
     p.add_argument("--salida", required=True, type=Path)
     p.add_argument("--formato", choices=FORMATOS, default="vertical")
     p.add_argument("--subs", type=Path, help="archivo .srt para quemar subtítulos")
-    p.add_argument("--fondo", default="white", help="color de relleno (default: white)")
+    p.add_argument("--fondo", default="blur",
+                   help="relleno cuando el archivo no tiene la proporción del video: "
+                        "blur (desenfocado, default) o un color (white, black...)")
     p.add_argument("--desde", help="inicio del tramo (segundos o MM-SS) para sacar un clip")
     p.add_argument("--hasta", help="fin del tramo (segundos o MM-SS)")
     a = p.parse_args()
 
     ffmpeg = ffmpeg_bin()
-    imagenes = []
+    medios = []
     for f in a.imagenes.iterdir():
-        if f.suffix.lower() in EXTENSIONES:
+        if f.suffix.lower() in IMAGENES | VIDEOS:
             t = marca_de_nombre(f.stem)
             if t is None:
                 print(f"  (ignoro {f.name}: el nombre no es una marca de tiempo)")
             else:
-                imagenes.append((t, f.resolve()))
-    if not imagenes:
-        sys.exit("No hay imágenes con nombre de marca de tiempo en la carpeta.")
-    imagenes.sort()
+                medios.append((t, f.resolve()))
+    if not medios:
+        sys.exit("No hay imágenes ni videos con nombre de marca de tiempo en la carpeta.")
+    medios.sort()
 
-    total = duracion_audio(ffmpeg, a.audio)
+    total_audio = duracion(ffmpeg, a.audio)
     desde = marca_de_nombre(a.desde) if a.desde else 0.0
-    hasta = marca_de_nombre(a.hasta) if a.hasta else total
+    hasta = marca_de_nombre(a.hasta) if a.hasta else total_audio
     if desde is None or hasta is None or not 0 <= desde < hasta:
         sys.exit("--desde/--hasta inválidos (usá segundos como 130 o minutos-segundos como 02-10).")
-    hasta = min(hasta, total)
-    if a.desde or a.hasta:
-        previas = [im for im in imagenes if im[0] <= desde]
-        imagenes = previas[-1:] + [im for im in imagenes if desde < im[0] < hasta]
-        imagenes = [(t - desde, f) for t, f in imagenes]
-        if a.subs:
-            a.subs = recortar_srt(a.subs, desde, hasta)
-    total = hasta - desde
-    if not imagenes:
-        sys.exit("No hay imágenes en ese tramo.")
-    if imagenes[0][0] > 0:
-        print(f"  Aviso: la primera imagen arranca en {imagenes[0][0]}s; la estiro hasta 0s.")
-        imagenes[0] = (0.0, imagenes[0][1])
+    hasta = min(hasta, total_audio)
+    if a.subs and (a.desde or a.hasta):
+        a.subs = recortar_srt(a.subs, desde, hasta)
+
+    # Tramos (archivo, inicio, fin, offset) dentro de [desde, hasta];
+    # offset = cuánto del archivo ya pasó (para arrancar un video a mitad en un clip)
+    tramos = []
+    for i, (t, f) in enumerate(medios):
+        fin = medios[i + 1][0] if i + 1 < len(medios) else hasta
+        ini, fin = max(t, desde), min(fin, hasta)
+        if fin > ini:
+            tramos.append((f, ini, fin, ini - t))
+    if not tramos:
+        sys.exit("No hay archivos en ese tramo.")
+    if tramos[0][1] > desde:
+        f, ini, fin, off = tramos[0]
+        print(f"  Aviso: el primer archivo arranca en {ini:.2f}s; lo estiro hasta el comienzo.")
+        tramos[0] = (f, desde, fin, off)
 
     ancho, alto = FORMATOS[a.formato]
+    vf = filtro_encuadre(ancho, alto, a.fondo)
+    total = hasta - desde
+    n_vid = sum(1 for f, *_ in tramos if f.suffix.lower() in VIDEOS)
+    print(f"Armando {a.salida} ({a.formato}, {len(tramos)} tramos, {n_vid} videos, {total:.1f}s)...")
 
-    with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False) as lista:
-        for i, (t, f) in enumerate(imagenes):
-            fin = imagenes[i + 1][0] if i + 1 < len(imagenes) else total
-            if fin <= t:
-                continue
-            ruta = str(f).replace("'", r"'\''")
-            lista.write(f"file '{ruta}'\nduration {fin - t:.3f}\n")
-        lista.write(f"file '{str(imagenes[-1][1])}'\n")  # el concat demuxer necesita repetir la última
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp = Path(tmp)
+        lista = tmp / "lista.txt"
+        with lista.open("w") as l:
+            for i, (f, ini, fin, off) in enumerate(tramos):
+                parte = tmp / f"{i:04d}.mp4"
+                render_tramo(ffmpeg, f, fin - ini, off, parte, vf)
+                l.write(f"file '{parte}'\n")
+        mudo = tmp / "mudo.mp4"
+        r = subprocess.run([ffmpeg, "-y", "-f", "concat", "-safe", "0", "-i", str(lista),
+                            "-c", "copy", str(mudo)], capture_output=True, text=True)
+        if r.returncode != 0:
+            print(r.stderr[-1500:])
+            sys.exit("Falló la unión de tramos.")
 
-    filtro = (f"scale={ancho}:{alto}:force_original_aspect_ratio=decrease,"
-              f"pad={ancho}:{alto}:(ow-iw)/2:(oh-ih)/2:color={a.fondo},setsar=1,fps=30,format=yuv420p")
-    if a.subs:
-        srt = str(a.subs.resolve()).replace("\\", "/").replace(":", r"\:").replace("'", r"\'")
-        filtro += (f",subtitles='{srt}':force_style='Fontsize=14,Bold=1,Outline=2,"
-                   f"MarginV={'60' if a.formato == 'vertical' else '30'}'")
-
-    cmd = [ffmpeg, "-y", "-f", "concat", "-safe", "0", "-i", lista.name, "-ss", f"{desde:.3f}", "-t", f"{total:.3f}", "-i", str(a.audio),
-           "-vf", filtro, "-c:v", "libx264", "-preset", "medium", "-crf", "20",
-           "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", str(a.salida)]
-    print(f"Armando {a.salida} ({a.formato}, {len(imagenes)} imágenes, {total:.1f}s)...")
-    r = subprocess.run(cmd, capture_output=True, text=True)
-    Path(lista.name).unlink(missing_ok=True)
-    if r.returncode != 0:
-        print(r.stderr[-2000:])
-        if a.subs and "subtitles" in r.stderr:
-            print("\nTu ffmpeg no soporta subtítulos quemados; probá sin --subs o instalá ffmpeg completo.")
-        sys.exit(1)
+        cmd = [ffmpeg, "-y", "-i", str(mudo), "-ss", f"{desde:.3f}", "-t", f"{total:.3f}",
+               "-i", str(a.audio), "-map", "0:v", "-map", "1:a"]
+        if a.subs:
+            srt = str(a.subs.resolve()).replace("\\", "/").replace(":", r"\:").replace("'", r"\'")
+            cmd += ["-vf", f"subtitles='{srt}':force_style='Fontsize=14,Bold=1,Outline=2,"
+                           f"MarginV={'60' if a.formato == 'vertical' else '30'}'",
+                    "-c:v", "libx264", "-preset", "medium", "-crf", "20"]
+        else:
+            cmd += ["-c:v", "copy"]
+        cmd += ["-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", str(a.salida)]
+        r = subprocess.run(cmd, capture_output=True, text=True)
+        if r.returncode != 0:
+            print(r.stderr[-2000:])
+            if a.subs and "subtitles" in r.stderr:
+                print("\nTu ffmpeg no soporta subtítulos quemados; probá sin --subs o instalá ffmpeg completo.")
+            sys.exit(1)
     print("Listo.")
 
 

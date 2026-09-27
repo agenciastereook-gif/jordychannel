@@ -45,9 +45,13 @@ Es el método del video (voz propia + dibujos sincronizados). Carpeta: `episodio
 2. **Voz** — grabás `voz.mp3` (45–75 s).
 3. **Marcas** — TurboScribe → exportar SRT → `voz.srt`. Después:
    `python3 scripts/srt_a_marcas.py episodios/<carpeta>/voz.srt > episodios/<carpeta>/marcas.txt`
-4. **Dibujos** — `prompts/02_imagenes.md` + `marcas.txt` en Claude Code (Higgsfield).
+4. **Imágenes** — elegí según la noticia (ver "Fotos reales, dibujos o mezcla" abajo):
+   - **Tus fotos y videos**: ponelos en `episodios/<carpeta>/material/` y usá `prompts/02b_material_propio.md`.
+     Claude mira el material, asigna cada archivo a su frase y te muestra la lista para que la apruebes.
+   - **Dibujos**: `prompts/02_imagenes.md` + `marcas.txt` (Higgsfield).
+   - **Mezcla** (lo más común): 02b primero; las frases sin material quedan como `DIBUJO` y se generan solo esas.
    *Mientras se generan, avanzá con el bloque 3.*
-5. **Revisión** — mirá los dibujos; pedí rehacer los que estén mal (por número de segundo).
+5. **Revisión** — mirá la carpeta `imagenes/`; pedí rehacer lo que esté mal (por número de segundo).
 6. **Armado** —
    `python3 scripts/armar_video.py --audio episodios/<carpeta>/voz.mp3 --imagenes episodios/<carpeta>/imagenes --subs episodios/<carpeta>/voz.srt --salida episodios/<carpeta>/short.mp4`
 7. **Textos** — `prompts/03_publicacion.md` → caption de la collab, título de YouTube, post de X.
@@ -97,10 +101,30 @@ Video largo ──► YouTube Jordy
              └► 1–2 clips verticales ──► stock para Reels/Shorts de Jordy
 ```
 
-## Estilo visual
-- **Short diario y video largo de Jordy**: dibujos simples tipo Paint, fondo blanco. Es la firma
-  del formato: se reconoce en el scroll.
-- **El Hit y El Recorte**: fotos y clips reales, diseño sobrio. Sin dibujos.
+## Fotos reales, dibujos o mezcla
+
+El script acepta **dibujos, fotos y videos mezclados** en la misma carpeta. Si una foto o video no
+tiene la proporción del video (ej. foto horizontal en un short vertical), la centra con el mismo
+fondo desenfocado de los reels de noticias. Los videos van sin su audio (manda tu voz).
+
+Regla práctica:
+- **Personas reales → foto real.** No le pidas al dibujo que "se parezca" a alguien: la IA no lo
+  logra bien, muchas herramientas lo bloquean y, si sale parecido a otra persona, es un error
+  periodístico. La foto identifica; el dibujo explica.
+- **Ideas, cifras, conceptos → dibujo.** "Prohibió las apuestas", "movían 3 mil millones",
+  "los chicos con el celular": ahí el dibujo rinde más que cualquier foto de archivo.
+- **Momentos → video.** La declaración, el acto, el gol: 2 a 4 segundos del video real.
+
+**De dónde sacar fotos sin problemas:**
+- Fotos oficiales de gobiernos y organismos (Casa Rosada, Planalto, Congreso), que suelen
+  permitir uso con crédito. Ej.: la Agência Brasil publica con licencia libre citando autor.
+- Wikimedia Commons (revisá la licencia de cada foto).
+- Capturas de TV/streaming para comentar la noticia, con crédito del medio. Es lo habitual en el
+  rubro, pero es zona gris: nunca uses una foto de agencia (Reuters, AFP, Getty) sin licencia.
+- Poné el crédito en la descripción: "Fotos: Agência Brasil / Planalto".
+
+**Estilo por marca:** el short y el largo de Jordy pueden llevar mezcla (foto + dibujo); El Hit y
+El Recorte, siempre material real.
 
 ## Cada dos semanas (15 min)
 Mirá qué funcionó (retención, seguidores ganados, qué noticias rindieron) y anotá una cosa para
