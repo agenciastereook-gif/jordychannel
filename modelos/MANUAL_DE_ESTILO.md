@@ -116,9 +116,11 @@ a la pregunta; en los demás tipos, dentro de las primeras frases.
 
 ## 4. Identificación de personas y entidades
 
-4.1. En la primera mención, cada persona se presenta con nombre completo y con la referencia que
-permite al público reconocerla. Esa referencia se elige por lo que la audiencia conoce de ella, no
-por lo que es más relevante en su trayectoria.
+4.1. Cada persona se menciona de la forma en que el público la conoce. Si es ampliamente conocida,
+basta la forma más corta que la identifica sin ambigüedad; el nombre completo y los cargos
+formales solo se agregan cuando hacen falta para saber de quién se habla. Si es poco conocida, se
+presenta con su nombre y con la referencia que permite ubicarla, elegida por lo que la audiencia
+conoce de ella y no por lo que es más relevante en su trayectoria.
 
 4.2. En las menciones siguientes se usa una única forma abreviada, siempre la misma dentro del
 guion.
@@ -127,8 +129,9 @@ guion.
 de una, se repite la identificación en lugar de usar el pronombre.
 
 4.4. Quien habla o actúa en nombre de una entidad se presenta con su función y su nombre. Las
-entidades se nombran completas y, si el público puede no conocerlas, se explica en pocas palabras
-qué son.
+entidades se nombran de modo que el público sepa exactamente cuál es: si la historia ocurre fuera
+del país del público, las instituciones llevan su país; si el público puede no conocerlas, se
+explica en pocas palabras qué son.
 
 4.5. Los datos personales que dimensionan el hecho, como la edad, se dan cerca de la primera
 mención. Los que no aportan a la comprensión, se omiten.
@@ -137,9 +140,11 @@ mención. Los que no aportan a la comprensión, se omiten.
 
 ## 5. Datos y precisión
 
-5.1. Siempre se prefiere el dato concreto a la generalidad. Tiempo, lugar y cantidad se expresan
-con el mayor nivel de precisión que el material permite. Cuando el hecho ocurrió en otra zona
-horaria, se indica a qué hora local corresponde la referencia.
+5.1. Siempre se prefiere el dato concreto a la generalidad, pero precisión no es exhaustividad.
+Un dato de tiempo, lugar o cantidad entra solo si agrega comprensión a la historia. Un detalle que
+no cambia nada de lo que el público entiende, o que repite algo ya dicho o evidente, se omite. En
+una reconstrucción, en cambio, los datos de tiempo y lugar son la secuencia misma y se dan con el
+mayor detalle disponible, con la hora local cuando el hecho ocurrió en otra zona horaria.
 
 5.2. Lo aproximado se dice como aproximado, con giros propios del habla. Ninguna cifra se redondea,
 se agranda ni se achica para que suene mejor.
@@ -150,7 +155,15 @@ del relato.
 5.4. Las magnitudes técnicas se incluyen cuando ayudan a entender la secuencia o la escala, y se
 expresan de la forma en que el público las entiende al escucharlas.
 
-5.5. Todo dato tiene que estar en el material de base. Si falta un dato necesario para entender
+5.5. Referencias completas. Toda referencia tiene que poder entenderse sin que el público se
+pregunte cuál, cuándo, quién o cuánto. Si una referencia relativa o genérica deja esa pregunta
+abierta y la respuesta importa para la historia, se da el dato concreto.
+
+5.6. Vigencia. Cuando se usa una estadística o un estudio, se usa el más reciente disponible. Si el
+único dato disponible es antiguo en relación con el hecho, se dice de cuándo es, y entra solo si
+sigue siendo relevante para entender la noticia.
+
+5.7. Todo dato tiene que estar en el material de base. Si falta un dato necesario para entender
 la historia, se marca como pendiente de verificación. Nunca se completa por deducción, por
 probabilidad ni por conocimiento general.
 
@@ -197,7 +210,12 @@ verbos que atribuyen intención, culpa o reticencia, salvo que el hecho lo acred
 6.8. Silencio. La negativa o la omisión de una fuente implicada en responder es información y se
 consigna como tal, sin interpretarla.
 
-6.9. Límite de lo impersonal. Las construcciones sin sujeto sirven para narrar lo que es de
+6.9. Sin metacomentarios. Cuando una afirmación ya está atribuida, la atribución y el verbo
+bastan para que el público sepa que es la posición de quien la sostiene. El narrador no agrega
+frases que evalúen, relativicen o califiquen esa afirmación. Si hay un dato que la contradice, se
+da el dato; si no lo hay, no se comenta.
+
+6.10. Límite de lo impersonal. Las construcciones sin sujeto sirven para narrar lo que es de
 conocimiento público o verificable en sí mismo. Nunca para introducir algo dudoso, exclusivo o
 controvertido sin decir de dónde proviene.
 
@@ -243,6 +261,13 @@ cronológico es el del acontecimiento que se reconstruye, no el de su historia p
 otro, como el momento, el lugar o el autor de una acción, van dentro de la misma frase y no en una
 frase aparte. Nunca se escribe una frase cuyo único contenido sea un dato accesorio.
 
+8.3.2. Toda frase aporta información nueva. No se escriben frases puente cuya única función sea
+pasar de un tema a otro, anunciar lo que viene o resumir lo anterior: la transición se hace con el
+conector al comienzo de la frase que ya trae el dato siguiente.
+
+8.3.3. La brevedad nunca va en contra de la claridad. Si un matiz no se puede decir con claridad en
+pocas palabras, se explica bien o se omite; nunca se comprime hasta volverse ambiguo.
+
 8.3.1. Las frases se encadenan como en un relato oral: cada una se apoya en la anterior y prepara
 la siguiente. Se alternan frases de extensión media con frases breves, reservadas para los
 momentos que necesitan peso. Se evitan las subordinadas encadenadas y los incisos.
@@ -273,6 +298,11 @@ se enumeran de forma explícita en voz alta.
 9.1. Registro informativo, sobrio y claro. La base es un español neutro, con el léxico rioplatense
 que usaría Jordy de forma natural en una conversación. Se evitan la jerga de redes, el lunfardo
 forzado y los extranjerismos innecesarios.
+
+9.1.1. Lenguaje llano. Las categorías técnicas, legales, económicas o administrativas se
+reemplazan por la forma en que el público nombra esas cosas en la vida cotidiana. Si la categoría
+precisa es necesaria para no inducir a error, se la nombra una vez y se la explica en palabras
+comunes en la misma frase.
 
 9.2. No se usan exclamaciones, énfasis tipográficos, suspensos artificiales ni fórmulas que
 prometen algo para retener la atención. La atención se sostiene con información.
@@ -408,6 +438,12 @@ menos. Nunca se rellena.
 1. ¿La primera frase contiene el núcleo de la noticia y la identificación del protagonista?
 1.1. ¿Quedaron afuera los datos que no cambian la comprensión?
 1.2. ¿Hay una tensión que recorre el guion hasta el cierre?
+1.3. ¿Cada frase aporta un dato nuevo, sin frases puente ni comentarios del narrador sobre lo
+     atribuido?
+1.4. ¿Todo está dicho en lenguaje llano y cada referencia se entiende sin preguntar cuál, cuándo
+     o quién?
+1.5. ¿Los datos de tiempo y lugar que quedaron agregan algo, y las estadísticas son las más
+     recientes?
 2. ¿El tipo de relato elegido es el adecuado y se respeta su estructura?
 3. ¿Cada atribución cumple al menos un criterio de la sección 6, y no hay atribuciones que no lo
    cumplan?

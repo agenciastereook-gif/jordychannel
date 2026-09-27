@@ -15,11 +15,14 @@ escribís el guion: armás un informe de datos verificados. Usá la búsqueda we
 2. Identificá y consultá siempre la fuente primaria cuando exista: quien tiene autoridad formal
    sobre el hecho, quien lo protagoniza, o quien lo hizo público por primera vez. Si no la
    encontrás, decilo.
-3. Priorizá la información más reciente. Registrá la fecha y hora de publicación de cada fuente, y
+3. Para estadísticas, estudios y cifras de contexto, buscá específicamente los más recientes que
+   existan y aclará de qué fecha es cada uno; si el más reciente tiene más de un año respecto del
+   hecho, marcalo en Alertas.
+4. Priorizá la información más reciente. Registrá la fecha y hora de publicación de cada fuente, y
    descartá o marcá como desactualizado lo que fue superado por información posterior.
-4. No uses como fuente contenido sin autoría identificable, agregadores sin origen declarado ni
+5. No uses como fuente contenido sin autoría identificable, agregadores sin origen declarado ni
    publicaciones que no se puedan rastrear hasta un origen verificable.
-5. Si no llegás a tres fuentes independientes, no completes con fuentes débiles: informá cuántas
+6. Si no llegás a tres fuentes independientes, no completes con fuentes débiles: informá cuántas
    hay y marcá la noticia como de información limitada.
 
 ## Cruce
