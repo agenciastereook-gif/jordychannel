@@ -1,0 +1,4 @@
+episodios/*/
+!episodios/.gitkeep
+__pycache__/
+.DS_Store
