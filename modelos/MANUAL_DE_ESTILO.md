@@ -29,6 +29,23 @@ elige precisión sin excepción.
 
 ---
 
+## 2. Selección y jerarquía
+
+2.0.1. El guion no traslada la investigación: la selecciona. De todo el material disponible entra
+solo lo que el público necesita para entender el núcleo de la noticia, qué lo provocó y qué
+consecuencia tiene. Un dato correcto que no cambia la comprensión se descarta.
+
+2.0.2. Un guion corto se sostiene con pocos datos fuertes, no con muchos datos débiles. Antes de
+escribir se eligen los elementos esenciales y el resto se deja afuera, aunque sea interesante.
+
+2.0.3. Documentos, estudios, normas y cifras entran solo si son la noticia o si la explican de
+forma decisiva, y con su hallazgo o efecto principal. Su metodología, su estructura interna y sus
+detalles técnicos no entran salvo que sin ellos el público llegue a una conclusión falsa.
+
+2.0.4. Todo guion tiene una tensión que lo recorre: un conflicto, una contradicción o una pregunta
+que el relato plantea y desarrolla. Los datos se ordenan para sostener esa tensión hasta el giro y
+el cierre. Un guion sin tensión es una lista, y una lista no es un guion.
+
 ## 2. Clasificación de la noticia y estructura
 
 Antes de escribir se determina qué tipo de relato requiere la noticia. El tipo no depende del
@@ -59,8 +76,10 @@ de modo que convive lo confirmado con lo que no lo está.
 8. La posición, o la falta de posición, de quienes rodean al protagonista.
 
 ### 2.3. Reconstrucción
-Corresponde cuando el hecho es complejo y el público necesita entender cómo se produjo, paso a
-paso, para poder comprenderlo.
+Corresponde cuando el hecho es un acontecimiento cuya secuencia material u operativa hay que
+seguir paso a paso para comprenderlo. No corresponde para decisiones políticas, institucionales o
+judiciales: esas se cuentan como último momento o como historia, empezando por la decisión y con
+el antecedente mínimo indispensable.
 1. La pregunta que el relato va a responder, planteada al comienzo.
 2. Las coordenadas completas del hecho: tiempo, lugar, actores y magnitudes relevantes.
 3. La secuencia de acontecimientos en estricto orden, con las referencias de tiempo y de espacio
@@ -204,6 +223,10 @@ con su origen.
 7.5. Cada afirmación provisoria lleva su propia marca de provisoriedad. No alcanza con advertirlo
 una vez para todo el guion.
 
+7.6. Proporcionalidad. Las aclaraciones sobre el alcance de un dato se incluyen solo cuando su
+ausencia llevaría al público a una conclusión falsa. No se agregan salvedades por prudencia
+genérica: la precisión se logra eligiendo bien cómo decir el dato, no acumulando advertencias.
+
 ---
 
 ## 8. Narración y ritmo
@@ -211,12 +234,18 @@ una vez para todo el guion.
 8.1. El narrador habla siempre en tercera persona y nunca se dirige al público. La única pregunta
 admitida es la que abre una reconstrucción.
 
-8.2. El relato sigue el orden en que ocurrieron los hechos. Si hace falta un antecedente, se
-introduce marcado como tal y el relato vuelve después al punto en que estaba.
+8.2. El relato arranca siempre en el núcleo de la noticia y desde ahí avanza en orden. Los
+antecedentes entran solo si sin ellos no se entiende el hecho, comprimidos en lo mínimo, marcados
+como antecedente, y nunca antes de haber contado lo central. En una reconstrucción, el orden
+cronológico es el del acontecimiento que se reconstruye, no el de su historia previa.
 
-8.3. Cada frase contiene una sola idea. Se alternan frases de extensión media con frases breves,
-que se reservan para los momentos que necesitan peso. Se evitan las subordinadas encadenadas y los
-incisos.
+8.3. Cada frase contiene una sola idea, pero una idea completa. Los datos que solo precisan a
+otro, como el momento, el lugar o el autor de una acción, van dentro de la misma frase y no en una
+frase aparte. Nunca se escribe una frase cuyo único contenido sea un dato accesorio.
+
+8.3.1. Las frases se encadenan como en un relato oral: cada una se apoya en la anterior y prepara
+la siguiente. Se alternan frases de extensión media con frases breves, reservadas para los
+momentos que necesitan peso. Se evitan las subordinadas encadenadas y los incisos.
 
 8.4. Las relaciones de tiempo entre un hecho y el siguiente se explicitan siempre: qué pasó antes,
 qué después y cuánto tiempo transcurrió, de modo que la secuencia se pueda seguir sin imágenes.
@@ -332,7 +361,8 @@ la conclusión surge de exponer con datos la tensión entre ellas, no de declara
 
 14.1. No se usan paréntesis, abreviaturas ni símbolos. Toda sigla se explica en su primera mención.
 
-14.2. Números, horas y fechas se escriben de manera que se lean sin vacilar, tal como se dicen.
+14.2. Cifras, horas y fechas se escriben con números, no con letras. El año se omite cuando es el
+año en curso, y se prefiere la referencia temporal que el público entiende más rápido.
 
 14.3. Los nombres propios extranjeros se escriben correctamente. Si su pronunciación no es
 evidente, se agrega una indicación entre corchetes, destinada solo a quien lee, que no se
@@ -368,16 +398,20 @@ menos. Nunca se rellena.
 - Recurrir a fórmulas de retención, exclamaciones o suspenso artificial.
 - Exponer de manera morbosa a víctimas o a personas vulnerables.
 - Reproducir frases de guiones anteriores.
+- Trasladar al guion todo el contenido de la investigación.
+- Escribir frases cuyo único contenido sea un dato accesorio.
 
 ---
 
 ## 17. Control previo a la entrega
 
 1. ¿La primera frase contiene el núcleo de la noticia y la identificación del protagonista?
+1.1. ¿Quedaron afuera los datos que no cambian la comprensión?
+1.2. ¿Hay una tensión que recorre el guion hasta el cierre?
 2. ¿El tipo de relato elegido es el adecuado y se respeta su estructura?
 3. ¿Cada atribución cumple al menos un criterio de la sección 6, y no hay atribuciones que no lo
    cumplan?
-4. ¿El público puede identificar el grado de certeza de cada afirmación?
+4. ¿El público puede identificar el grado de certeza de cada afirmación, sin salvedades que sobren?
 5. ¿La secuencia es cronológica y las relaciones de tiempo están explícitas?
 6. ¿Cada recurso de uso limitado aparece como máximo una vez?
 7. ¿El cierre corresponde a una de las formas de la sección 13?

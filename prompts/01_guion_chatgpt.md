@@ -12,7 +12,9 @@ leer yo: **60 a 90 segundos** si es noticia o historia; **hasta 3 minutos** si e
 tipo "¿cómo fue?".
 
 **Seguí completo el `MANUAL_DE_ESTILO.md` adjunto** (si no lo tenés, pedímelo antes de escribir).
-Antes del guion, decime a qué tipo pertenece la noticia según la sección 2 del manual.
+Antes del guion, decime en tres líneas: el tipo de relato (sección 2), la tensión que lo recorre
+y los datos esenciales que elegiste del material (sección 2.0). El material es una investigación
+completa: no la trasladés, seleccioná.
 
 Reglas (no negociables):
 1. Solo hechos que estén en el material. No inventes datos, fechas, cifras ni citas.
