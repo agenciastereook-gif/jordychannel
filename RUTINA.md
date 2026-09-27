@@ -4,25 +4,22 @@ Es el método del video original (voz propia + imágenes que cambian cada 2–4 
 su segundo exacto), con herramientas gratis. Una persona. La versión con IA paga está guardada en
 la rama `sistema-premium`, para cuando esto sea rentable.
 
-## Los pasos del short (siempre iguales)
+## Una sola vez
+Doble clic en **`INSTALAR.bat`**. Si instala Python, cerrá la ventana y abrilo de nuevo.
 
-Carpeta del día: `episodios/AAAA-MM-DD-slug/`
+## Cada short
 
-| # | Paso | Herramienta | Quién | Queda guardado |
-|---|---|---|---|---|
-| 0 | Investigación: fuentes, cruce y datos | ChatGPT con `prompts/00_investigacion.md` | ChatGPT (vos revisás) | `investigacion.md` |
-| 1 | Guion + qué mostrar en cada frase | ChatGPT con `prompts/01_guion_chatgpt.md` | ChatGPT (vos verificás) | `guion.md` |
-| 2 | Grabar la voz | Celular o micrófono | Vos | `voz.mp3` |
-| 3 | Marcas de tiempo | TurboScribe → exportar SRT | Vos | `voz.srt` |
-| 4 | Juntar fotos y videos | La "lista de búsqueda" del guion | Vos | `material/` |
-| 5 | Asignar cada archivo a su segundo | Claude Code con `prompts/02_asignar_material.md` | Claude (vos das OK) | `imagenes/` |
-| 6 | Armar el video | `scripts/armar_video.py` | Claude | `short.mp4` |
-| 7 | Textos para publicar | `prompts/03_publicacion.md` | Claude | — |
+| # | Qué | Quién |
+|---|---|---|
+| 1 | Investigación y guion en tus GPT de ChatGPT (Investigador → Guionista) | ChatGPT (vos revisás) |
+| 2 | Doble clic en **`NUEVO SHORT.bat`**, escribís el tema → se crea y se abre la carpeta | PC |
+| 3 | Pegás el guion en `guion.md`, tirás tu grabación en la carpeta y las fotos/videos en `material/` (cualquier nombre) | Vos |
+| 4 | En Claude Code escribís **`/short`** | Vos |
+| 5 | Transcribe la voz, asigna el material a cada segundo y te pide OK | PC (Claude) |
+| 6 | Arma `short.mp4` y escribe `textos.md` con caption, título y post de X | PC (Claude) |
 
-Comando del paso 6:
-```
-python3 scripts/armar_video.py --audio episodios/<carpeta>/voz.mp3 --imagenes episodios/<carpeta>/imagenes --subs episodios/<carpeta>/voz.srt --salida episodios/<carpeta>/short.mp4
-```
+La transcripción corre gratis en tu compu (reemplaza a TurboScribe). La primera vez baja el modelo
+de voz, unos 500 MB.
 
 **IA (opcional, para más adelante):** si una frase no tiene material, en el guion va como `IA`.
 Mientras no haya herramienta, queda la imagen anterior en pantalla. El día que la haya, la imagen
