@@ -17,7 +17,7 @@ Estilo (igual en todas, para que el canal sea reconocible):
 - Personajes tipo muñequito/caricatura simple. Se puede usar un rasgo reconocible
   (pelo, anteojos, camiseta, micrófono) pero **nunca** un retrato realista de una persona real.
 - Texto dentro de la imagen: solo si es 1–3 palabras clave (ej. "JUICIO", "$ 3 MILLONES").
-- Formato **vertical 9:16** (para short). Si te pido video largo: 16:9.
+- Formato **vertical 9:16** para el short. Para el video largo: **16:9** y un dibujo cada 3–5 s.
 
 Reglas de cuidado (es un canal de noticias):
 - No dibujes a una persona real cometiendo un delito o en una situación íntima/humillante
