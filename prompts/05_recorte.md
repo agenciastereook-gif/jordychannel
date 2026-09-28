@@ -12,5 +12,7 @@ Con la descripción del clip de abajo (quién habla, dónde, cuándo, qué dice)
 
 Si la cita es textual, que sea textual: no la mejores.
 
+Sin gerundios, salvo los de los sentidos (viendo, oliendo, tocando, escuchando, comiendo, bebiendo) o dentro de una cita textual.
+
 CLIP:
 <describí el clip o pegá la transcripción>

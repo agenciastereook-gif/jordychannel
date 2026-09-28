@@ -7,14 +7,19 @@ la rama `sistema-premium`, para cuando esto sea rentable.
 ## Una sola vez
 Doble clic en **`INSTALAR.bat`**. Si instala Python, cerrá la ventana y abrilo de nuevo.
 
-## Cada short
+## Cada short (con el panel)
+Doble clic en **`ESTUDIO.pyw`**. A la izquierda están tus shorts; **+** crea uno nuevo. Seguí las pestañas:
+**1 Investigación** (ChatGPT busca en la web) → **2 Guion** (ChatGPT, con el manual; revisalo ahí) →
+**3 Voz y material** (arrastrás la grabación y las fotos/videos; los clips de El Recorte se agregan con un clic) →
+**4 Asignación** (Claude elige qué va en cada frase; corregís y das OK) → **5 Video** → **6 Textos**.
+
+## Cada short (sin el panel)
 
 | # | Qué | Quién |
 |---|---|---|
-| 1 | Investigación y guion en ChatGPT (Investigador → Guionista) | ChatGPT (vos revisás) |
-| 1b | Con el guion final, plan visual: qué mostrar en cada frase y dónde conseguirlo (Buscador visual, `prompts/01b_busqueda_visual.md`) | ChatGPT |
+| 1 | Investigación y guion en tus GPT de ChatGPT (Investigador → Guionista) | ChatGPT (vos revisás) |
 | 2 | Doble clic en **`NUEVO SHORT.bat`**, escribís el tema → se crea y se abre la carpeta | PC |
-| 3 | Pegás el guion en `guion.md` y el plan en `visual.md`, tirás tu grabación en la carpeta y las fotos/videos en `material/` (cualquier nombre) | Vos |
+| 3 | Pegás el guion en `guion.md`, tirás tu grabación en la carpeta y las fotos/videos en `material/` (cualquier nombre) | Vos |
 | 4 | En Claude Code escribís **`/short`** | Vos |
 | 5 | Transcribe la voz, asigna el material a cada segundo y te pide OK | PC (Claude) |
 | 6 | Arma `short.mp4` y escribe `textos.md` con caption, título y post de X | PC (Claude) |
@@ -22,18 +27,11 @@ Doble clic en **`INSTALAR.bat`**. Si instala Python, cerrá la ventana y abrilo 
 La transcripción corre gratis en tu compu (reemplaza a TurboScribe). La primera vez baja el modelo
 de voz, unos 500 MB.
 
-**Sonido original:** cuando el guion tiene una línea `[SONIDO ORIGINAL]`, al grabar la salteás y
-seguís de corrido. Poné en `material/` el video que tiene ese sonido. Al armar, la voz se corta en
-ese punto, pasa el clip con su audio y después sigue tu voz; los subtítulos se corren solos.
-
-**IA (opcional, para más adelante):** si una frase no tiene material, en el plan visual y en
-`asignacion.txt` va como `IA`.
+**IA (opcional, para más adelante):** si una frase no tiene material, en el guion va como `IA`.
 Mientras no haya herramienta, queda la imagen anterior en pantalla. El día que la haya, la imagen
 o animación se guarda en `material/` y se cambia esa línea en `asignacion.txt`. Nada más cambia.
 
-**Fotos:** personas reales siempre con foto o video real. Fuentes seguras: fotos oficiales de
-gobiernos y organismos, Wikimedia Commons (mirar licencia), capturas con crédito del medio.
-Nunca fotos de agencia (Reuters, AFP, Getty) sin licencia. Crédito en la descripción.
+**Material:** en Estudio, "Buscar material" lo busca y lo baja solo; también podés pegar un link (YouTube, X, TikTok, Instagram o foto). Primero fuentes seguras (oficiales, Wikimedia Commons); si no hay, se usa igual: el riesgo lo asume Jordy. Personas reales: siempre foto o video real. Ningún video queda más de 5 s seguidos: el armado mete un microcorte. Créditos en la descripción.
 
 ## Dónde sale cada cosa
 
@@ -42,7 +40,7 @@ Nunca fotos de agencia (Reuters, AFP, Getty) sin licencia. Crédito en la descri
 | Short de la noticia (lun–vie) | 1 por día | 1 por día | IG collab El Hit + Jordy · YouTube Shorts Jordy · dato a X de El Hit |
 | El Hit extra (placa, carrusel, breaking) | 1 por día | 2 por día | IG El Hit (`prompts/04_el_hit.md`) |
 | El Recorte | 1 clip por día | 2 por día | IG El Recorte, collab con El Hit si es noticia, X de El Hit (`prompts/05_recorte.md`) |
-| Video largo | 1 por semana | 1 por semana | YouTube Jordy (`prompts/06_video_largo.md`, mismos pasos con `--formato horizontal`) |
+| Video largo | 1 por semana | 1 por semana | YouTube Jordy (`prompts/06_video_largo.md`, mismos 7 pasos en `--formato horizontal`) |
 | Clips del largo (finde) | 1 | 2+ | Stock para Reels/Shorts (`prompts/07_clips.md` + `--desde/--hasta`) |
 
 El piso es obligatorio; el ideal, si hay tiempo. Semana complicada: short 3 días y se usa el stock.

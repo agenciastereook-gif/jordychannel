@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "estudio",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["ESTUDIO.pyw", "--sin-ventana", "--puerto", "8431"],
+      "port": 8431
+    }
+  ]
+}

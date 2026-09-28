@@ -2,3 +2,7 @@ episodios/*/
 !episodios/.gitkeep
 __pycache__/
 .DS_Store
+
+# local de cada PC
+.claude/settings.local.json
+*.log

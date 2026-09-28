@@ -1,0 +1,1287 @@
+{
+  "brand": "Jordy en Vivo",
+  "version": "1.0",
+  "date": "2026-09-28",
+  "status": "Design assets and layout specification; not integrated into Estudio",
+  "palette": {
+    "negro": "#101010",
+    "papel": "#F4F0E6",
+    "amarillo": "#FFE000",
+    "azul": "#0047FF",
+    "rojo": "#FF2A23"
+  },
+  "fonts": {
+    "titulo": {
+      "family": "Anton",
+      "style": "Regular",
+      "weight": 400,
+      "file": "fuentes/Anton.ttf"
+    },
+    "texto": {
+      "family": "IBM Plex Sans",
+      "style": "Regular",
+      "weight": 400,
+      "file": "fuentes/IBMPlexSans-Regular.ttf"
+    },
+    "semibold": {
+      "family": "IBM Plex Sans",
+      "style": "SemiBold",
+      "weight": 600,
+      "file": "fuentes/IBMPlexSans-SemiBold.ttf"
+    }
+  },
+  "geometry": {
+    "units": "reference_pixels",
+    "box": "[x, y, width, height]",
+    "origin": "top_left",
+    "text_origin": "top_left_of_visible_ink",
+    "font_size": "em_pixels",
+    "tracking_px": 0,
+    "radius_px": 0,
+    "scale": "output_width / reference_width; output aspect ratio must match reference",
+    "rounding": "nearest_integer_half_up_after_scaling"
+  },
+  "text_fit": {
+    "method": "word_wrap_then_decrease_font_size_by_2px",
+    "line_height": "multiply_original_line_height_by_fitted_size / original_size",
+    "word_break": false,
+    "ellipsis": false,
+    "horizontal_stretch": false,
+    "on_overflow": "reject_and_request_shorter_authorized_text_or_split_into_cards",
+    "preserve_quote_text": true,
+    "source_required_for_data_and_quotes": true,
+    "placeholders_allowed_in_production": false
+  },
+  "composition": {
+    "video_order": [
+      "footage",
+      "credito",
+      "zocalo",
+      "subtitulos",
+      "marca_agua"
+    ],
+    "card_order": [
+      "background",
+      "dato_or_cita",
+      "subtitulos",
+      "marca_agua"
+    ],
+    "exclusive": [
+      [
+        "dato",
+        "cita",
+        "zocalo"
+      ]
+    ],
+    "omit_credit_on_cards": true,
+    "card_source_replaces_image_credit": true,
+    "skip_subtitle_background_when_no_cue": true
+  },
+  "texture": {
+    "default": "none",
+    "optional": "static_monochrome_grain_on_card_background_only",
+    "max_opacity": 0.03,
+    "grain_size_px": [
+      1,
+      2
+    ],
+    "on_text_or_logo": false
+  },
+  "motion": {
+    "easing": {
+      "ease_out_cubic": "1-(1-t)^3",
+      "ease_in_cubic": "t^3",
+      "linear": "t"
+    },
+    "frame_quantization": "duration=0 => 0 frames; otherwise max(1, floor(seconds*fps+0.5))",
+    "property_interpolation": "start+(end-start)*easing(clamp(elapsed/duration,0,1))",
+    "piece_scope": "animate piece layers as one group; full-card background cuts at scene boundary",
+    "watermark_scope": "once_at_video_start_and_end; never_restart_on_shot_change",
+    "default_image_transition": {
+      "type": "cut",
+      "duration_s": 0
+    },
+    "optional_same_scene_stills_transition": {
+      "type": "crossfade",
+      "duration_s": 0.12
+    },
+    "crossfade_scope": "footage_only_keep_overlays_stationary",
+    "still_motion": "none",
+    "count_up_numbers": false,
+    "flash_or_bounce": false,
+    "max_same_video_continuous_s": 5
+  },
+  "formats": {
+    "vertical": {
+      "canvas_px": [
+        1080,
+        1920
+      ],
+      "safe_box": [
+        72,
+        144,
+        852,
+        1440
+      ],
+      "pieces": {
+        "zocalo": {
+          "enter": {
+            "duration_s": 0.3,
+            "translate_from_px": [
+              -64,
+              0
+            ],
+            "translate_to_px": [
+              0,
+              0
+            ],
+            "opacity": [
+              0,
+              1
+            ],
+            "easing": "ease_out_cubic"
+          },
+          "exit": {
+            "duration_s": 0.2,
+            "translate_from_px": [
+              0,
+              0
+            ],
+            "translate_to_px": [
+              -32,
+              0
+            ],
+            "opacity": [
+              1,
+              0
+            ],
+            "easing": "ease_in_cubic"
+          },
+          "hold_s": 4,
+          "layers": [
+            {
+              "kind": "rect",
+              "box": [
+                72,
+                1160,
+                852,
+                160
+              ],
+              "color": "negro",
+              "opacity": 0.94
+            },
+            {
+              "kind": "rect",
+              "box": [
+                72,
+                1160,
+                8,
+                160
+              ],
+              "color": "amarillo",
+              "opacity": 1
+            },
+            {
+              "kind": "text",
+              "box": [
+                104,
+                1182,
+                788,
+                60
+              ],
+              "font": "titulo",
+              "size_px": 52,
+              "line_height_px": 62,
+              "min_size_px": 42,
+              "max_lines": 1,
+              "align": "left",
+              "color": "papel",
+              "sample": "[NOMBRE Y APELLIDO]",
+              "content_key": "nombre"
+            },
+            {
+              "kind": "text",
+              "box": [
+                104,
+                1256,
+                788,
+                40
+              ],
+              "font": "texto",
+              "size_px": 30,
+              "line_height_px": 36,
+              "min_size_px": 30,
+              "max_lines": 1,
+              "align": "left",
+              "color": "papel",
+              "sample": "[Cargo o función]",
+              "content_key": "cargo"
+            }
+          ]
+        },
+        "credito": {
+          "enter": {
+            "duration_s": 0.16,
+            "translate_from_px": [
+              0,
+              0
+            ],
+            "translate_to_px": [
+              0,
+              0
+            ],
+            "opacity": [
+              0,
+              1
+            ],
+            "easing": "ease_out_cubic"
+          },
+          "exit": {
+            "duration_s": 0.12,
+            "translate_from_px": [
+              0,
+              0
+            ],
+            "translate_to_px": [
+              0,
+              0
+            ],
+            "opacity": [
+              1,
+              0
+            ],
+            "easing": "ease_in_cubic"
+          },
+          "hold": "during_credited_asset",
+          "layers": [
+            {
+              "kind": "rect",
+              "box": [
+                72,
+                1352,
+                660,
+                44
+              ],
+              "color": "negro",
+              "opacity": 0.92
+            },
+            {
+              "kind": "text",
+              "box": [
+                88,
+                1358,
+                628,
+                32
+              ],
+              "font": "texto",
+              "size_px": 24,
+              "line_height_px": 29,
+              "min_size_px": 24,
+              "max_lines": 1,
+              "align": "left",
+              "color": "papel",
+              "sample": "Imagen: [Autor / medio]",
+              "content_key": "credito"
+            }
+          ]
+        },
+        "subtitulos": {
+          "enter": {
+            "duration_s": 0,
+            "translate_from_px": [
+              0,
+              0
+            ],
+            "translate_to_px": [
+              0,
+              0
+            ],
+            "opacity": [
+              0,
+              1
+            ],
+            "easing": "linear"
+          },
+          "exit": {
+            "duration_s": 0,
+            "translate_from_px": [
+              0,
+              0
+            ],
+            "translate_to_px": [
+              0,
+              0
+            ],
+            "opacity": [
+              1,
+              0
+            ],
+            "easing": "ease_in_cubic"
+          },
+          "hold": "speech_cue",
+          "layers": [
+            {
+              "kind": "rect",
+              "box": [
+                72,
+                1424,
+                852,
+                144
+              ],
+              "color": "negro",
+              "opacity": 0.92
+            },
+            {
+              "kind": "text",
+              "box": [
+                96,
+                1440,
+                804,
+                112
+              ],
+              "font": "semibold",
+              "size_px": 46,
+              "line_height_px": 56,
+              "min_size_px": 46,
+              "max_lines": 2,
+              "align": "center",
+              "color": "papel",
+              "sample": "Así se ve una frase\nsubtitulada en pantalla.",
+              "content_key": "subtitulo"
+            }
+          ]
+        },
+        "marca_agua": {
+          "enter": {
+            "duration_s": 0.24,
+            "translate_from_px": [
+              0,
+              0
+            ],
+            "translate_to_px": [
+              0,
+              0
+            ],
+            "opacity": [
+              0,
+              1
+            ],
+            "easing": "ease_out_cubic"
+          },
+          "exit": {
+            "duration_s": 0.16,
+            "translate_from_px": [
+              0,
+              0
+            ],
+            "translate_to_px": [
+              0,
+              0
+            ],
+            "opacity": [
+              1,
+              0
+            ],
+            "easing": "ease_in_cubic"
+          },
+          "hold": "entire_video",
+          "layers": [
+            {
+              "kind": "rect",
+              "box": [
+                64,
+                148,
+                184,
+                72
+              ],
+              "color": "negro",
+              "opacity": 0.8
+            },
+            {
+              "kind": "image",
+              "box": [
+                72,
+                156,
+                168,
+                56
+              ],
+              "file": "logos/marca-agua-clara-168.png",
+              "opacity": 1
+            }
+          ]
+        },
+        "dato": {
+          "background": "azul",
+          "enter": {
+            "duration_s": 0.24,
+            "translate_from_px": [
+              0,
+              24
+            ],
+            "translate_to_px": [
+              0,
+              0
+            ],
+            "opacity": [
+              0,
+              1
+            ],
+            "easing": "ease_out_cubic"
+          },
+          "exit": {
+            "duration_s": 0.16,
+            "translate_from_px": [
+              0,
+              0
+            ],
+            "translate_to_px": [
+              0,
+              0
+            ],
+            "opacity": [
+              1,
+              0
+            ],
+            "easing": "ease_in_cubic"
+          },
+          "hold_s": 4,
+          "hold_formula": "max(4, visible_word_count / 3)",
+          "layers": [
+            {
+              "kind": "text",
+              "box": [
+                72,
+                432,
+                852,
+                44
+              ],
+              "font": "semibold",
+              "size_px": 30,
+              "line_height_px": 36,
+              "min_size_px": 30,
+              "max_lines": 1,
+              "align": "left",
+              "color": "papel",
+              "sample": "LA CIFRA",
+              "content_key": null
+            },
+            {
+              "kind": "rect",
+              "box": [
+                72,
+                500,
+                96,
+                10
+              ],
+              "color": "papel",
+              "opacity": 1
+            },
+            {
+              "kind": "text",
+              "box": [
+                72,
+                550,
+                852,
+                336
+              ],
+              "font": "titulo",
+              "size_px": 312,
+              "line_height_px": 374,
+              "min_size_px": 176,
+              "max_lines": 1,
+              "align": "left",
+              "color": "papel",
+              "sample": "[CIFRA]",
+              "content_key": "cifra"
+            },
+            {
+              "kind": "text",
+              "box": [
+                72,
+                922,
+                852,
+                68
+              ],
+              "font": "semibold",
+              "size_px": 44,
+              "line_height_px": 53,
+              "min_size_px": 44,
+              "max_lines": 1,
+              "align": "left",
+              "color": "papel",
+              "sample": "[Unidad / período]",
+              "content_key": "unidad"
+            },
+            {
+              "kind": "text",
+              "box": [
+                72,
+                1024,
+                852,
+                126
+              ],
+              "font": "texto",
+              "size_px": 42,
+              "line_height_px": 54,
+              "min_size_px": 42,
+              "max_lines": 2,
+              "align": "left",
+              "color": "papel",
+              "sample": "[Qué mide este dato\ny a quiénes alcanza]",
+              "content_key": "contexto"
+            },
+            {
+              "kind": "text",
+              "box": [
+                72,
+                1200,
+                852,
+                84
+              ],
+              "font": "texto",
+              "size_px": 26,
+              "line_height_px": 34,
+              "min_size_px": 26,
+              "max_lines": 2,
+              "align": "left",
+              "color": "papel",
+              "sample": "Fuente: [Organismo / documento]\n[Fecha del dato]",
+              "content_key": "fuente"
+            }
+          ]
+        },
+        "cita": {
+          "background": "papel",
+          "enter": {
+            "duration_s": 0.28,
+            "translate_from_px": [
+              0,
+              24
+            ],
+            "translate_to_px": [
+              0,
+              0
+            ],
+            "opacity": [
+              0,
+              1
+            ],
+            "easing": "ease_out_cubic"
+          },
+          "exit": {
+            "duration_s": 0.2,
+            "translate_from_px": [
+              0,
+              0
+            ],
+            "translate_to_px": [
+              0,
+              0
+            ],
+            "opacity": [
+              1,
+              0
+            ],
+            "easing": "ease_in_cubic"
+          },
+          "hold_s": 6,
+          "hold_formula": "max(6, quote_and_attribution_word_count / 3)",
+          "layers": [
+            {
+              "kind": "text",
+              "box": [
+                72,
+                376,
+                852,
+                44
+              ],
+              "font": "semibold",
+              "size_px": 30,
+              "line_height_px": 36,
+              "min_size_px": 30,
+              "max_lines": 1,
+              "align": "left",
+              "color": "negro",
+              "sample": "CITA",
+              "content_key": null
+            },
+            {
+              "kind": "rect",
+              "box": [
+                72,
+                450,
+                96,
+                10
+              ],
+              "color": "rojo",
+              "opacity": 1
+            },
+            {
+              "kind": "text",
+              "box": [
+                72,
+                530,
+                852,
+                500
+              ],
+              "font": "titulo",
+              "size_px": 112,
+              "line_height_px": 128,
+              "min_size_px": 88,
+              "max_lines": 4,
+              "align": "left",
+              "color": "negro",
+              "sample": "«[Frase textual\nverificada,\nsin cambiar\nsus palabras]»",
+              "content_key": "cita"
+            },
+            {
+              "kind": "text",
+              "box": [
+                72,
+                1080,
+                852,
+                58
+              ],
+              "font": "semibold",
+              "size_px": 38,
+              "line_height_px": 46,
+              "min_size_px": 38,
+              "max_lines": 1,
+              "align": "left",
+              "color": "negro",
+              "sample": "[Nombre y apellido]",
+              "content_key": "autor"
+            },
+            {
+              "kind": "text",
+              "box": [
+                72,
+                1152,
+                852,
+                84
+              ],
+              "font": "texto",
+              "size_px": 30,
+              "line_height_px": 40,
+              "min_size_px": 30,
+              "max_lines": 2,
+              "align": "left",
+              "color": "negro",
+              "sample": "[Cargo o función]",
+              "content_key": "cargo"
+            },
+            {
+              "kind": "text",
+              "box": [
+                72,
+                1256,
+                852,
+                76
+              ],
+              "font": "texto",
+              "size_px": 26,
+              "line_height_px": 34,
+              "min_size_px": 26,
+              "max_lines": 2,
+              "align": "left",
+              "color": "negro",
+              "sample": "Fuente: [Medio / documento]\n[Fecha de la declaración]",
+              "content_key": "fuente"
+            }
+          ]
+        }
+      }
+    },
+    "horizontal": {
+      "canvas_px": [
+        1920,
+        1080
+      ],
+      "safe_box": [
+        96,
+        54,
+        1728,
+        972
+      ],
+      "pieces": {
+        "zocalo": {
+          "enter": {
+            "duration_s": 0.3,
+            "translate_from_px": [
+              -64,
+              0
+            ],
+            "translate_to_px": [
+              0,
+              0
+            ],
+            "opacity": [
+              0,
+              1
+            ],
+            "easing": "ease_out_cubic"
+          },
+          "exit": {
+            "duration_s": 0.2,
+            "translate_from_px": [
+              0,
+              0
+            ],
+            "translate_to_px": [
+              -32,
+              0
+            ],
+            "opacity": [
+              1,
+              0
+            ],
+            "easing": "ease_in_cubic"
+          },
+          "hold_s": 4,
+          "layers": [
+            {
+              "kind": "rect",
+              "box": [
+                96,
+                688,
+                960,
+                136
+              ],
+              "color": "negro",
+              "opacity": 0.94
+            },
+            {
+              "kind": "rect",
+              "box": [
+                96,
+                688,
+                8,
+                136
+              ],
+              "color": "amarillo",
+              "opacity": 1
+            },
+            {
+              "kind": "text",
+              "box": [
+                128,
+                710,
+                896,
+                52
+              ],
+              "font": "titulo",
+              "size_px": 44,
+              "line_height_px": 53,
+              "min_size_px": 36,
+              "max_lines": 1,
+              "align": "left",
+              "color": "papel",
+              "sample": "[NOMBRE Y APELLIDO]",
+              "content_key": "nombre"
+            },
+            {
+              "kind": "text",
+              "box": [
+                128,
+                768,
+                896,
+                40
+              ],
+              "font": "texto",
+              "size_px": 28,
+              "line_height_px": 34,
+              "min_size_px": 28,
+              "max_lines": 1,
+              "align": "left",
+              "color": "papel",
+              "sample": "[Cargo o función]",
+              "content_key": "cargo"
+            }
+          ]
+        },
+        "credito": {
+          "enter": {
+            "duration_s": 0.16,
+            "translate_from_px": [
+              0,
+              0
+            ],
+            "translate_to_px": [
+              0,
+              0
+            ],
+            "opacity": [
+              0,
+              1
+            ],
+            "easing": "ease_out_cubic"
+          },
+          "exit": {
+            "duration_s": 0.12,
+            "translate_from_px": [
+              0,
+              0
+            ],
+            "translate_to_px": [
+              0,
+              0
+            ],
+            "opacity": [
+              1,
+              0
+            ],
+            "easing": "ease_in_cubic"
+          },
+          "hold": "during_credited_asset",
+          "layers": [
+            {
+              "kind": "rect",
+              "box": [
+                96,
+                610,
+                720,
+                44
+              ],
+              "color": "negro",
+              "opacity": 0.92
+            },
+            {
+              "kind": "text",
+              "box": [
+                112,
+                616,
+                688,
+                32
+              ],
+              "font": "texto",
+              "size_px": 24,
+              "line_height_px": 29,
+              "min_size_px": 24,
+              "max_lines": 1,
+              "align": "left",
+              "color": "papel",
+              "sample": "Imagen: [Autor / medio]",
+              "content_key": "credito"
+            }
+          ]
+        },
+        "subtitulos": {
+          "enter": {
+            "duration_s": 0,
+            "translate_from_px": [
+              0,
+              0
+            ],
+            "translate_to_px": [
+              0,
+              0
+            ],
+            "opacity": [
+              0,
+              1
+            ],
+            "easing": "linear"
+          },
+          "exit": {
+            "duration_s": 0,
+            "translate_from_px": [
+              0,
+              0
+            ],
+            "translate_to_px": [
+              0,
+              0
+            ],
+            "opacity": [
+              1,
+              0
+            ],
+            "easing": "ease_in_cubic"
+          },
+          "hold": "speech_cue",
+          "layers": [
+            {
+              "kind": "rect",
+              "box": [
+                360,
+                866,
+                1200,
+                128
+              ],
+              "color": "negro",
+              "opacity": 0.92
+            },
+            {
+              "kind": "text",
+              "box": [
+                384,
+                882,
+                1152,
+                96
+              ],
+              "font": "semibold",
+              "size_px": 40,
+              "line_height_px": 48,
+              "min_size_px": 40,
+              "max_lines": 2,
+              "align": "center",
+              "color": "papel",
+              "sample": "Así se ve una frase\nsubtitulada en pantalla.",
+              "content_key": "subtitulo"
+            }
+          ]
+        },
+        "marca_agua": {
+          "enter": {
+            "duration_s": 0.24,
+            "translate_from_px": [
+              0,
+              0
+            ],
+            "translate_to_px": [
+              0,
+              0
+            ],
+            "opacity": [
+              0,
+              1
+            ],
+            "easing": "ease_out_cubic"
+          },
+          "exit": {
+            "duration_s": 0.16,
+            "translate_from_px": [
+              0,
+              0
+            ],
+            "translate_to_px": [
+              0,
+              0
+            ],
+            "opacity": [
+              1,
+              0
+            ],
+            "easing": "ease_in_cubic"
+          },
+          "hold": "entire_video",
+          "layers": [
+            {
+              "kind": "rect",
+              "box": [
+                88,
+                46,
+                184,
+                72
+              ],
+              "color": "negro",
+              "opacity": 0.8
+            },
+            {
+              "kind": "image",
+              "box": [
+                96,
+                54,
+                168,
+                56
+              ],
+              "file": "logos/marca-agua-clara-168.png",
+              "opacity": 1
+            }
+          ]
+        },
+        "dato": {
+          "background": "azul",
+          "enter": {
+            "duration_s": 0.24,
+            "translate_from_px": [
+              0,
+              24
+            ],
+            "translate_to_px": [
+              0,
+              0
+            ],
+            "opacity": [
+              0,
+              1
+            ],
+            "easing": "ease_out_cubic"
+          },
+          "exit": {
+            "duration_s": 0.16,
+            "translate_from_px": [
+              0,
+              0
+            ],
+            "translate_to_px": [
+              0,
+              0
+            ],
+            "opacity": [
+              1,
+              0
+            ],
+            "easing": "ease_in_cubic"
+          },
+          "hold_s": 4,
+          "hold_formula": "max(4, visible_word_count / 3)",
+          "layers": [
+            {
+              "kind": "text",
+              "box": [
+                96,
+                250,
+                800,
+                44
+              ],
+              "font": "semibold",
+              "size_px": 30,
+              "line_height_px": 36,
+              "min_size_px": 30,
+              "max_lines": 1,
+              "align": "left",
+              "color": "papel",
+              "sample": "LA CIFRA",
+              "content_key": null
+            },
+            {
+              "kind": "rect",
+              "box": [
+                96,
+                318,
+                96,
+                10
+              ],
+              "color": "papel",
+              "opacity": 1
+            },
+            {
+              "kind": "text",
+              "box": [
+                96,
+                382,
+                816,
+                250
+              ],
+              "font": "titulo",
+              "size_px": 212,
+              "line_height_px": 254,
+              "min_size_px": 144,
+              "max_lines": 1,
+              "align": "left",
+              "color": "papel",
+              "sample": "[CIFRA]",
+              "content_key": "cifra"
+            },
+            {
+              "kind": "text",
+              "box": [
+                96,
+                660,
+                816,
+                60
+              ],
+              "font": "semibold",
+              "size_px": 36,
+              "line_height_px": 43,
+              "min_size_px": 36,
+              "max_lines": 1,
+              "align": "left",
+              "color": "papel",
+              "sample": "[Unidad / período]",
+              "content_key": "unidad"
+            },
+            {
+              "kind": "rect",
+              "box": [
+                960,
+                382,
+                4,
+                300
+              ],
+              "color": "papel",
+              "opacity": 0.65
+            },
+            {
+              "kind": "text",
+              "box": [
+                1040,
+                388,
+                784,
+                174
+              ],
+              "font": "texto",
+              "size_px": 44,
+              "line_height_px": 56,
+              "min_size_px": 44,
+              "max_lines": 3,
+              "align": "left",
+              "color": "papel",
+              "sample": "[Qué mide este dato\ny a quiénes alcanza]",
+              "content_key": "contexto"
+            },
+            {
+              "kind": "text",
+              "box": [
+                1040,
+                610,
+                784,
+                80
+              ],
+              "font": "texto",
+              "size_px": 26,
+              "line_height_px": 34,
+              "min_size_px": 26,
+              "max_lines": 2,
+              "align": "left",
+              "color": "papel",
+              "sample": "Fuente: [Organismo / documento]\n[Fecha del dato]",
+              "content_key": "fuente"
+            }
+          ]
+        },
+        "cita": {
+          "background": "papel",
+          "enter": {
+            "duration_s": 0.28,
+            "translate_from_px": [
+              0,
+              24
+            ],
+            "translate_to_px": [
+              0,
+              0
+            ],
+            "opacity": [
+              0,
+              1
+            ],
+            "easing": "ease_out_cubic"
+          },
+          "exit": {
+            "duration_s": 0.2,
+            "translate_from_px": [
+              0,
+              0
+            ],
+            "translate_to_px": [
+              0,
+              0
+            ],
+            "opacity": [
+              1,
+              0
+            ],
+            "easing": "ease_in_cubic"
+          },
+          "hold_s": 6,
+          "hold_formula": "max(6, quote_and_attribution_word_count / 3)",
+          "layers": [
+            {
+              "kind": "text",
+              "box": [
+                96,
+                218,
+                1728,
+                44
+              ],
+              "font": "semibold",
+              "size_px": 30,
+              "line_height_px": 36,
+              "min_size_px": 30,
+              "max_lines": 1,
+              "align": "left",
+              "color": "negro",
+              "sample": "CITA",
+              "content_key": null
+            },
+            {
+              "kind": "rect",
+              "box": [
+                96,
+                290,
+                96,
+                10
+              ],
+              "color": "rojo",
+              "opacity": 1
+            },
+            {
+              "kind": "text",
+              "box": [
+                300,
+                310,
+                1524,
+                310
+              ],
+              "font": "titulo",
+              "size_px": 104,
+              "line_height_px": 120,
+              "min_size_px": 84,
+              "max_lines": 2,
+              "align": "left",
+              "color": "negro",
+              "sample": "«[Frase textual verificada,\nsin cambiar sus palabras]»",
+              "content_key": "cita"
+            },
+            {
+              "kind": "text",
+              "box": [
+                300,
+                658,
+                1524,
+                58
+              ],
+              "font": "semibold",
+              "size_px": 40,
+              "line_height_px": 48,
+              "min_size_px": 40,
+              "max_lines": 1,
+              "align": "left",
+              "color": "negro",
+              "sample": "[Nombre y apellido]",
+              "content_key": "autor"
+            },
+            {
+              "kind": "text",
+              "box": [
+                300,
+                726,
+                1524,
+                42
+              ],
+              "font": "texto",
+              "size_px": 28,
+              "line_height_px": 34,
+              "min_size_px": 28,
+              "max_lines": 1,
+              "align": "left",
+              "color": "negro",
+              "sample": "[Cargo o función]",
+              "content_key": "cargo"
+            },
+            {
+              "kind": "text",
+              "box": [
+                300,
+                788,
+                1524,
+                40
+              ],
+              "font": "texto",
+              "size_px": 24,
+              "line_height_px": 29,
+              "min_size_px": 24,
+              "max_lines": 1,
+              "align": "left",
+              "color": "negro",
+              "sample": "Fuente: [Medio / documento] · [Fecha]",
+              "content_key": "fuente"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

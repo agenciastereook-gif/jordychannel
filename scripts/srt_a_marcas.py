@@ -2,7 +2,7 @@
 """Convierte el .srt que exporta TurboScribe (o Whisper) en una lista limpia
 de marcas de tiempo para pegar debajo del prompt de imágenes.
 
-    python3 scripts/srt_a_marcas.py voz.srt > marcas.txt
+    python scripts/srt_a_marcas.py voz.srt --salida marcas.txt
 
 Salida:
     [0.00] Hoy Wanda Nara rompió el silencio...
@@ -13,6 +13,7 @@ Salida:
 """
 import argparse
 import re
+import sys
 from pathlib import Path
 
 TIEMPO = re.compile(r"(\d+):(\d+):(\d+)[,.](\d+)\s*-->\s*(\d+):(\d+):(\d+)[,.](\d+)")
@@ -26,6 +27,7 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("srt", type=Path)
     p.add_argument("--min-seg", type=float, default=2.0)
+    p.add_argument("--salida", type=Path, help="archivo de salida (UTF-8); sin esto, imprime")
     a = p.parse_args()
 
     bloques = []
@@ -47,8 +49,13 @@ def main():
         else:
             unidos.append([ini, fin, texto])
 
-    for ini, _, texto in unidos:
-        print(f"[{ini:.2f}] {texto}")
+    lineas = "".join(f"[{ini:.2f}] {texto}\n" for ini, _, texto in unidos)
+    if a.salida:
+        a.salida.write_text(lineas, encoding="utf-8")
+        print(f"Listo: {a.salida} ({len(unidos)} marcas)")
+    else:
+        sys.stdout.reconfigure(encoding="utf-8")
+        print(lineas, end="")
 
 
 if __name__ == "__main__":

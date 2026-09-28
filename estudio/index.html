@@ -1,0 +1,2598 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Estudio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  /* Mismo diseño que StreamDash v2 (P:\TRANSMISIONES\JORDY EN VIVO\GRAPH\v2\panel.html), perfil de Jordy */
+  @font-face { font-family: 'IBM Plex Sans'; src: url(/web/fuentes/IBMPlexSans-Regular.ttf); font-weight: 400; }
+  @font-face { font-family: 'IBM Plex Sans'; src: url(/web/fuentes/IBMPlexSans-SemiBold.ttf); font-weight: 600; }
+  @font-face { font-family: 'Unbounded'; src: url(/web/fuentes/Unbounded-ExtraBold.ttf); font-weight: 800; }
+  :root {
+    --bg: #221a2e; --panel: #2c2338; --panel-hover: #352a43; --borde: #3c3049;
+    --fg: #f4f0f7; --suave: #a99ebd; --tenue: #7c7090;
+    --acento: #e93f3f; --acento2: #f3903c;
+    --grad: linear-gradient(135deg, var(--acento), var(--acento2)); --tinta: #1a1220;
+    --verde: #3ddc97; --rojo: #ff5c6c; --ambar: #f3b43c;
+    --rail-w: 74px; --titulos: 'Unbounded', sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--bg); color: var(--fg); display: flex; overflow: hidden; position: relative;
+    font: 14px/1.5 'IBM Plex Sans', system-ui, sans-serif;
+  }
+  ::selection { background: var(--acento); color: #fff; }
+  .glow {
+    position: fixed; top: -180px; left: -140px; width: 520px; height: 520px; pointer-events: none; z-index: 0;
+    background: radial-gradient(circle, color-mix(in oklab, var(--acento) 32%, transparent), transparent 70%);
+  }
+  button, input, textarea, select { font: inherit; color: inherit; }
+  ::-webkit-scrollbar { width: 12px; height: 12px; }
+  ::-webkit-scrollbar-thumb { background: var(--panel-hover); border: 3px solid var(--bg); border-radius: 8px; }
+
+  /* ---------------- barra lateral */
+  #rail {
+    width: var(--rail-w); flex: none; display: flex; flex-direction: column; padding: 20px 0 14px; z-index: 2;
+    background: color-mix(in oklab, var(--bg) 85%, black 10%); border-right: 1px solid var(--borde);
+  }
+  #rail-items { flex: 1; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  #rail-items::-webkit-scrollbar { width: 0; }
+  .item { position: relative; display: flex; justify-content: center; cursor: pointer; }
+  .item .circulo {
+    width: 44px; height: 44px; border-radius: 16px; background: var(--panel); position: relative;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--titulos); font-weight: 800; font-size: 14px; transition: border-radius .15s, background .15s;
+  }
+  .item:hover .circulo { border-radius: 13px; }
+  .item.activo .circulo { background: var(--grad); color: var(--tinta); border-radius: 13px; }
+  .item .pildora { display: none; }
+  .item .listo {
+    position: absolute; right: -3px; bottom: -3px; width: 13px; height: 13px;
+    border-radius: 50%; background: var(--verde); border: 3px solid var(--bg);
+  }
+  .item .tip {
+    position: fixed; left: calc(var(--rail-w) + 6px); background: var(--panel); border: 1px solid var(--borde);
+    color: var(--fg); padding: 6px 12px; border-radius: 10px; font-size: 12px; white-space: nowrap;
+    pointer-events: none; opacity: 0; z-index: 50; transform: translateY(-50%);
+    box-shadow: 0 10px 24px -10px rgba(0,0,0,.6);
+  }
+  .item:hover .tip { opacity: 1; }
+  .separador { height: 1px; width: 28px; background: var(--borde); margin: 12px auto; }
+  #mas .circulo { background: transparent; border: 1.5px dashed var(--borde); color: var(--suave);
+                  font-family: inherit; font-size: 20px; font-weight: 400; }
+  #mas:hover .circulo { color: var(--acento); border-color: var(--acento); }
+
+  /* ---------------- zona principal */
+  #main { flex: 1; display: flex; flex-direction: column; min-width: 0; position: relative; z-index: 1; }
+  #cab { padding: 22px 30px 0; }
+  .wordmark-fila { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .wordmark { font-family: var(--titulos); font-weight: 800; font-size: 26px; letter-spacing: -0.01em; }
+  .wordmark span { color: var(--acento); }
+  #cab h1 { font-size: 17px; margin: 4px 0 0; font-weight: 600; min-width: 0; color: var(--suave);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #cab .fecha { color: var(--suave); font-size: 12px; }
+
+  #tabs { display: flex; align-items: center; gap: 10px; padding: 16px 30px 0; flex-wrap: wrap; max-width: 100%; box-sizing: border-box; }
+  .pasos { display: flex; }
+  /* cada paso es una flecha pegada a la siguiente: rojo = falta, amarillo = trabajando, verde = listo */
+  .tab {
+    font-weight: 700; font-size: 12px; letter-spacing: .02em; padding: 11px 24px 11px 28px; margin-left: -8px;
+    border: 0; background: #8e2b36; color: #fff; cursor: pointer; display: flex; align-items: center; gap: 8px;
+    clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%, 14px 50%);
+  }
+  .tab:first-child { margin-left: 0; padding-left: 18px; clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%); }
+  .tab.hecho { background: #1f9d57; }
+  .tab.trabajando { background: #d4a017; color: #1b1400; }
+  .tab.bloqueado { opacity: .4; cursor: not-allowed; }
+  .tab.sel { filter: brightness(1.22); box-shadow: inset 0 -3px 0 #fff; }
+  .tab .num { font-size: 11px; opacity: .75; }
+  #modal-claude { position: fixed; inset: 0; background: rgba(10,6,16,.5); backdrop-filter: blur(8px); display: none;
+                  align-items: flex-start; justify-content: center; z-index: 110; }
+  #modal-claude.visible { display: flex; }
+  .barra-prog { height: 8px; background: var(--borde); border-radius: 99px; overflow: hidden; margin: 14px 0; }
+  #mc-barra { height: 100%; width: 0; background: var(--grad); transition: width .5s; }
+
+  #contenido { flex: 1; overflow-y: auto; padding: 18px 30px 24px; }
+  .vista { display: none; max-width: 1000px; }
+  .vista.sel { display: block; }
+
+  .titulo-seccion {
+    font-family: var(--titulos); font-weight: 800; font-size: 13px; letter-spacing: .02em; text-transform: uppercase;
+    display: inline-block; margin: 8px 0 10px; padding-bottom: 7px; border-bottom: 3px solid var(--acento);
+  }
+  .titulo-seccion span { font-family: 'IBM Plex Sans'; }
+  .ayuda { color: var(--suave); font-size: 12.5px; margin: 0 0 12px; }
+  .caja { background: var(--panel); border: 1px solid var(--borde); border-radius: 13px; padding: 12px 14px; margin-bottom: 12px; }
+  .fila { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+  .fila .crece, .crece { flex: 1; }
+  hr.linea { border: 0; height: 1px; background: var(--borde); margin: 22px 0; }
+
+  .btn {
+    font-weight: 600; font-size: 12.5px; letter-spacing: .02em; padding: 10px 16px; border-radius: 11px;
+    border: 1px solid var(--borde); background: var(--panel-hover); color: var(--fg); cursor: pointer; white-space: nowrap;
+  }
+  .btn:hover { border-color: color-mix(in oklab, var(--acento) 45%, var(--borde)); }
+  .btn.primario { background: var(--grad); color: var(--tinta); border-color: transparent; }
+  .btn.primario:hover { filter: brightness(1.08); }
+  .btn.verde { background: var(--verde); color: var(--tinta); border-color: transparent; }
+  .btn.rojo { background: var(--rojo); color: #fff; border-color: transparent; }
+  .btn:disabled { opacity: .4; cursor: not-allowed; filter: none; }
+  .btn .ia { font-size: 10.5px; opacity: .75; font-weight: 400; margin-left: 6px; }
+  .btn.enorme { font-family: var(--titulos); font-weight: 800; padding: 14px 28px; font-size: 13px; letter-spacing: .03em; }
+
+  input[type=text], textarea, select {
+    background: var(--panel); border: 1px solid var(--borde); border-radius: 11px; outline: 0;
+    padding: 10px 12px; width: 100%; font-size: 14px;
+  }
+  input::placeholder, textarea::placeholder { color: var(--suave); opacity: .7; }
+  input[type=text]:focus, textarea:focus, select:focus { border-color: var(--acento); }
+  textarea { resize: vertical; min-height: 120px; line-height: 1.6; }
+  textarea.grande { min-height: 420px; }
+  textarea.chico { min-height: 70px; }
+  select { cursor: pointer; }
+  code { background: var(--bg); padding: 1px 6px; border-radius: 6px; font-size: 12px; }
+
+  /* avisos y progreso */
+  #aviso { display: none; background: color-mix(in oklab, var(--ambar) 12%, transparent); color: var(--fg);
+           border-radius: 11px; padding: 10px 14px; margin-bottom: 14px; font-size: 12.5px; }
+  .tarea { display: none; background: color-mix(in oklab, var(--acento) 12%, transparent); border-radius: 11px;
+           padding: 10px 14px; margin-bottom: 12px; font-size: 12.5px; font-weight: 600; }
+  .tarea.error { background: color-mix(in oklab, var(--rojo) 14%, transparent); }
+  .tarea.ok { background: color-mix(in oklab, var(--verde) 12%, transparent); }
+  .tarea .log { color: var(--suave); white-space: pre-wrap; font: 400 11.5px Consolas, monospace;
+                margin-top: 6px; max-height: 160px; overflow-y: auto; }
+  .girando { display: inline-block; width: 10px; height: 10px; border: 2px solid var(--acento2);
+             border-right-color: transparent; border-radius: 50%; animation: giro .8s linear infinite;
+             margin-right: 6px; vertical-align: -1px; }
+  @keyframes giro { to { transform: rotate(360deg); } }
+  .estado-inv { padding: 10px 14px; margin-bottom: 12px; font-size: 12.5px; font-weight: 600; border-radius: 11px;
+                background: var(--panel); border: 1px solid var(--borde); display: flex; align-items: center; gap: 10px; }
+  .estado-inv.proceso { color: var(--ambar); background: color-mix(in oklab, var(--ambar) 10%, transparent); border-color: transparent; }
+  .estado-inv.lista { color: var(--verde); background: color-mix(in oklab, var(--verde) 10%, transparent); border-color: transparent; }
+
+  /* subida y material */
+  .zona {
+    border: 1.5px dashed var(--borde); border-radius: 13px; padding: 22px; text-align: center; color: var(--suave);
+    cursor: pointer; margin-bottom: 12px; transition: border-color .15s, color .15s;
+  }
+  .zona:hover, .zona.encima { border-color: var(--acento2); color: var(--acento2); }
+  .zona b { color: var(--fg); }
+  .voz-fila { display: flex; align-items: center; gap: 10px; }
+  .voz-fila audio { flex: 1; height: 36px; }
+  .grilla { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+  .mini { background: var(--panel); border: 1px solid var(--borde); border-radius: 13px; overflow: hidden; position: relative; }
+  .mini .img { aspect-ratio: 1; background: var(--bg) center/cover no-repeat; }
+  .mini .nombre { font-size: 12px; font-weight: 600; padding: 7px 10px; white-space: nowrap; overflow: hidden;
+                  text-overflow: ellipsis; color: var(--suave); }
+  .mini .tipo, .mini .ojo { position: absolute; top: 7px; left: 7px; background: rgba(0,0,0,.7); font-size: 11px;
+                            padding: 2px 8px; border-radius: 999px; }
+  .mini .ojo { left: auto; right: 38px; background: color-mix(in oklab, var(--acento2) 80%, black); }
+  .mini .x { position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,.7); border: 0; border-radius: 8px;
+             width: 26px; height: 26px; cursor: pointer; display: none; color: #fff; }
+  .mini:hover .x { display: block; }
+  .mini .x:hover { background: var(--rojo); }
+  .mini .agregar { position: absolute; bottom: 36px; right: 7px; padding: 7px 12px; }
+  .mini.agregado { border-color: var(--verde); }
+
+  /* asignación */
+  table.asig { width: 100%; border-collapse: collapse; }
+  table.asig td { padding: 6px 8px 6px 0; vertical-align: middle; border-bottom: 1px solid var(--borde); }
+  table.asig .t { color: var(--acento2); font: 600 12px Consolas, monospace; width: 66px; }
+  table.asig .frase { font-size: 13px; }
+  .frase-in { background: transparent !important; border-color: transparent !important; padding: 6px 8px !important; font-size: 13px !important; }
+  .frase-in:hover, .frase-in:focus { border-color: var(--borde) !important; background: var(--panel) !important; }
+  table.asig .elige { width: 260px; }
+  table.asig .pv { width: 58px; }
+  .pv div { width: 48px; height: 48px; border-radius: 10px; background: var(--bg) center/cover no-repeat;
+            display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--tenue); }
+
+  /* video */
+  .reproductor { display: flex; gap: 18px; align-items: flex-start; flex-wrap: wrap; }
+  .reproductor video { width: 320px; aspect-ratio: 9/16; background: #000; border-radius: 13px; }
+  .reproductor .acciones { display: flex; flex-direction: column; gap: 8px; }
+
+  /* textos, informes, fuentes */
+  .texto-card, .inv-card { background: var(--panel); border: 1px solid var(--borde); border-radius: 13px; margin-bottom: 10px; overflow: hidden; }
+  .texto-card .cab { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px 0; }
+  .texto-card .cab span { font-family: var(--titulos); font-weight: 800; font-size: 11.5px; text-transform: uppercase; letter-spacing: .02em; }
+  .texto-card .cab small { color: var(--suave); font: 400 11px 'IBM Plex Sans'; margin-left: 8px; }
+  .texto-card textarea { min-height: 60px; background: transparent; border: 0; }
+  .inv-card { margin-top: 12px; }
+  .inv-card .cab { display: flex; align-items: center; gap: 10px; padding: 10px 12px; }
+  .inv-card .cab b { flex: 1; font-weight: 600; }
+  .inv-card .est { font-size: 12px; font-weight: 600; color: var(--suave); }
+  .inv-card .est.ok { color: var(--verde); }
+  .inv-card .est.error { color: var(--rojo); }
+  .inv-card textarea { background: var(--bg); border: 0; border-radius: 0; min-height: 320px; }
+  .informe { background: var(--panel); border: 1px solid var(--borde); border-radius: 13px;
+             padding: 12px 14px; margin: 12px 0; font-size: 13px; white-space: pre-wrap; }
+  .informe h4 { margin: 8px 0 2px; font-family: var(--titulos); font-size: 11px; color: var(--acento2); text-transform: uppercase; }
+  .informe h4:first-child { margin-top: 0; }
+  .informe a { color: var(--acento2); }
+  .informe .quien { float: right; color: var(--tenue); font-size: 11px; }
+  .fuente { background: var(--panel); border: 1px solid var(--borde); border-radius: 11px; display: flex; align-items: center;
+            gap: 10px; padding: 8px 10px; margin-bottom: 6px; font-size: 13px; }
+  .fuente .n { color: var(--acento2); font: 600 12px Consolas, monospace; }
+  .fuente .que { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .fuente .que a { color: var(--acento2); }
+  .fuente .tam { color: var(--tenue); font-size: 11px; }
+  .fuente .x { background: none; border: 0; color: var(--suave); cursor: pointer; font-size: 14px; }
+  .fuente .x:hover { color: var(--rojo); }
+
+  /* selector de IA */
+  .ias { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+  .ia-op { background: var(--panel); border: 1px solid var(--borde); border-radius: 13px; padding: 12px 16px 12px 12px;
+           cursor: pointer; display: flex; align-items: center; gap: 12px; min-width: 210px; position: relative; text-align: left; }
+  .ia-op:hover { border-color: color-mix(in oklab, var(--acento) 45%, var(--borde)); }
+  .ia-op.sel { border-color: var(--acento); box-shadow: 0 0 0 1px var(--acento) inset; }
+  .ia-op.apagada { opacity: .4; cursor: not-allowed; }
+  .ia-op .check { position: absolute; top: 8px; right: 8px; width: 18px; height: 18px; border-radius: 50%;
+                  border: 1.5px solid var(--borde); font-size: 11px; display: flex; align-items: center; justify-content: center; color: transparent; }
+  .ia-op.sel .check { background: var(--grad); border-color: transparent; color: var(--tinta); }
+  .ia-op .nom { font-weight: 600; display: block; }
+  .ia-op .sub { color: var(--suave); font-size: 12px; display: block; }
+  .logo { width: 40px; height: 40px; border-radius: 12px; flex: none; display: flex; align-items: center; justify-content: center; }
+  .logo i { width: 60%; height: 60%; display: block; background: var(--col);
+            -webkit-mask: var(--img) center / contain no-repeat; mask: var(--img) center / contain no-repeat; }
+  .logo.chico { width: 26px; height: 26px; border-radius: 8px; }
+  .logo-chatgpt { background: #0d0d0d; --col: #fff; --img: url(/web/logos/openai.svg); }
+  .logo-gemini { background: #1b1c22; --col: linear-gradient(135deg, #4f8cff, #9b6ef3 55%, #e06fae); --img: url(/web/logos/googlegemini.svg); }
+  .logo-claude { background: #2a1d18; --col: #d97757; --img: url(/web/logos/claude.svg); }
+
+  /* editor del guion */
+  .editor { background: var(--panel); border: 1px solid var(--borde); border-radius: 13px; padding: 14px 16px;
+            min-height: 420px; white-space: pre-wrap; line-height: 1.75; outline: 0; font-size: 15px; }
+  .editor:focus { border-color: var(--acento); }
+  .editor:empty::before { content: attr(data-vacio); color: var(--tenue); }
+  .editor del { color: var(--rojo); text-decoration: line-through; background: rgba(255,92,108,.14); cursor: pointer; border-radius: 3px; }
+  .editor ins { color: var(--verde); text-decoration: none; background: rgba(61,220,151,.14); border-radius: 3px; }
+  .leyenda { font-size: 12px; color: var(--suave); display: flex; gap: 14px; align-items: center; margin: 8px 0; flex-wrap: wrap; }
+  .leyenda del { color: var(--rojo); } .leyenda ins { color: var(--verde); text-decoration: none; }
+  /* bloques del guion */
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .chip { font-weight: 600; font-size: 12px; padding: 9px 14px; border-radius: 999px; border: 1px solid var(--borde);
+          background: var(--panel); color: var(--suave); cursor: pointer; }
+  .chip:hover { color: var(--fg); }
+  .chip.sel { background: var(--grad); color: var(--tinta); border-color: transparent; }
+  .comentarios { background: var(--panel); border: 1px solid var(--borde); border-radius: 13px; padding: 12px 14px;
+                 margin-bottom: 14px; font-size: 13px; display: grid; gap: 8px; }
+  .comentarios b { display: block; font-family: var(--titulos); font-size: 10.5px; color: var(--acento2);
+                   text-transform: uppercase; letter-spacing: .03em; margin-bottom: 2px; }
+  .verifs, .titulos { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; margin-bottom: 16px; }
+  .verif { background: var(--panel); border: 1px solid var(--borde); border-radius: 13px; padding: 12px;
+           display: flex; flex-direction: column; gap: 10px; justify-content: space-between; font-size: 13px; }
+  .verif button { align-self: flex-start; border: 0; border-radius: 999px; padding: 7px 14px; cursor: pointer;
+                  font-weight: 600; font-size: 11.5px; letter-spacing: .03em;
+                  background: color-mix(in oklab, var(--rojo) 18%, transparent); color: var(--rojo); }
+  .verif.ok { border-color: color-mix(in oklab, var(--verde) 50%, var(--borde)); }
+  .verif.ok button { background: color-mix(in oklab, var(--verde) 18%, transparent); color: var(--verde); }
+  .titulo-btn { background: var(--panel); border: 1px solid var(--borde); border-radius: 13px; padding: 14px;
+                text-align: left; cursor: pointer; font-weight: 600; font-size: 14px; display: flex; flex-direction: column; gap: 6px; }
+  .titulo-btn:hover { border-color: var(--acento); }
+  .titulo-btn small { color: var(--suave); font-weight: 400; font-size: 11px; }
+
+  /* apariencia */
+  #apariencia { position: fixed; left: calc(var(--rail-w) + 8px); bottom: 14px; z-index: 60; display: none;
+                background: var(--panel); border: 1px solid var(--borde); border-radius: 14px; padding: 16px; width: 260px;
+                box-shadow: 0 20px 50px -20px rgba(0,0,0,.7); }
+  #apariencia.visible { display: block; }
+  #apariencia h3 { margin: 0 0 12px; font-family: var(--titulos); font-size: 13px; }
+  #apariencia .fila { justify-content: space-between; font-size: 13px; }
+  input[type=color] { -webkit-appearance: none; appearance: none; width: 30px; height: 30px; border: 2px solid var(--borde);
+                      border-radius: 50%; padding: 0; background: none; cursor: pointer; overflow: hidden; }
+  input[type=color]::-webkit-color-swatch-wrapper { padding: 0; }
+  input[type=color]::-webkit-color-swatch { border: none; border-radius: 50%; }
+  #btn-apariencia .circulo { background: transparent; color: var(--suave); font-size: 18px; }
+  #btn-apariencia:hover .circulo { color: var(--acento); }
+  :root[data-tema="claro"] { --bg: #f5f1fa; --panel: #ffffff; --panel-hover: #efe7f7; --borde: #e1d7ee;
+                             --fg: #241c30; --suave: #786b8c; --tenue: #a397b5; }
+  /* editar prompts */
+  #prompts-panel { position: fixed; top: 0; bottom: 0; left: var(--rail-w); right: 0; z-index: 40; display: none;
+                   background: var(--bg); padding: 22px 30px; flex-direction: column; gap: 12px; }
+  #prompts-panel.visible { display: flex; }
+  #prompts-panel textarea { flex: 1; min-height: 200px; font: 13px/1.6 Consolas, monospace; resize: none; }
+  #prompts-panel .chip.tocado::after { content: " ●"; color: var(--acento2); }
+  /* editor: copia de El Recorte (EditorView + Timeline) */
+  .ed-vista { display: grid; grid-template-columns: 1fr 280px; gap: 18px; margin-bottom: 14px; }
+  .stage-row { display: flex; gap: 18px; flex-wrap: wrap; align-items: flex-start; }
+  .stage-col { display: flex; flex-direction: column; gap: 6px; }
+  .editor-row-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: var(--suave); margin: 0; }
+  .video-stage, .final-stage { position: relative; background: #000; border-radius: 10px; overflow: hidden;
+                               border: 1px solid var(--borde); flex-shrink: 0; }
+  .video-stage img, .video-stage video { width: 100%; height: 100%; display: block; object-fit: contain; }
+  .final-stage { width: 202px; height: 360px; }
+  .crop-box { position: absolute; border: 2px solid var(--acento2); box-shadow: 0 0 0 2000px rgba(0,0,0,.45);
+              z-index: 5; cursor: move; }
+  .crop-box span { position: absolute; top: 0; left: 0; background: var(--acento2); color: var(--tinta);
+                   font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 0 0 6px 0; }
+  .crop-resize { position: absolute; right: -6px; bottom: -6px; width: 14px; height: 14px; border-radius: 50%;
+                 background: var(--acento2); cursor: nwse-resize; }
+  .ed-lado { display: flex; flex-direction: column; gap: 10px; }
+  .timeline { background: var(--panel); border: 1px solid var(--borde); border-radius: 10px; padding: 12px; }
+  .timeline-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; gap: 10px; }
+  .timeline-time { font-size: 12px; color: var(--suave); font-variant-numeric: tabular-nums; flex: 1; }
+  .timeline-zoom { display: flex; gap: 4px; }
+  .timeline-zoom .btn, .timeline-header .play { font-size: 15px; font-weight: 700; line-height: 1; padding: 6px 12px; }
+  .timeline-scroll { overflow-x: auto; overflow-y: hidden; }
+  .timeline-inner { position: relative; }
+  .timeline-ruler { position: relative; height: 18px; margin-bottom: 4px; cursor: pointer; }
+  .timeline-tick { position: absolute; top: 0; bottom: 0; border-left: 1px solid var(--borde); padding-left: 3px; }
+  .timeline-tick span { font-size: 9.5px; color: var(--suave); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .timeline-track { position: relative; height: 56px; background: var(--panel-hover); border-radius: 8px; cursor: pointer; }
+  .clip-block { position: absolute; top: 5px; bottom: 5px; border: 1px solid var(--acento); border-radius: 6px;
+                cursor: pointer; min-width: 6px; background: color-mix(in oklab, var(--acento) 35%, transparent) center/cover; }
+  .clip-block.selected { border-color: var(--acento2); box-shadow: 0 0 0 1px var(--acento2) inset; }
+  .clip-label { position: absolute; top: 4px; left: 8px; font-size: 12px; color: #fff; pointer-events: none;
+                text-shadow: 0 1px 2px rgba(0,0,0,.8); }
+  .handle { position: absolute; top: 0; bottom: 0; width: 12px; cursor: ew-resize; z-index: 2; }
+  .handle:hover { background: rgba(255,255,255,.15); }
+  .handle-left { left: -6px; border-radius: 6px 0 0 6px; }
+  .tl-acciones { display: flex; gap: 4px; flex-wrap: wrap; }
+  .tl-acciones .btn { padding: 6px 10px; font-size: 12px; }
+  .tl-fila { position: relative; background: var(--panel-hover); border-radius: 8px; cursor: pointer; margin-bottom: 6px; }
+  .text-track { height: 30px; }
+  .capa-track { height: 36px; }
+  .voz-track { height: 44px; overflow: hidden; }
+  .voz-track canvas { position: absolute; top: 0; height: 44px; pointer-events: none; }
+  .timeline-track { margin-bottom: 6px; }
+  .tl-nombre { position: sticky; left: 4px; display: inline-block; font-size: 10px; color: var(--suave); padding: 2px 6px;
+               pointer-events: none; z-index: 3; text-transform: uppercase; letter-spacing: .03em; }
+  .capa-block { position: absolute; top: 3px; bottom: 3px; border-radius: 6px; cursor: grab; min-width: 6px; overflow: hidden;
+                display: flex; align-items: center; padding: 0 8px; font-size: 11px; color: #fff; white-space: nowrap;
+                border: 1px solid; }
+  .capa-block[data-capa="textos"] { background: rgba(232,121,249,.35); border-color: #e879f9; }
+  .capa-block[data-capa="videos"] { background: color-mix(in oklab, var(--acento2) 35%, transparent) center/cover; border-color: var(--acento2); }
+  .capa-block[data-capa="subtitulos"] { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.5); cursor: pointer; }
+  .capa-block[data-capa="audios"] { background: rgba(61,220,151,.3); border-color: var(--verde); }
+  .capa-block.selected { box-shadow: 0 0 0 2px #fff inset; }
+  .capa-block .handle-right { right: -6px; border-radius: 0 6px 6px 0; }
+  #ed-final > div, #ed-final canvas { position: absolute; inset: 0; }
+  #ed-final canvas { width: 100%; height: 100%; }
+  .ed-lado label { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12.5px; }
+  .ed-lado input[type=number] { width: 80px; background: var(--panel); border: 1px solid var(--borde); border-radius: 8px; padding: 6px 8px; color: var(--fg); }
+  .ed-lado input[type=range] { flex: 1; accent-color: var(--acento); }
+  .ed-lado input[type=checkbox] { accent-color: var(--acento); width: 16px; height: 16px; }
+  .colores-deg { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .playhead { position: absolute; top: -2px; bottom: -2px; width: 2px; background: #fff; pointer-events: none; z-index: 5; }
+  .vacio { text-align: center; color: var(--suave); padding: 60px 20px; }
+
+  /* barra inferior */
+  #estado { color: var(--suave); font-size: 12px; padding: 4px 30px; min-height: 24px; }
+  #barra { background: color-mix(in oklab, var(--bg) 85%, black 10%); border-top: 1px solid var(--borde);
+           padding: 8px 30px; display: flex; gap: 8px; align-items: center; }
+  #barra .ind { font-size: 12px; font-weight: 600; color: var(--suave); display: flex; align-items: center; gap: 6px; margin-right: 12px; }
+  #barra .punto { width: 7px; height: 7px; border-radius: 50%; background: var(--tenue); }
+  #barra .punto.si { background: var(--verde); }
+  #barra .punto.no { background: var(--rojo); }
+  #barra .espacio { flex: 1; }
+
+  /* diálogo "nuevo short" */
+  #fondo { position: fixed; inset: 0; background: rgba(10,6,16,.6); display: none;
+           align-items: flex-start; justify-content: center; z-index: 100; }
+  #fondo.visible { display: flex; }
+  .dialogo { background: var(--panel); border: 1px solid var(--borde); border-radius: 16px; margin-top: 150px;
+             padding: 22px 26px; width: 400px; text-align: center; box-shadow: 0 20px 50px -20px rgba(0,0,0,.7); }
+  .dialogo h3 { margin: 0 0 12px; font-family: var(--titulos); font-size: 15px; }
+  .dialogo p { color: var(--suave); font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="glow"></div>
+
+<nav id="rail">
+  <div id="rail-items"></div>
+  <div class="separador"></div>
+  <div class="item" id="btn-prompts" onclick="abrirPrompts()">
+    <div class="circulo" style="background:transparent;color:var(--suave);font-size:17px">✎</div><div class="tip">Editar prompts</div>
+  </div>
+  <div class="item" id="btn-apariencia" style="margin-top:12px" onclick="$('#apariencia').classList.toggle('visible')">
+    <div class="circulo">⚙</div><div class="tip">Apariencia</div>
+  </div>
+  <div class="item" id="mas" title="" style="margin-top:12px">
+    <div class="pildora"></div>
+    <div class="circulo">+</div>
+    <div class="tip">Nuevo short</div>
+  </div>
+</nav>
+
+<div id="main">
+  <div id="cab">
+    <div class="wordmark-fila">
+      <div class="wordmark">JORDY<span>ESTUDIO</span></div>
+      <span class="fecha" id="fecha"></span>
+    </div>
+    <h1 id="titulo"></h1>
+  </div>
+
+  <div id="tabs">
+    <div class="pasos">
+      <button class="tab" data-v="investigacion"><span class="num">1</span>Investigación</button>
+      <button class="tab" data-v="guion"><span class="num">2</span>Guion</button>
+      <button class="tab" data-v="voz"><span class="num">3</span>Voz</button>
+      <button class="tab" data-v="material"><span class="num">4</span>Material</button>
+      <button class="tab" data-v="editor"><span class="num">5</span>Editor</button>
+      <button class="tab" data-v="video"><span class="num">6</span>Video</button>
+    </div>
+    <span class="crece"></span>
+    <button class="btn" onclick="reiniciarPaso()">↺ Reiniciar paso</button>
+    <button class="btn primario" onclick="proximoPaso()">Próximo paso →</button>
+  </div>
+
+  <div id="contenido">
+    <div id="aviso"></div>
+    <div class="tarea" id="tarea"><div class="msg"></div><div class="log"></div></div>
+
+    <div id="sin-shorts" class="vacio" style="display:none">
+      Todavía no hay shorts.<br><br>
+      <button class="btn primario" onclick="abrirNuevo()">+ Nuevo short</button>
+    </div>
+
+    <!-- 1 -->
+    <section class="vista" id="v-investigacion">
+      <div class="titulo-seccion">Tema</div>
+      <input type="text" id="tema" data-campo="tema" placeholder="De qué se trata la noticia" style="margin-bottom:14px">
+
+      <div class="titulo-seccion">Eje periodístico</div>
+      <p class="ayuda">La línea del guion: qué querés contar y desde dónde. El guion va por acá; si algo lo tensiona,
+        queda como observación para vos abajo del guion, sin cambiar el enfoque.</p>
+      <textarea id="eje" data-campo="eje" class="chico" style="margin-bottom:14px"
+                placeholder="Qué querés contar y desde dónde."></textarea>
+
+      <div class="titulo-seccion">Fuentes <span id="n-fuentes" style="color:var(--tenue)"></span></div>
+      <p class="ayuda">De a una: un link o el texto completo de una nota. Las IA las leen primero.</p>
+      <div class="fila" style="align-items:stretch">
+        <textarea id="nueva-fuente" class="chico crece" placeholder="Pegá un link o una nota completa"></textarea>
+        <button class="btn" onclick="agregarFuente()">Agregar fuente</button>
+      </div>
+      <div id="lista-fuentes" style="margin-bottom:14px"></div>
+
+      <div class="titulo-seccion">¿Con qué IA investigás?</div>
+      <p class="ayuda">Elegí una, dos o las tres: cada una hace su propia investigación, en paralelo.</p>
+      <div class="ias">
+        <button class="ia-op" data-ia="chatgpt"><span class="logo logo-chatgpt"><i></i></span>
+          <span><span class="nom">ChatGPT</span><span class="sub" data-sub>con búsqueda web</span></span><span class="check">✓</span></button>
+        <button class="ia-op" data-ia="gemini"><span class="logo logo-gemini"><i></i></span>
+          <span><span class="nom">Gemini</span><span class="sub" data-sub>con Google</span></span><span class="check">✓</span></button>
+        <button class="ia-op" data-ia="claude"><span class="logo logo-claude"><i></i></span>
+          <span><span class="nom">Claude</span><span class="sub" data-sub>con búsqueda web</span></span><span class="check">✓</span></button>
+      </div>
+      <button class="btn primario enorme" id="btn-investigar" onclick="comenzarInvestigacion()">COMENZAR INVESTIGACIÓN</button>
+
+      <div id="resultados"></div>
+    </section>
+
+    <!-- 2 -->
+    <section class="vista" id="v-guion">
+      <div class="estado-inv" id="estado-inv"></div>
+      <div class="fila">
+        <span class="chips" id="ia-guion" style="margin:0">
+          <button class="chip" data-ia="chatgpt">ChatGPT</button>
+          <button class="chip" data-ia="gemini">Gemini</button>
+          <button class="chip" data-ia="claude">Claude</button>
+        </span>
+        <button class="btn primario" data-tarea="guion">Redactar guion</button>
+        <button class="btn" data-tarea="revisar">Revisar datos<span class="ia">Gemini</span></button>
+        <button class="btn" id="btn-ortografia" onclick="revisionOrtografica()">REVISIÓN ORTOGRÁFICA<span class="ia">ChatGPT</span></button>
+        <button class="btn primario" id="btn-completa" onclick="revisionCompleta()">REVISIÓN COMPLETA<span class="ia">ChatGPT + web</span></button>
+      </div>
+      <div id="revision"></div>
+      <div id="meta-arriba"></div>
+      <div class="titulo-seccion">Guion</div>
+      <div class="leyenda">
+        <span><del>tachado</del> = borrado (doble clic lo recupera)</span><span><ins>verde</ins> = agregado</span>
+        <span>Ctrl+Z deshace · Ctrl+Y rehace</span>
+      </div>
+      <div id="decision" class="estado-inv proceso" style="display:none">
+        <span class="chips" style="margin:0">
+          <button class="chip" data-ver="mio" onclick="verGuion('mio')">Mis correcciones</button>
+          <button class="chip" data-ver="ia" onclick="verGuion('ia')">Corrección de la IA</button>
+          <button class="chip sel" data-ver="final" onclick="verGuion('final')">Mi versión final</button>
+        </span>
+        <span class="crece" id="decision-texto"></span>
+        <button class="btn" id="btn-usar-version" style="display:none" onclick="usarVersion()">Usar esta versión</button>
+        <button class="btn verde" onclick="guardarGuionYa()">Guardar</button>
+        <span id="decision-botones"><button class="btn primario" onclick="aceptarCambios()">Aceptar cambios</button>
+        <button class="btn" onclick="prefieroMiGuion()">Prefiero mi guion</button></span>
+      </div>
+      <div id="guion-editor" class="editor" contenteditable="true" spellcheck="true" lang="es"
+           data-vacio="Acá aparece el guion (o pegalo vos)."></div>
+      <div id="meta-abajo" style="margin-top:18px"></div>
+    </section>
+
+    <!-- 3 -->
+    <section class="vista" id="v-voz">
+      <div class="titulo-seccion">Tu grabación</div>
+      <div id="voz-caja"></div>
+      <div id="voz-cortes" class="caja" style="display:none">
+        <div class="fila" style="margin:0 0 8px">
+          <button class="btn play" id="vc-play" onclick="vcPlay()">▶</button>
+          <span class="timeline-time" id="vc-tiempo">0:00.0</span>
+          <span class="ayuda crece" style="margin:0" id="vc-info"></span>
+          <button class="btn" onclick="vcZoom(1 / 1.6)">−</button><button class="btn" onclick="vcZoom(1.6)">+</button>
+        </div>
+        <div class="timeline-scroll" id="vc-scroll" style="height:110px"><canvas id="vc-onda" height="100"></canvas></div>
+        <div class="fila" style="margin:8px 0 0">
+          <button class="btn" onclick="vcMarcar('ini')">Marcar inicio</button>
+          <button class="btn" onclick="vcMarcar('fin')">Marcar fin</button>
+          <button class="btn" onclick="vcQuitar()">Cortar selección</button>
+          <button class="btn" onclick="vcDeshacer()">Deshacer</button>
+          <span class="crece"></span>
+          <button class="btn" id="vc-restaurar" onclick="vcRestaurar()">Volver a la original</button>
+          <button class="btn" onclick="vcExportar()">Exportar audio</button>
+          <button class="btn verde" onclick="vcAplicar()">Aplicar cortes</button>
+        </div>
+      </div>
+      <div id="voz-confirmar"></div>
+      <div id="subs-caja"></div>
+    </section>
+
+    <!-- 4 -->
+    <section class="vista" id="v-material">
+      <div class="titulo-seccion">Material (fotos y videos)</div>
+      <p class="ayuda">Personas reales: siempre foto o video real. Primero fuentes seguras; si no hay, vale cualquiera.</p>
+      <div class="fila" id="fila-describir" style="display:none">
+        <button class="btn" data-tarea="describir">Mirar los videos<span class="ia">Gemini</span></button>
+        <span class="ayuda" style="margin:0">Gemini mira cada video completo. Eso se usa para asignar mejor (también lo hace solo al asignar).</span>
+      </div>
+      <div class="fila">
+        <button class="btn primario" data-tarea="buscar">Buscar material<span class="ia">ChatGPT + web</span></button>
+        <input type="text" id="link-url" class="crece" placeholder="Pegá un link (YouTube, X, TikTok, Instagram o foto)">
+        <input type="text" id="link-desde" placeholder="desde (seg)" style="width:110px">
+        <button class="btn" id="btn-link" onclick="bajarLink()">Bajar</button>
+      </div>
+      <div class="zona" id="zona-material"><b>Arrastrá acá tus fotos y videos</b> o hacé clic para elegirlos</div>
+      <div class="grilla" id="grilla"></div>
+      <hr class="linea">
+      <div class="fila" style="margin-bottom:4px">
+        <div class="titulo-seccion crece" style="margin:0">Desde El Recorte</div>
+        <button class="btn" onclick="cargarRecorte()">Actualizar</button>
+      </div>
+      <p class="ayuda" id="recorte-ayuda">Tus últimos clips exportados. Clic en “Agregar” y pasan al material de este short.</p>
+      <div class="grilla" id="grilla-recorte"></div>
+      <hr class="linea">
+      <div class="titulo-seccion">Asignación</div>
+      <div id="asig-contenido"></div>
+    </section>
+
+    <!-- editor -->
+    <section class="vista" id="v-editor">
+      <div id="ed-vacio" class="vacio" style="display:none">Primero hacé la asignación, o dejá que Claude edite todo.<br><br><button class="btn" onclick="editarConClaude('mio')">Editar con Claude</button> <button class="btn primario" onclick="editarConClaude('gratis')">Editar con Claude gratis</button></div>
+      <div id="ed-cuerpo">
+        <div class="ed-vista">
+          <div class="stage-row">
+            <div class="stage-col"><h3 class="editor-row-title">Original</h3><div id="ed-original" class="video-stage"></div></div>
+            <div class="stage-col"><h3 class="editor-row-title">Vista final (1080×1920)</h3>
+              <div id="ed-final" class="final-stage"><div id="ed-base"></div><div id="ed-capas"></div>
+                <canvas id="ed-textos" width="404" height="720"></canvas></div></div>
+          </div>
+          <aside class="ed-lado" id="ed-lado"></aside>
+        </div>
+        <div class="timeline">
+          <div class="timeline-header">
+            <button class="btn play" id="tl-play" onclick="tlPlay()">▶</button>
+            <div class="timeline-time" id="tl-time">00:00.0 / 00:00.0</div>
+            <div class="tl-acciones">
+              <button class="btn" onclick="edCortar()" title="Corta el video en el cabezal">+ Corte</button>
+              <button class="btn" onclick="edSubir('agregar')" title="Sube un archivo y lo pone en el cabezal">+ Archivo</button>
+              <button class="btn" onclick="edAgregar('videos')">+ Video</button>
+              <button class="btn" onclick="edAgregar('audios')">+ Audio</button>
+              <button class="btn" onclick="edAgregar('textos')">+ Texto</button>
+              <button class="btn" onclick="edQuitar()">Quitar</button>
+            </div>
+            <div class="timeline-zoom">
+              <button class="btn" onclick="tlZoom(1 / 1.6)" title="Alejar (o Ctrl + rueda)">−</button>
+              <button class="btn" onclick="tlZoom(1.6)" title="Acercar (o Ctrl + rueda)">+</button>
+            </div>
+          </div>
+          <div class="timeline-scroll" id="tl-scroll">
+            <div class="timeline-inner" id="tl-inner">
+              <div class="timeline-ruler" id="tl-ruler"></div>
+              <div class="tl-fila text-track" data-capa="subtitulos"></div>
+              <div class="tl-fila text-track" data-capa="textos"></div>
+              <div class="tl-fila capa-track" data-capa="videos"></div>
+              <div class="timeline-track" id="tl-track"></div>
+              <div class="tl-fila voz-track" id="tl-voz"><canvas id="tl-onda" height="44"></canvas><span class="tl-nombre">Voz</span></div>
+              <div class="tl-fila capa-track" data-capa="audios"></div>
+              <div class="playhead" id="tl-playhead"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <input type="file" id="subir-audio" accept="audio/*,.m4a,.opus" hidden>
+      <input type="file" id="ed-subir" accept="image/*,video/*" hidden>
+    </section>
+
+    <!-- 5 -->
+    <section class="vista" id="v-video">
+      <div id="video-contenido"></div>
+      <hr class="linea">
+      <div class="titulo-seccion">Textos de publicación</div>
+      <div class="fila">
+        <button class="btn primario" data-tarea="textos">Escribir textos<span class="ia" data-redactor></span></button>
+        <button class="btn" onclick="guardarTextos()">Guardar cambios</button>
+        <span class="ayuda" style="margin:0">Caption de la collab, título y descripción de YouTube, post de X.</span>
+      </div>
+      <div id="textos-contenido"></div>
+    </section>
+  </div>
+
+  <div id="estado"></div>
+  <div id="barra">
+    <span class="ind"><span class="punto" id="p-codex"></span>ChatGPT</span>
+    <span class="ind"><span class="punto" id="p-claude"></span>Claude</span>
+    <span class="ind"><span class="punto" id="p-gemini"></span>Gemini</span>
+    <span class="ind"><span class="punto" id="p-whisper"></span>Transcripción</span>
+    <span class="espacio"></span>
+    <button class="btn" onclick="abrir('carpeta')">Abrir carpeta</button>
+  </div>
+</div>
+
+<div id="prompts-panel">
+  <div class="wordmark-fila">
+    <div class="wordmark">EDITAR<span>PROMPTS</span></div>
+    <button class="btn" onclick="cerrarPrompts()">Cerrar ✕</button>
+  </div>
+  <div class="chips" id="lista-prompts" style="margin:0"></div>
+  <p class="ayuda" id="prompt-ayuda" style="margin:0"></p>
+  <textarea id="prompt-texto" spellcheck="false"></textarea>
+  <div class="fila" style="margin:0">
+    <button class="btn primario" onclick="guardarPrompt()">Guardar</button>
+    <button class="btn" id="btn-restaurar" onclick="restaurarPrompt()">Volver al original</button>
+    <span class="ayuda" style="margin:0">Lo que está entre {{llaves}} lo completa Estudio con los datos del short. Los títulos
+      tipo === GUION === o ### Caption IG son los que Estudio lee: no les cambies el nombre.</span>
+  </div>
+</div>
+
+<div id="apariencia">
+  <h3>Apariencia</h3>
+  <div class="chips" id="modos">
+    <button class="chip" data-modo="oscuro">Oscuro</button>
+    <button class="chip" data-modo="claro">Claro</button>
+  </div>
+  <div class="fila"><span>Color principal</span><input type="color" id="color1"></div>
+  <div class="fila"><span>Color secundario</span><input type="color" id="color2"></div>
+  <button class="btn" style="width:100%" onclick="aplicarTema({})">Volver a los de StreamDash</button>
+</div>
+
+<div id="modal-claude">
+  <div class="dialogo" style="width:460px">
+    <h3 id="mc-titulo"></h3>
+    <p id="mc-texto"></p>
+    <div class="barra-prog"><div id="mc-barra"></div></div>
+    <div class="fila" style="justify-content:center;margin:0">
+      <button class="btn" id="mc-refrescar" onclick="mcRefrescar()">Refrescar</button>
+      <button class="btn" onclick="cerrarModal()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<div id="fondo">
+  <div class="dialogo">
+    <h3>Nuevo short</h3>
+    <input type="text" id="nuevo-tema" placeholder="Tema del short">
+    <p>Se crea la carpeta en episodios/ con la fecha de hoy.</p>
+    <div class="fila" style="justify-content:center;margin:0">
+      <button class="btn primario" onclick="crearNuevo()">Crear</button>
+      <button class="btn" onclick="cerrarNuevo()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="elegir-material" multiple accept="image/png,image/jpeg,image/webp,video/*" hidden>
+<input type="file" id="elegir-voz" accept="audio/*,.m4a,.opus" hidden>
+
+<script>
+const PALETA = ["#4f8cff", "#e0576b", "#3fb27f", "#e0a33f", "#9b6ef3", "#e06fae", "#3fb0c4", "#d97845"];
+const NOMBRES_TAREA = { investigar: "Investigando", guion: "Escribiendo el guion", transcribir: "Transcribiendo",
+  asignar: "Asignando material", armar: "Armando el video", textos: "Escribiendo los textos",
+  revisar: "Revisando el guion", ortografia: "Revisión ortográfica", completa: "Revisión completa", describir: "Gemini mirando los videos", buscar: "Buscando material", editar: "Claude editando", pedir: "Pedido a tu Claude" };
+
+let episodios = [], ep = null, slug = null, herr = {}, vista = "investigacion";
+let tareaVista = null;      // última tarea mostrada (para refrescar al terminar)
+let asigEditada = false;    // hay cambios sin guardar en la tabla de asignación
+
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const guardado = (k, v) => { try { return v === undefined ? localStorage.getItem(k) : localStorage.setItem(k, v); } catch (e) { return null; } };
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const colorDe = n => PALETA[[...n].reduce((a, c) => a + c.charCodeAt(0), 0) % PALETA.length];
+function iniciales(n) {
+  const p = n.replace(/_/g, " ").split(/\s+/).filter(Boolean);
+  if (!p.length) return "?";
+  return p.length === 1 ? p[0].slice(0, 2).toUpperCase() : (p[0][0] + p[1][0]).toUpperCase();
+}
+const url = r => `/ep/${encodeURIComponent(slug)}/${r.split("/").map(encodeURIComponent).join("/")}`;
+const msg = t => { $("#estado").textContent = t; };
+const fmtT = t => { const m = Math.floor(t / 60), s = (t % 60).toFixed(2).padStart(5, "0"); return `${m}:${s}`; };
+
+async function api(ruta, datos, opciones = {}) {
+  const r = await fetch(ruta, datos === undefined ? {} : {
+    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(datos), ...opciones });
+  const j = await r.json().catch(() => ({ error: "Respuesta inválida del servidor" }));
+  if (!r.ok || j.error) throw new Error(j.error || r.statusText);
+  return j;
+}
+
+// ---------------------------------------------------------------- rail
+function pintarRail() {
+  const cont = $("#rail-items");
+  cont.innerHTML = "";
+  for (const e of episodios) {
+    const d = document.createElement("div");
+    d.className = "item" + (e.slug === slug ? " activo" : "");
+    d.style.setProperty("--c", colorDe(e.titulo));
+    d.innerHTML = `<div class="pildora"></div><div class="circulo">${esc(iniciales(e.titulo))}
+      ${e.listo ? '<span class="listo"></span>' : ""}</div><div class="tip">${esc(e.titulo)} · ${e.fecha}</div>`;
+    d.onmouseenter = () => { d.querySelector(".tip").style.top = (d.getBoundingClientRect().top + 32) + "px"; };
+    d.onclick = () => seleccionar(e.slug);
+    cont.appendChild(d);
+  }
+  $("#sin-shorts").style.display = episodios.length ? "none" : "block";
+  $("#tabs").style.visibility = episodios.length ? "visible" : "hidden";
+}
+$("#mas").onmouseenter = () => { $("#mas .tip").style.top = ($("#mas").getBoundingClientRect().top + 32) + "px"; };
+$("#mas").onclick = () => abrirNuevo();
+
+async function cargarEpisodios() {
+  episodios = await api("/api/episodios");
+  pintarRail();
+}
+
+async function seleccionar(s) {
+  if (asigEditada && !confirm("Hay cambios en la asignación sin guardar. ¿Salir igual?")) return;
+  asigEditada = false;
+  slug = s; guardado("slug", s);
+  ep = null;
+  pintarRail();
+  await refrescar(true);
+  if (vista === "material") cargarRecorte();
+  E.firma = null; edCargar(ep);
+}
+
+// ---------------------------------------------------------------- nuevo short
+function abrirNuevo() { $("#fondo").classList.add("visible"); $("#nuevo-tema").value = ""; setTimeout(() => $("#nuevo-tema").focus(), 30); }
+function cerrarNuevo() { $("#fondo").classList.remove("visible"); }
+async function crearNuevo() {
+  const tema = $("#nuevo-tema").value.trim();
+  if (!tema) return;
+  try {
+    const r = await api("/api/nuevo", { tema });
+    cerrarNuevo();
+    await cargarEpisodios();
+    await seleccionar(r.slug);
+    elegirVista("investigacion");
+    msg("Short creado: " + tema);
+  } catch (e) { msg(e.message); }
+}
+$("#nuevo-tema").onkeydown = e => { if (e.key === "Enter") crearNuevo(); if (e.key === "Escape") cerrarNuevo(); };
+
+// ---------------------------------------------------------------- pestañas
+const PASOS = [["investigacion", "Investigación"], ["guion", "Guion"], ["voz", "Voz"], ["material", "Material"], ["editor", "Editor"], ["video", "Video"]];
+const PASO_TAREA = { investigar: "investigacion", guion: "guion", revisar: "guion", ortografia: "guion", completa: "guion",
+  transcribir: "voz", buscar: "material", describir: "material", asignar: "material", editar: "editor", pedir: "editor",
+  armar: "video", textos: "video" };
+let HECHO = {};
+function pasoLibre(v) { const i = PASOS.findIndex(p => p[0] === v); return PASOS.slice(0, i).every(([q]) => HECHO[q]) || HECHO[v]; }
+function pintarPasos() {
+  const t = ep && ep.tarea, trabaja = t && t.estado === "corriendo" ? PASO_TAREA[t.tarea] : null;
+  $$(".tab").forEach(b => {
+    b.classList.toggle("hecho", !!HECHO[b.dataset.v]);
+    b.classList.toggle("trabajando", trabaja === b.dataset.v);
+    b.classList.toggle("bloqueado", !pasoLibre(b.dataset.v));
+  });
+}
+async function reiniciarPaso() {
+  const nombre = (PASOS.find(p => p[0] === vista) || [])[1];
+  if (!nombre || !slug) return;
+  if (!confirm(`¿Reiniciar "${nombre}"? Lo que hiciste en este paso se guarda aparte (no se borra) y el paso queda para hacer de nuevo.`)) return;
+  try { await api("/api/reiniciar?e=" + encodeURIComponent(slug), { paso: vista }); } catch (e) { msg(e.message); return; }
+  E.firma = null; edCargado = null; await refrescar(true); msg(`"${nombre}" reiniciado.`);
+}
+function proximoPaso() {
+  const i = PASOS.findIndex(p => p[0] === vista);
+  if (!HECHO[vista]) { msg("Todavía falta terminar este paso."); return; }
+  if (i >= 0 && i < PASOS.length - 1) elegirVista(PASOS[i + 1][0]);
+}
+function elegirVista(v) {
+  v = { asignacion: "material", textos: "video" }[v] || v;
+  if (v !== "editor" && E.audio && !E.audio.paused) tlPlay();
+  if (v === "material" && vista !== "material" && slug) cargarRecorte();
+  vista = v; guardado("vista", v);
+  $$(".tab").forEach(t => t.classList.toggle("sel", t.dataset.v === v));
+  $$(".vista").forEach(s => s.classList.toggle("sel", s.id === "v-" + v && !!slug));
+}
+$$(".tab").forEach(t => t.onclick = () => {
+  if (!pasoLibre(t.dataset.v)) { msg("Primero terminá el paso anterior."); return; }
+  elegirVista(t.dataset.v);
+});
+
+// ---------------------------------------------------------------- refresco
+async function refrescar(completo = false) {
+  if (!slug) return;
+  let d;
+  try { d = await api("/api/ep?e=" + encodeURIComponent(slug)); }
+  catch (e) { msg(e.message); return; }
+  const anterior = ep;
+  ep = d;
+  $("#titulo").textContent = d.titulo;
+  $("#fecha").textContent = d.slug.slice(0, 10);
+
+  // textos editables: no piso lo que Jordy está escribiendo
+  pintarEditor(d);
+  pintarMeta(d.meta || {});
+  edCargar(d);
+  for (const [id, valor] of [["tema", d.tema], ["eje", d.eje]]) {
+    const el = $("#" + id);
+    if (document.activeElement !== el && !el.dataset.sucio) el.value = valor;
+  }
+  pintarFuentes();
+  pintarResultados();
+
+  const vigente = !!(d.edicion && d.edicion.vigente);
+  HECHO = { investigacion: Object.keys(d.investigaciones).length > 0, guion: !!d.guion.trim(), voz: !!d.voz && d.marcas.length > 0,
+    material: d.material.length > 0 && (Object.keys(d.asignacion).length > 0 || vigente), editor: vigente || !!d.video, video: !!d.video };
+  pintarDecision();
+  const firmaVoz = JSON.stringify([d.voz, d.marcas.length, d.subtitulos, d.edicion && d.edicion.capas && d.edicion.capas.subtitulos]);
+  if ((completo || firmaVoz !== vozFirma) && document.activeElement.dataset.sub === undefined) { vozFirma = firmaVoz; pintarVoz(); }
+
+  const firma = x => x && JSON.stringify([x.voz, x.audios_sueltos, x.material.map(m => m.nombre + m.mini + m.descripcion)]);
+  if (completo || firma(anterior) !== firma(d)) pintarMaterial();
+  const firmaAsig = x => x && JSON.stringify([x.marcas, x.asignacion, x.material.map(m => m.nombre + m.mini), x.voz, x.srt]);
+  if (completo || (!asigEditada && document.activeElement.dataset.sub === undefined && firmaAsig(anterior) !== firmaAsig(d))) pintarAsignacion();
+  if (completo || !anterior || anterior.video_v !== d.video_v) pintarVideo();
+  if (completo || !anterior || anterior.textos !== d.textos) pintarTextos();
+  pintarInforme("#revision", d.revision, "Revisión de datos · Gemini");
+  const quien = d.redactor === "claude" ? "Claude" : "ChatGPT";
+  $$("[data-redactor]").forEach(s => s.textContent = quien);
+  pintarTarea();
+  if (!pasoLibre({ asignacion: "material", textos: "video" }[vista] || vista)) vista = (PASOS.find(([q]) => !HECHO[q]) || PASOS[0])[0];
+  elegirVista(vista);
+}
+
+function formatearInforme(md) {
+  return esc(md.trim())
+    .replace(/^#{1,4}\s*(.+)$/gm, "<h4>$1</h4>")
+    .replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")
+    .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank">$1</a>')
+    .replace(/(^|[\s(])(https?:\/\/[^\s)<]+)/g, '$1<a href="$2" target="_blank">$2</a>')
+    .replace(/<\/h4>\n/g, "</h4>");
+}
+function pintarInforme(sel, texto, quien) {
+  const el = $(sel);
+  if (el.dataset.texto === (texto || "")) return;
+  el.dataset.texto = texto || "";
+  el.innerHTML = texto && texto.trim()
+    ? `<div class="informe"><span class="quien">${esc(quien)}</span>${formatearInforme(texto)}</div>` : "";
+}
+
+function pintarTarea() {
+  const t = ep && ep.tarea, caja = $("#tarea");
+  const corriendo = t && t.estado === "corriendo";
+  $$("[data-tarea]").forEach(b => b.disabled = !!corriendo);
+  pintarPasos(); pintarModal();
+  pintarEstadoInvestigacion();
+  $("#btn-investigar").disabled = !!corriendo;
+  if (!t) { caja.style.display = "none"; return; }
+  caja.style.display = "block";
+  caja.className = "tarea " + (t.estado === "corriendo" ? "" : t.estado);
+  const seg = Math.round(((t.fin || Date.now() / 1000) - t.inicio));
+  const nombre = NOMBRES_TAREA[t.tarea] || t.tarea;
+  caja.querySelector(".msg").innerHTML = corriendo
+    ? `<span class="girando"></span>${nombre}… <span style="color:var(--suave)">${seg}s</span>`
+    : (t.estado === "ok" ? `✓ ${nombre}: listo (${seg}s)` : `✗ ${nombre}: hubo un problema`);
+  const log = caja.querySelector(".log");
+  log.textContent = t.log.join("\n");
+  log.scrollTop = log.scrollHeight;
+  // al terminar, llevo a Jordy a donde está el resultado
+  const clave = t.tarea + t.inicio;
+  if (!corriendo && tareaVista === clave + "run" && t.estado === "ok" && !MODAL) {
+    const destino = { guion: "guion", transcribir: "voz",
+      asignar: "material", armar: "video", textos: "video", investigar: "investigacion",
+      revisar: "guion", ortografia: "guion", completa: "guion", describir: "material", buscar: "material", editar: "editor" }[t.tarea];
+    if (destino) elegirVista(destino);
+  }
+  tareaVista = clave + (corriendo ? "run" : "fin");
+}
+
+async function lanzar(tarea, datos = {}) {
+  try { await api("/api/tarea?e=" + encodeURIComponent(slug), { tarea, ...datos }); msg(""); await refrescar(); }
+  catch (e) { msg(e.message); }
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-tarea]");
+  if (b && !b.disabled) lanzar(b.dataset.tarea, b.dataset.tarea === "guion" ? { ia: iaGuion } : {});
+});
+
+// ---------------------------------------------------------------- guardar textos (auto)
+async function guardarCampo(campo, texto) {
+  try { await api("/api/guardar?e=" + encodeURIComponent(slug), { campo, texto }); } catch (e) { msg(e.message); }
+}
+// cualquier campo con data-campo se guarda solo (también los que se crean después)
+const relojes = {};
+document.addEventListener("input", e => {
+  const el = e.target.closest("[data-campo]");
+  if (!el || !slug) return;
+  el.dataset.sucio = "1";
+  clearTimeout(relojes[el.dataset.campo]);
+  relojes[el.dataset.campo] = setTimeout(async () => {
+    await guardarCampo(el.dataset.campo, el.value); delete el.dataset.sucio; msg("Guardado.");
+  }, 700);
+});
+
+// ---------------------------------------------------------------- editor del guion (cambios marcados)
+// Nada se borra: lo borrado queda en <del> (tachado rojo) y lo agregado en <ins> (verde).
+// El texto limpio (sin lo tachado) es el que usan la grabación, los textos y el resto del flujo.
+const ed = $("#guion-editor");
+let edCargado = null, edSucio = false, edReloj;
+
+function limpiarHTML(h) {  // solo texto, <ins> y <del>
+  const caja = document.createElement("div");
+  caja.innerHTML = h;
+  const copiar = (origen, destino) => origen.childNodes.forEach(n => {
+    if (n.nodeType === 3) destino.appendChild(document.createTextNode(n.data));
+    else if (n.nodeName === "BR") destino.appendChild(document.createTextNode("\n"));
+    else if (n.nodeName === "INS" || n.nodeName === "DEL") {
+      const m = document.createElement(n.nodeName.toLowerCase()); copiar(n, m); destino.appendChild(m);
+    } else copiar(n, destino);
+  });
+  const limpio = document.createElement("div");
+  copiar(caja, limpio);
+  return limpio.innerHTML;
+}
+function textoLimpio() {
+  const copia = ed.cloneNode(true);
+  copia.querySelectorAll("del").forEach(d => d.remove());
+  return copia.textContent;
+}
+let verSel = "final";
+function verGuion(cual) {  // switch: mis correcciones / corrección de la IA / mi versión final (la única editable)
+  verSel = cual;
+  $$("#decision .chip").forEach(b => b.classList.toggle("sel", b.dataset.ver === cual));
+  ed.contentEditable = cual === "final";
+  $("#btn-usar-version").style.display = cual === "final" ? "none" : "";
+  if (cual === "mio") ed.innerHTML = limpiarHTML(ep.guion_previo || "");
+  else if (cual === "ia") ed.innerHTML = limpiarHTML(ep.guion_ia_marcas || ep.guion_edicion || "");
+  else { edCargado = null; pintarEditor(ep); }
+}
+function pintarDecision() {
+  const m = ep.meta || {}, hay = !!(m.revision_pendiente || ep.guion_previo || ep.guion_ia_marcas);
+  $("#decision").style.display = hay ? "flex" : "none";
+  $("#decision-texto").textContent = m.revision_pendiente || "";
+  $("#decision-botones").style.display = m.revision_pendiente ? "" : "none";
+}
+async function usarVersion() {  // la versión que estás mirando pasa a ser tu versión final
+  if (!confirm("¿Usar esta versión como tu guion final?")) return;
+  const h = ed.innerHTML;
+  verGuion("final"); foto(); ed.innerHTML = h; edCambio();
+  msg("Listo: esa versión es ahora tu guion final.");
+}
+async function guardarGuionYa() {
+  if (verSel !== "final") { await usarVersion(); return; }
+  clearTimeout(edReloj);
+  const h = ed.innerHTML;
+  await guardarCampo("guion", textoLimpio());
+  await guardarCampo("guion_edicion", h);
+  edCargado = h; edSucio = false; msg("Guion guardado.");
+}
+function pintarEditor(d) {
+  if (verSel !== "final") return;
+  const h = d.guion_edicion || esc(d.guion);
+  if (h === edCargado || edSucio || document.activeElement === ed) return;
+  edCargado = h;
+  ed.innerHTML = limpiarHTML(h);
+  deshacer = []; rehacer = [];
+}
+
+// ---- Ctrl+Z / Ctrl+Y propios (el del navegador no sabe de tachados)
+let deshacer = [], rehacer = [], ultimaFoto = 0;
+function posCursor() {
+  const sel = getSelection();
+  if (!sel.rangeCount || !ed.contains(sel.anchorNode)) return 0;
+  const r = document.createRange();
+  r.selectNodeContents(ed);
+  r.setEnd(sel.getRangeAt(0).startContainer, sel.getRangeAt(0).startOffset);
+  return r.toString().length;
+}
+function ponerPos(n) {
+  const w = document.createTreeWalker(ed, NodeFilter.SHOW_TEXT);
+  while (w.nextNode()) {
+    if (n <= w.currentNode.length) {
+      const r = document.createRange(); r.setStart(w.currentNode, n); r.collapse(true);
+      getSelection().removeAllRanges(); getSelection().addRange(r);
+      return;
+    }
+    n -= w.currentNode.length;
+  }
+}
+function foto(agrupar = false) {  // las letras seguidas se deshacen juntas
+  const ahora = Date.now();
+  if (!(agrupar && ahora - ultimaFoto < 800)) {
+    deshacer.push({ h: ed.innerHTML, p: posCursor() });
+    if (deshacer.length > 200) deshacer.shift();
+  }
+  rehacer = []; ultimaFoto = agrupar ? ahora : 0;
+}
+function volver(desde, hacia) {
+  const s = desde.pop();
+  if (!s) return;
+  hacia.push({ h: ed.innerHTML, p: posCursor() });
+  ed.innerHTML = s.h; ponerPos(s.p); ultimaFoto = 0;
+  edCambio();
+}
+ed.addEventListener("keydown", e => {
+  if (!(e.ctrlKey || e.metaKey)) return;
+  const k = e.key.toLowerCase();
+  if (k === "z" && !e.shiftKey) { e.preventDefault(); volver(deshacer, rehacer); }
+  else if (k === "y" || (k === "z" && e.shiftKey)) { e.preventDefault(); volver(rehacer, deshacer); }
+});
+function seleccionLimpia() {
+  const sel = getSelection();
+  if (!sel.rangeCount || sel.isCollapsed) return null;
+  const caja = document.createElement("div");
+  caja.appendChild(sel.getRangeAt(0).cloneContents());
+  caja.querySelectorAll("del").forEach(d => d.remove());
+  return caja.textContent;
+}
+ed.addEventListener("copy", e => {
+  const texto = seleccionLimpia();
+  if (texto === null) return;
+  e.preventDefault(); e.clipboardData.setData("text/plain", texto);
+});
+ed.addEventListener("cut", e => {
+  const texto = seleccionLimpia();
+  if (texto === null) return;
+  e.preventDefault(); e.clipboardData.setData("text/plain", texto);
+  foto(); marcarBorrado(getSelection().getRangeAt(0), true); edCambio();
+});
+function edCambio() {
+  edSucio = true;
+  clearTimeout(edReloj);
+  edReloj = setTimeout(async () => {
+    const h = ed.innerHTML;
+    await guardarCampo("guion", textoLimpio());
+    await guardarCampo("guion_edicion", h);
+    edCargado = h; edSucio = false;
+    msg("Guardado.");
+  }, 700);
+}
+
+function nodosDeTexto(r) {
+  // corta los textos en los bordes del rango y devuelve los que quedan adentro
+  let { startContainer: sc, startOffset: so, endContainer: ec, endOffset: eo } = r;
+  if (ec.nodeType === 3 && eo < ec.length) ec.splitText(eo);
+  if (sc.nodeType === 3 && so > 0) { const resto = sc.splitText(so); if (ec === sc) ec = resto; sc = resto; so = 0; }
+  const r2 = document.createRange();
+  sc.nodeType === 3 ? r2.setStartBefore(sc) : r2.setStart(sc, so);
+  ec.nodeType === 3 ? r2.setEndAfter(ec) : r2.setEnd(ec, eo);
+  const lista = [], w = document.createTreeWalker(ed, NodeFilter.SHOW_TEXT);
+  while (w.nextNode()) if (w.currentNode.length && r2.intersectsNode(w.currentNode)) lista.push(w.currentNode);
+  return { lista, r2 };
+}
+function marcarBorrado(r, haciaAtras) {
+  const { lista, r2 } = nodosDeTexto(r);
+  const ancla = document.createTextNode("");
+  const donde = r2.cloneRange(); donde.collapse(haciaAtras); donde.insertNode(ancla);
+  for (const n of lista) {
+    if (n.parentElement.closest("del")) continue;
+    const ins = n.parentElement.closest("ins");
+    if (ins) { n.remove(); if (!ins.textContent) ins.remove(); continue; }  // lo recién agregado se borra de verdad
+    const d = document.createElement("del"); n.replaceWith(d); d.appendChild(n);
+  }
+  ponerCursor(ancla);
+}
+function ponerCursor(nodo, despues = false) {
+  const r = document.createRange();
+  despues ? r.setStartAfter(nodo) : r.setStartBefore(nodo);
+  r.collapse(true);
+  const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+}
+function insertar(texto) {
+  let r = getSelection().getRangeAt(0);
+  const donde = n => (n.nodeType === 3 ? n.parentElement : n);
+  const del = donde(r.startContainer).closest("del");
+  if (del && ed.contains(del)) { r = document.createRange(); r.setStartAfter(del); r.collapse(true); }
+  const ins = donde(r.startContainer).closest("ins");
+  const nodo = document.createTextNode(texto);
+  if (ins && ed.contains(ins)) r.insertNode(nodo);
+  else { const n = document.createElement("ins"); n.appendChild(nodo); r.insertNode(n); }
+  ponerCursor(nodo, true);
+}
+ed.addEventListener("beforeinput", e => {
+  const tipo = e.inputType;
+  if (tipo === "insertCompositionText") return;  // teclados con composición: se deja pasar
+  e.preventDefault();
+  const sel = getSelection();
+  if (!sel.rangeCount || tipo.startsWith("history") || tipo.startsWith("format")) return;
+  foto(tipo === "insertText");
+  if (tipo.startsWith("delete")) {
+    const atras = !tipo.includes("Forward");
+    if (sel.isCollapsed) sel.modify("extend", atras ? "backward" : "forward",
+      tipo.includes("Word") ? "word" : tipo.includes("Line") ? "lineboundary" : "character");
+    if (!sel.isCollapsed) marcarBorrado(sel.getRangeAt(0), atras);
+  } else {
+    const texto = tipo === "insertParagraph" || tipo === "insertLineBreak" ? "\n"
+      : e.data ?? (e.dataTransfer && e.dataTransfer.getData("text/plain")) ?? "";
+    if (!texto) return;
+    if (!sel.isCollapsed) marcarBorrado(sel.getRangeAt(0), true);
+    insertar(texto);
+  }
+  edCambio();
+});
+ed.addEventListener("input", edCambio);  // lo que se haya dejado pasar (composición)
+ed.addEventListener("dblclick", e => {    // doble clic en lo tachado: lo recupera
+  const d = e.target.closest("del");
+  if (!d) return;
+  e.preventDefault();
+  foto();
+  d.replaceWith(...d.childNodes);
+  edCambio();
+});
+function aceptarCambios() {
+  foto();
+  ed.querySelectorAll("del").forEach(d => d.remove());
+  ed.querySelectorAll("ins").forEach(i => i.replaceWith(...i.childNodes));
+  ed.normalize();
+  edCambio();
+  metaAccion({ accion: "aceptar_revision" });
+  msg("Cambios aceptados.");
+}
+async function prefieroMiGuion() {
+  if (!confirm("¿Descartar la reescritura de la IA y volver a tu guion?")) return;
+  clearTimeout(edReloj); edSucio = false; ed.blur();
+  await metaAccion({ accion: "prefiero_mi_guion" });
+  edCargado = null;
+  await refrescar(true);
+  msg("Volviste a tu guion.");
+}
+async function revisionCompleta() {
+  clearTimeout(edReloj);  // que las correcciones marcadas estén guardadas antes de mandarlas
+  await guardarCampo("guion", textoLimpio());
+  await guardarCampo("guion_edicion", ed.innerHTML);
+  edSucio = false;
+  lanzar("completa");
+}
+async function revisionOrtografica() {
+  if (ed.querySelector("ins, del") &&
+      !confirm("La revisión acepta tus cambios marcados y después marca los suyos. ¿Sigo?")) return;
+  clearTimeout(edReloj);
+  await guardarCampo("guion", textoLimpio());
+  await guardarCampo("guion_edicion", "");
+  edSucio = false;
+  lanzar("ortografia");
+}
+
+// ---------------------------------------------------------------- editor (copia del de El Recorte)
+// Video: cortes de la asignación (cada marca donde entra un archivo nuevo). Encima: capas de textos,
+// videos/fotos y audios extra. Todo se guarda en edicion.json y el armado lo respeta.
+const NICE = [1 / 30, 2 / 30, 5 / 30, 10 / 30, 0.5, 1, 2, 5, 10, 15, 30, 60, 120, 300, 600];
+const E = { segs: [], capas: { videos: [], audios: [], textos: [] }, total: 0, sel: 0, selCapa: null, pps: 0,
+  audio: null, vozSrc: null, onda: null, dims: {}, firma: null, reloj: null, vistaFirma: null, capasFirma: null,
+  sonidos: {}, estilosSD: null, panelFirma: null, misEstilos: {} };
+let ctxAudio = null;  // uno solo para toda la página: el navegador limita cuántos se pueden abrir
+const decodificar = b => (ctxAudio ||= new AudioContext()).decodeAudioData(b);
+const segSrt = x => { const [h, m, s] = x.trim().replace(",", ".").split(":"); return +h * 3600 + +m * 60 + +s; };
+const subsTiempos = () => (ep.subtitulos || []).map(s => { const [a, b] = s.tiempo.split("-->"); return { ini: segSrt(a), fin: segSrt(b), texto: s.texto }; });
+function estiloSub() {
+  return { fuente: "IBM Plex Sans", tamano: 64, color: "#ffffff", negrita: true, cursiva: false, mayusculas: false, degrade: false,
+    degrade_tipo: "vertical", degrade_colores: [], sombra: true, posicion: "abajo-centro", margen_x: 70, margen_y: 380, envolver: true, x: 0.1, y: 0.7 };
+}
+const esVideo = a => /\.(mp4|mov|webm|m4v)$/i.test(a);
+const fmtTL = x => `${String(Math.floor(x / 60)).padStart(2, "0")}:${(x % 60).toFixed(1).padStart(4, "0")}`;
+const nuevoId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+
+function segsDesde(d) {
+  if (d.edicion && d.edicion.vigente) return d.edicion.segmentos.map(s => ({ ...s }));
+  const segs = [];
+  for (const m of d.marcas) {
+    const a = d.asignacion[m.t.toFixed(2)];
+    if (a && a !== "=" && a !== "IA") segs.push({ t: segs.length ? m.t : 0, archivo: a, modo: "recorte", crop: null });
+  }
+  return segs;
+}
+function edCargar(d) {
+  if (!d) return;
+  const firma = JSON.stringify([d.edicion, d.asignacion, d.voz, d.material.map(m => m.nombre), d.audios_extra]);
+  if (firma === E.firma || E.reloj) return;
+  E.firma = firma;
+  E.segs = segsDesde(d);
+  const cp = (d.edicion && d.edicion.capas) || {};
+  E.capas = { videos: cp.videos || [], audios: cp.audios || [], textos: cp.textos || [],
+    subtitulos: cp.subtitulos || { activo: false, estilo: estiloSub() } };
+  cargarFuente(E.capas.subtitulos.estilo.fuente);
+  api("/api/mis_estilos?e=" + encodeURIComponent(slug), {}).then(r => { E.misEstilos = r; }).catch(() => {});
+  if (E.histSlug !== slug) { E.histSlug = slug; E.atras = []; E.adelante = []; }
+  E.ultimo = estadoEd();
+  E.sel = Math.min(E.sel, Math.max(0, E.segs.length - 1));
+  if (E.selCapa && E.selCapa.tipo !== "subtitulos" && !E.capas[E.selCapa.tipo][E.selCapa.i]) E.selCapa = null;
+  const hay = E.segs.length && d.voz;
+  $("#ed-vacio").style.display = hay ? "none" : "block";
+  $("#ed-cuerpo").style.display = hay ? "block" : "none";
+  if (!hay) return;
+  if (E.vozSrc !== url(d.voz) + "?v=" + d.voz_v) {
+    if (E.audio) E.audio.pause();
+    E.vozSrc = url(d.voz) + "?v=" + d.voz_v; E.onda = null;
+    E.audio = new Audio(E.vozSrc);
+    E.audio.onloadedmetadata = () => { E.total = E.audio.duration; tlAjustar(); edRender(); };
+    fetch(E.vozSrc).then(r => r.arrayBuffer()).then(b => decodificar(b)).then(buf => {
+      const datos = buf.getChannelData(0), paso = Math.floor(buf.sampleRate / 100), picos = new Float32Array(Math.ceil(datos.length / paso));
+      for (let i = 0; i < picos.length; i++) { let m = 0; for (let j = i * paso; j < Math.min(datos.length, (i + 1) * paso); j++) m = Math.max(m, Math.abs(datos[j])); picos[i] = m; }
+      E.onda = picos; tlOnda();
+    }).catch(() => {});
+  }
+  if (!E.estilosSD) api("/api/estilos_streamdash?e=" + encodeURIComponent(slug), {}).then(r => { E.estilosSD = r; }).catch(() => { E.estilosSD = {}; });
+  for (const s of E.segs) cargarDims(s.archivo);
+  for (const v of E.capas.videos) cargarDims(v.archivo);
+  for (const x of E.capas.textos) cargarFuente(x.estilo.fuente);
+  E.panelFirma = null;
+  edRender();
+}
+function cargarDims(a) {
+  if (E.dims[a] !== undefined) return;
+  E.dims[a] = null;
+  const listo = (w, h) => {  // "recorte" sin recuadro todavía: pantalla completa centrada
+    E.dims[a] = { w, h };
+    for (const s of E.segs) if (s.archivo === a && s.modo === "recorte" && !s.crop) s.crop = recorteInicial(a);
+    edRender();
+  };
+  if (esVideo(a)) { const v = document.createElement("video"); v.preload = "metadata"; v.onloadedmetadata = () => listo(v.videoWidth, v.videoHeight); v.src = url("material/" + a); }
+  else { const i = new Image(); i.onload = () => listo(i.naturalWidth, i.naturalHeight); i.src = url("material/" + a); }
+}
+function recorteInicial(a) {  // el recuadro 9:16 más grande, centrado (como El Recorte)
+  const d = E.dims[a];
+  if (!d) return null;
+  let cw = d.w, ch = d.w * 16 / 9;
+  if (ch > d.h) { ch = d.h; cw = d.h * 9 / 16; }
+  return { x: (d.w - cw) / 2 / d.w, y: (d.h - ch) / 2 / d.h, w: cw / d.w, h: ch / d.h };
+}
+const estadoEd = () => JSON.stringify({ segs: E.segs, capas: E.capas });
+function edHistorial() {  // guarda el estado anterior para poder deshacer
+  if (E.histSlug !== slug) { E.histSlug = slug; E.atras = []; E.adelante = []; E.ultimo = null; }
+  const ahora_ = estadoEd();
+  if (E.ultimo && E.ultimo !== ahora_) { E.atras.push(E.ultimo); if (E.atras.length > 100) E.atras.shift(); E.adelante = []; }
+  E.ultimo = ahora_;
+}
+function edDeshacer(rehacer) {
+  const de = rehacer ? E.adelante : E.atras, a = rehacer ? E.atras : E.adelante;
+  if (!de || !de.length) { msg(rehacer ? "Nada para rehacer." : "Nada para deshacer."); return; }
+  a.push(estadoEd());
+  const s = JSON.parse(de.pop());
+  E.segs = s.segs; E.capas = s.capas; E.ultimo = estadoEd();
+  E.sel = Math.min(E.sel, E.segs.length - 1); E.selCapa = null; E.panelFirma = null;
+  edRender(); edGuardar(true);
+}
+function edCopiar() {
+  const o = selObj();
+  if (!o || (E.selCapa && E.selCapa.tipo === "subtitulos")) return;
+  E.portapapeles = { tipo: E.selCapa ? E.selCapa.tipo : "seg", o: JSON.parse(JSON.stringify(o)) };
+  msg("Copiado.");
+}
+function edPegar() {
+  const p = E.portapapeles;
+  if (!p) return;
+  const x = ahora(), o = JSON.parse(JSON.stringify(p.o));
+  if (p.tipo === "seg") {  // un corte nuevo en el cabezal, con el mismo archivo y encuadre
+    const i = segEn(x);
+    if (x - E.segs[i].t < 0.3) { Object.assign(E.segs[i], { archivo: o.archivo, modo: o.modo, crop: o.crop }); seleccionar_("seg", i); }
+    else { E.segs.splice(i + 1, 0, { ...o, t: x }); seleccionar_("seg", i + 1); }
+  } else {
+    const dur = o.fin - o.ini;
+    o.id = nuevoId(); o.ini = Math.min(x, Math.max(0, E.total - dur)); o.fin = o.ini + dur;
+    E.capas[p.tipo].push(o); seleccionar_(p.tipo, E.capas[p.tipo].length - 1);
+  }
+  edGuardar();
+}
+document.addEventListener("keydown", e => {
+  if (vista !== "editor" || e.target.closest("input, textarea, select, [contenteditable=true]")) return;
+  const k = e.key.toLowerCase(), ctrl = e.ctrlKey || e.metaKey;
+  if (ctrl && k === "z" && !e.shiftKey) { e.preventDefault(); edDeshacer(false); }
+  else if (ctrl && (k === "y" || (k === "z" && e.shiftKey))) { e.preventDefault(); edDeshacer(true); }
+  else if (ctrl && k === "c") { e.preventDefault(); edCopiar(); }
+  else if (ctrl && k === "v") { e.preventDefault(); edPegar(); }
+  else if (k === "delete" || k === "backspace") { e.preventDefault(); edQuitar(); }
+});
+function edGuardar(sinHistorial) {
+  if (!sinHistorial) edHistorial();
+  clearTimeout(E.reloj);
+  E.reloj = setTimeout(async () => {
+    await api("/api/edicion?e=" + encodeURIComponent(slug), { segmentos: E.segs, capas: E.capas });
+    E.reloj = null; E.firma = null; await refrescar(); msg("Guardado.");
+  }, 600);
+}
+const segEn = x => { let k = 0; E.segs.forEach((s, i) => { if (s.t <= x) k = i; }); return k; };
+const finDe = i => (i + 1 < E.segs.length ? E.segs[i + 1].t : E.total);
+const ahora = () => (E.audio ? E.audio.currentTime : 0);
+const selObj = () => (!E.selCapa ? E.segs[E.sel] : E.selCapa.tipo === "subtitulos" ? E.capas.subtitulos : E.capas[E.selCapa.tipo][E.selCapa.i]);
+
+function edRender() {
+  if (!E.segs.length) return;
+  tlRender(); edLado(); edOriginal(); edFinal(true);
+}
+
+// ---- línea de tiempo
+function tlAjustar() { E.pps = Math.max(0.5, ($("#tl-scroll").clientWidth || 800) / Math.max(1, E.total)); }
+function tlRender() {
+  if (!E.pps) tlAjustar();
+  const scroll = $("#tl-scroll");
+  $("#tl-inner").style.width = Math.max(scroll.clientWidth, E.total * E.pps) + "px";
+  const paso = NICE.find(s => s * E.pps >= 56) || 600;
+  const desde = Math.max(0, Math.floor((scroll.scrollLeft - 150) / E.pps / paso) * paso);
+  const hasta = Math.min(E.total, (scroll.scrollLeft + scroll.clientWidth + 150) / E.pps);
+  let reg = "";
+  for (let x = desde; x <= hasta + paso; x += paso) {
+    if (x > E.total) break;
+    reg += `<div class="timeline-tick" style="left:${x * E.pps}px"><span>${fmtTL(x)}</span></div>`;
+  }
+  $("#tl-ruler").innerHTML = reg;
+  $("#tl-track").innerHTML = '<span class="tl-nombre">Video</span>' + E.segs.map((s, i) => {
+    const m = ep.material.find(x => x.nombre === s.archivo);
+    const fondo = m && m.mini ? `background-image:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)),url('${url(m.mini)}');` : "";
+    return `<div class="clip-block ${!E.selCapa && i === E.sel ? "selected" : ""}" data-i="${i}" title="${esc(s.archivo)}"
+      style="left:${s.t * E.pps}px;width:${Math.max(2, (finDe(i) - s.t) * E.pps)}px;${fondo}">
+      <span class="clip-label">${i + 1}</span>${i > 0 ? '<div class="handle handle-left"></div>' : ""}</div>`;
+  }).join("");
+  $('.tl-fila[data-capa="subtitulos"]').innerHTML = `<span class="tl-nombre">Subtítulos${E.capas.subtitulos.activo ? " · estilo propio" : ""}</span>` +
+    subsTiempos().map((s, i) => `<div class="capa-block ${E.selCapa && E.selCapa.tipo === "subtitulos" && E.selCapa.i === i ? "selected" : ""}"
+      data-capa="subtitulos" data-i="${i}" title="${esc(s.texto)}" style="left:${s.ini * E.pps}px;width:${Math.max(6, (s.fin - s.ini) * E.pps)}px">${esc(s.texto)}</div>`).join("");
+  const nombres = { textos: "Textos", videos: "Video 2", audios: "Audio 2" };
+  for (const tipo of ["textos", "videos", "audios"]) {
+    $(`.tl-fila[data-capa="${tipo}"]`).innerHTML = `<span class="tl-nombre">${nombres[tipo]}</span>` + E.capas[tipo].map((c, i) => {
+      const sel = E.selCapa && E.selCapa.tipo === tipo && E.selCapa.i === i;
+      const m = tipo === "videos" && ep.material.find(x => x.nombre === c.archivo);
+      const fondo = m && m.mini ? `background-image:linear-gradient(rgba(0,0,0,.3),rgba(0,0,0,.3)),url('${url(m.mini)}');` : "";
+      const nombre = tipo === "textos" ? c.texto : c.archivo;
+      return `<div class="capa-block ${sel ? "selected" : ""}" data-capa="${tipo}" data-i="${i}" title="${esc(nombre)}"
+        style="left:${c.ini * E.pps}px;width:${Math.max(6, (c.fin - c.ini) * E.pps)}px;${fondo}">${esc(nombre)}
+        <div class="handle handle-left"></div><div class="handle handle-right"></div></div>`;
+    }).join("");
+  }
+  tlOnda(); tlCabezal();
+}
+function tlOnda() {  // la onda de la voz, dibujada solo en la parte visible
+  const cv = $("#tl-onda"), sc = $("#tl-scroll");
+  if (!cv) return;
+  cv.width = sc.clientWidth; cv.style.left = sc.scrollLeft + "px"; cv.style.width = sc.clientWidth + "px";
+  const g = cv.getContext("2d"), H = cv.height;
+  g.clearRect(0, 0, cv.width, H);
+  if (!E.onda) return;
+  g.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--acento2").trim() || "#f3903c";
+  for (let x = 0; x < cv.width; x++) {
+    const t0 = (sc.scrollLeft + x) / E.pps, t1 = (sc.scrollLeft + x + 1) / E.pps;
+    let v = 0;
+    for (let i = Math.floor(t0 * 100); i <= Math.floor(t1 * 100) && i < E.onda.length; i++) v = Math.max(v, E.onda[i]);
+    const h = Math.max(1, Math.min(1, v * 1.4) * (H - 6));
+    g.fillRect(x, (H - h) / 2, 1, h);
+  }
+}
+function tlCabezal() {
+  const x = ahora();
+  $("#tl-playhead").style.left = x * E.pps + "px";
+  $("#tl-time").textContent = `${fmtTL(x)} / ${fmtTL(E.total)}`;
+  const sc = $("#tl-scroll"), px = x * E.pps;
+  if (px < sc.scrollLeft + 40) sc.scrollLeft = Math.max(0, px - 40);
+  else if (px > sc.scrollLeft + sc.clientWidth - 40) sc.scrollLeft = px - sc.clientWidth + 40;
+}
+function tlTiempo(clientX) {
+  const sc = $("#tl-scroll"), r = sc.getBoundingClientRect();
+  return Math.min(E.total, Math.max(0, (clientX - r.left + sc.scrollLeft) / E.pps));
+}
+function tlIr(x) { if (E.audio) E.audio.currentTime = x; tlCabezal(); edFinal(); sonidosSync(); }
+function tlZoom(f, centro) {
+  const sc = $("#tl-scroll"), off = centro ?? sc.clientWidth / 2, x = (sc.scrollLeft + off) / E.pps;
+  E.pps = Math.min(600, Math.max(0.5, E.pps * f));
+  tlRender(); sc.scrollLeft = x * E.pps - off; tlRender();
+}
+function arrastrar(onMove, onUp) {
+  const up = e => { window.removeEventListener("mousemove", onMove); window.removeEventListener("mouseup", up); onUp && onUp(e); };
+  window.addEventListener("mousemove", onMove); window.addEventListener("mouseup", up);
+}
+function seleccionar_(tipo, i) {
+  if (tipo === "seg") { E.sel = i; E.selCapa = null; } else E.selCapa = { tipo, i };
+  E.panelFirma = null; edRender();
+}
+$("#tl-ruler").addEventListener("mousedown", e => { tlIr(tlTiempo(e.clientX)); arrastrar(m => tlIr(tlTiempo(m.clientX))); });
+$("#tl-track").addEventListener("mousedown", e => {
+  e.preventDefault();
+  const bloque = e.target.closest(".clip-block");
+  if (!bloque) { tlIr(tlTiempo(e.clientX)); return; }
+  const i = +bloque.dataset.i;
+  seleccionar_("seg", i);
+  if (e.target.classList.contains("handle")) {  // mover el corte: cambia dónde entra este archivo
+    arrastrar(m => {
+      E.segs[i].t = Math.min(finDe(i) - 0.3, Math.max(E.segs[i - 1].t + 0.3, tlTiempo(m.clientX)));
+      tlRender(); edFinal(true);
+    }, () => edGuardar());
+  } else tlIr(tlTiempo(e.clientX));
+});
+$$(".tl-fila[data-capa]").forEach(fila => fila.addEventListener("mousedown", e => {
+  e.preventDefault();
+  const bloque = e.target.closest(".capa-block");
+  if (!bloque) { tlIr(tlTiempo(e.clientX)); return; }
+  const tipo = bloque.dataset.capa, i = +bloque.dataset.i, c = E.capas[tipo][i];
+  seleccionar_(tipo, i);
+  if (tipo === "subtitulos") { tlIr(tlTiempo(e.clientX)); return; }  // siguen a la voz: no se mueven
+  const t0 = tlTiempo(e.clientX), c0 = { ini: c.ini, fin: c.fin }, dur = c.fin - c.ini;
+  const borde = e.target.classList.contains("handle-left") ? "ini" : e.target.classList.contains("handle-right") ? "fin" : null;
+  let movio = false;
+  arrastrar(m => {
+    const dt = tlTiempo(m.clientX) - t0;
+    if (Math.abs(dt) * E.pps > 3) movio = true;
+    if (borde === "ini") c.ini = Math.min(c.fin - 0.3, Math.max(0, c0.ini + dt));
+    else if (borde === "fin") c.fin = Math.max(c.ini + 0.3, Math.min(E.total, c0.fin + dt));
+    else { c.ini = Math.min(E.total - dur, Math.max(0, c0.ini + dt)); c.fin = c.ini + dur; }
+    tlRender(); edFinal(true);
+  }, m => { if (movio) edGuardar(); else tlIr(tlTiempo(m.clientX)); });
+}));
+$("#tl-scroll").addEventListener("wheel", e => {
+  if (!e.ctrlKey) return;
+  e.preventDefault();
+  tlZoom(e.deltaY < 0 ? 1.2 : 1 / 1.2, e.clientX - $("#tl-scroll").getBoundingClientRect().left);
+}, { passive: false });
+$("#tl-scroll").addEventListener("scroll", () => tlRender());
+function sonidosSync() {  // audios extra sonando junto con la voz
+  const x = ahora(), sonando = E.audio && !E.audio.paused;
+  E.capas.audios.forEach(c => {
+    let s = E.sonidos[c.id];
+    if (!s || s.dataset.src !== c.archivo) { if (s) s.pause(); s = E.sonidos[c.id] = new Audio(url("audios/" + c.archivo)); s.dataset.src = c.archivo; }
+    const dentro = x >= c.ini && x < c.fin;
+    s.volume = Math.min(1, c.vol ?? 1);
+    if (sonando && dentro) { if (s.paused) { s.currentTime = x - c.ini; s.play().catch(() => {}); } }
+    else if (!s.paused) s.pause();
+  });
+}
+function tlPlay() {
+  if (!E.audio) return;
+  if (E.audio.paused) {
+    E.audio.play();
+    const paso = () => { if (E.audio.paused) return; tlCabezal(); edFinal(); sonidosSync(); requestAnimationFrame(paso); };
+    requestAnimationFrame(paso);
+  } else E.audio.pause();
+  $("#tl-play").textContent = E.audio.paused ? "▶" : "❚❚";
+  $$("#ed-final video").forEach(v => (E.audio.paused ? v.pause() : v.play().catch(() => {})));
+  sonidosSync();
+}
+document.addEventListener("keydown", e => {
+  if (vista === "editor" && e.code === "Space" && !e.target.closest("input, textarea, select, [contenteditable=true]")) {
+    e.preventDefault(); tlPlay();
+  }
+});
+
+// ---- agregar, cortar, quitar
+function edCortar() {
+  const x = ahora(), i = segEn(x);
+  if (x - E.segs[i].t < 0.3 || finDe(i) - x < 0.3) { msg("Mové el cabezal a donde querés cortar."); return; }
+  E.segs.splice(i + 1, 0, { ...E.segs[i], t: x, crop: E.segs[i].crop && { ...E.segs[i].crop } });
+  seleccionar_("seg", i + 1); edGuardar();
+}
+function estiloBase(cual = "principal") {  // igual que StreamDash
+  const sd = (E.estilosSD || {})[cual];
+  const base = cual === "principal"
+    ? { fuente: "FixtureItalic-CondensedBlack", tamano: 58, color: "#ffffff", negrita: true, cursiva: false, mayusculas: true,
+        degrade: true, degrade_tipo: "vertical", degrade_colores: ["#ffffff", "#ffffff", "#9e9e9e"], sombra: true,
+        posicion: "abajo-izq", margen_x: 32, margen_y: 36 }
+    : { fuente: "Fixture", tamano: 66, color: "#ffffff", negrita: true, cursiva: true, mayusculas: false, degrade: false,
+        degrade_tipo: "vertical", degrade_colores: [], sombra: true, posicion: "libre", margen_x: 0, margen_y: 0 };
+  const e = { ...base, ...(sd || {}) };
+  delete e.titulo; delete e.archivo_fuente;
+  e.tamano = Math.round(e.tamano * 1.6);  // StreamDash dibuja en 1920 de ancho; el short tiene 1080 y se ve en celular
+  if (cual === "principal") Object.assign(e, { posicion: "arriba-izq", margen_x: 60, margen_y: 230 });  // arriba: abajo van los subtítulos
+  if (e.x === undefined) { e.x = 0.08; e.y = 0.12; }
+  return e;
+}
+function edAgregar(tipo) {
+  const x = Math.min(ahora(), Math.max(0, E.total - 1));
+  let c;
+  if (tipo === "textos") { c = { id: nuevoId(), texto: "TEXTO", ini: x, fin: Math.min(E.total, x + 3), estilo: estiloBase() }; cargarFuente(c.estilo.fuente); }
+  else if (tipo === "videos") {
+    const a = (ep.material[0] || {}).nombre;
+    if (!a) { msg("Primero cargá material."); return; }
+    c = { id: nuevoId(), archivo: a, ini: x, fin: Math.min(E.total, x + 3), x: 0.25, y: 0.08, w: 0.5, h: 0.28 };
+    cargarDims(a); ajustarAlto(c);
+  } else {
+    if (!ep.audios_extra.length) { $("#subir-audio").click(); return; }
+    c = { id: nuevoId(), archivo: ep.audios_extra[0], ini: x, fin: Math.min(E.total, x + 5), vol: 1 };
+  }
+  E.capas[tipo].push(c);
+  seleccionar_(tipo, E.capas[tipo].length - 1); edGuardar();
+}
+function ajustarAlto(c) { const d = E.dims[c.archivo]; if (d) c.h = c.w * 1080 * (d.h / d.w) / 1920; }
+function edQuitar() {
+  if (E.selCapa && E.selCapa.tipo === "subtitulos") { msg("Los subtítulos se corrigen en Asignación."); return; }
+  if (E.selCapa) { E.capas[E.selCapa.tipo].splice(E.selCapa.i, 1); E.selCapa = null; }
+  else {
+    if (E.segs.length <= 1) return;
+    const i = E.sel;
+    if (i === 0) E.segs[1].t = 0;
+    E.segs.splice(i, 1); E.sel = Math.max(0, i - 1);
+  }
+  E.panelFirma = null; edRender(); edGuardar();
+}
+function edSubir(modo) { E.subirModo = modo; $("#ed-subir").click(); }
+$("#ed-subir").onchange = async e => {
+  const f = e.target.files[0]; e.target.value = "";
+  if (!f) return;
+  msg("Subiendo " + f.name + "…");
+  const r = await fetch(`/api/subir?e=${encodeURIComponent(slug)}&tipo=material`, { method: "POST", headers: { "X-Nombre": encodeURIComponent(f.name) }, body: f });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok || j.error) { msg(j.error || "No se pudo subir."); return; }
+  const x = ahora(), i = segEn(x), nuevo = { archivo: f.name, modo: "recorte", crop: null };
+  if (E.subirModo === "reemplazar" && !E.selCapa) Object.assign(E.segs[E.sel], nuevo);
+  else if (x - E.segs[i].t < 0.3) { Object.assign(E.segs[i], nuevo); E.sel = i; E.selCapa = null; }
+  else { E.segs.splice(i + 1, 0, { ...nuevo, t: x }); E.sel = i + 1; E.selCapa = null; }
+  cargarDims(f.name);
+  E.panelFirma = null; edGuardar(); await refrescar(); edRender(); msg("Archivo agregado.");
+};
+$("#subir-audio").onchange = async e => {
+  const f = e.target.files[0]; e.target.value = "";
+  if (!f) return;
+  msg("Subiendo " + f.name + "…");
+  const r = await fetch(`/api/subir?e=${encodeURIComponent(slug)}&tipo=audio`, { method: "POST", headers: { "X-Nombre": encodeURIComponent(f.name) }, body: f });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok || j.error) { msg(j.error || "No se pudo subir."); return; }
+  await refrescar();
+  const x = Math.min(ahora(), Math.max(0, E.total - 1));
+  const c = E.selCapa && E.selCapa.tipo === "audios" ? E.capas.audios[E.selCapa.i] : null;
+  if (c) c.archivo = f.name;
+  else { E.capas.audios.push({ id: nuevoId(), archivo: f.name, ini: x, fin: Math.min(E.total, x + 5), vol: 1 }); E.selCapa = { tipo: "audios", i: E.capas.audios.length - 1 }; }
+  E.panelFirma = null; edRender(); edGuardar(); msg("Audio agregado.");
+};
+
+// ---- textos (el sistema del graph de StreamDash, dibujado igual en la vista y en el video)
+const FUENTES_LOCALES = { "FixtureItalic-CondensedBlack": "FixtureItalic-CondensedBlack.ttf", "Fixture": "FixtureUltraItalic-Black.ttf",
+  "FixtureUltraItalic-Black": "FixtureUltraItalic-Black.ttf", "Anton": "Anton.ttf", "Unbounded": "Unbounded-ExtraBold.ttf",
+  "IBM Plex Sans": "IBMPlexSans-SemiBold.ttf" };
+const fuentes = {};
+let listaGoogle = null;
+function cargarFuente(f) {
+  if (!f || fuentes[f]) return fuentes[f];
+  let p;
+  if (FUENTES_LOCALES[f]) p = new FontFace(f, `url(/web/fuentes/${FUENTES_LOCALES[f]})`).load().then(ff => document.fonts.add(ff));
+  else {
+    const fam = encodeURIComponent(f).replace(/%20/g, "+");
+    p = Promise.all([`family=${fam}`, `family=${fam}:ital,wght@0,900;1,400;1,900`].map(q => new Promise(r => {
+      const l = document.createElement("link"); l.rel = "stylesheet"; l.href = `https://fonts.googleapis.com/css2?${q}&display=swap`;
+      l.onload = l.onerror = r; document.head.appendChild(l);
+    }))).then(() => document.fonts.load(`900 40px "${f}"`));
+  }
+  fuentes[f] = p.catch(() => {}).then(() => edTextos());
+  return fuentes[f];
+}
+function dibujarTexto(g, x, W, H) {  // W×H = tamaño del lienzo (1080×1920 o la vista chica)
+  const e = x.estilo, k = W / 1080, tam = e.tamano * k;
+  g.font = `${e.cursiva ? "italic " : ""}${e.negrita ? 900 : 400} ${tam}px "${e.fuente}", "Arial Black", sans-serif`;
+  g.letterSpacing = `${-0.05 * tam}px`;
+  let lineas = (e.mayusculas ? x.texto.toUpperCase() : x.texto).split("\n");
+  if (e.envolver) {  // subtítulos: cortar en palabras para que entren en el ancho
+    const max = W - 2 * e.margen_x * k;
+    lineas = lineas.flatMap(l => l.split(" ").reduce((acc, p) => {
+      const prueba = acc.length ? acc[acc.length - 1] + " " + p : p;
+      if (acc.length && g.measureText(prueba).width <= max) acc[acc.length - 1] = prueba; else acc.push(p);
+      return acc;
+    }, []));
+  }
+  g.textBaseline = "top";
+  const anchos = lineas.map(l => g.measureText(l).width), w = Math.max(...anchos, 1), h = tam * lineas.length;
+  let top, left, alinear = "left";
+  if (e.posicion === "libre" || !e.posicion.includes("-")) { left = e.x * W; top = e.y * H; }
+  else {
+    const [vert, hor] = e.posicion.split("-"), mx = e.margen_x * k, my = e.margen_y * k;
+    top = vert === "arriba" ? my : vert === "abajo" ? H - my - h : (H - h) / 2;
+    if (hor === "izq") left = mx; else if (hor === "der") { left = W - mx - w; alinear = "right"; } else { left = (W - w) / 2; alinear = "center"; }
+  }
+  let relleno = e.color;
+  const cols = (e.degrade_colores || []).filter(Boolean);
+  if (e.degrade) {
+    const cs = cols.length >= 2 ? cols : [e.color, "#555555"];
+    const gr = e.degrade_tipo === "radial" ? g.createRadialGradient(left + w / 2, top + h / 2, 0, left + w / 2, top + h / 2, Math.max(w, h) / 2)
+      : e.degrade_tipo === "horizontal" ? g.createLinearGradient(left, 0, left + w, 0)
+      : e.degrade_tipo === "diagonal" ? g.createLinearGradient(left, top, left + w, top + h) : g.createLinearGradient(0, top, 0, top + h);
+    cs.forEach((c, i) => gr.addColorStop(i / (cs.length - 1), c));
+    relleno = gr;
+  }
+  const sombras = !e.sombra ? [] : e.degrade
+    ? [[Math.max(1, tam * 0.05), Math.max(1, tam * 0.10), 0.85], [Math.max(1, tam * 0.10), Math.max(1, tam * 0.31), 0.5]]
+    : [[Math.max(1, tam * 0.09), Math.max(1, tam * 0.19), 0.6]];
+  const escribirTodo = () => lineas.forEach((l, i) => {
+    const lx = alinear === "left" ? left : alinear === "right" ? left + w - anchos[i] : left + (w - anchos[i]) / 2;
+    g.fillText(l, lx, top + i * tam);
+  });
+  g.fillStyle = relleno;
+  for (const [dy, blur, a] of sombras) { g.save(); g.shadowColor = `rgba(0,0,0,${a})`; g.shadowOffsetY = dy; g.shadowBlur = blur; escribirTodo(); g.restore(); }
+  g.shadowColor = "transparent"; escribirTodo();
+  x._caja = { left: left / W, top: top / H, w: w / W, h: h / H };
+}
+function edTextos() {
+  const cv = $("#ed-textos");
+  if (!cv) return;
+  const g = cv.getContext("2d"), x = ahora();
+  g.clearRect(0, 0, cv.width, cv.height);
+  E.capas.textos.forEach((tx, i) => {
+    const sel = E.selCapa && E.selCapa.tipo === "textos" && E.selCapa.i === i;
+    if ((x >= tx.ini && x < tx.fin) || sel) dibujarTexto(g, tx, cv.width, cv.height);
+  });
+  const st = E.capas.subtitulos;
+  if (st.activo || (E.selCapa && E.selCapa.tipo === "subtitulos")) {
+    const s = subsTiempos().find(s => x >= s.ini && x < s.fin) || (E.selCapa && E.selCapa.tipo === "subtitulos" && subsTiempos()[E.selCapa.i]);
+    if (s) dibujarTexto(g, { texto: s.texto, estilo: st.estilo }, cv.width, cv.height);
+  }
+}
+
+// ---- panel lateral (según lo elegido en la línea de tiempo)
+const POSICIONES = [["libre", "Libre (arrastrar)"], ["arriba-izq", "Arriba izquierda"], ["arriba-centro", "Arriba centro"], ["arriba-der", "Arriba derecha"],
+  ["medio-izq", "Medio izquierda"], ["medio-centro", "Centro"], ["medio-der", "Medio derecha"], ["abajo-izq", "Abajo izquierda"],
+  ["abajo-centro", "Abajo centro"], ["abajo-der", "Abajo derecha"]];
+function opciones(lista, actual) { return lista.map(([v, n]) => `<option value="${esc(v)}" ${v === actual ? "selected" : ""}>${esc(n)}</option>`).join(""); }
+function edLado() {
+  const firma = JSON.stringify([E.selCapa && E.selCapa.tipo === "subtitulos" ? "subs" : E.selCapa, E.sel, E.segs.length, ep.material.length, ep.audios_extra]);
+  if (firma === E.panelFirma) { marcarModo(); return; }
+  E.panelFirma = firma;
+  const o = selObj(), tipo = E.selCapa ? E.selCapa.tipo : "seg", mats = ep.material.map(m => [m.nombre, m.nombre]);
+  let h = "";
+  if (tipo === "seg") {
+    h = `<div class="titulo-seccion">Corte ${E.sel + 1} de ${E.segs.length}</div>
+      <select data-campo-ed="archivo">${opciones(mats, o.archivo)}</select>
+      <button class="btn" onclick="edSubir('reemplazar')">Reemplazar por otro archivo…</button>
+      <div class="titulo-seccion">Encuadre</div>
+      <div class="chips" id="ed-modos" style="margin:0">${[["recorte", "Pantalla completa"], ["blur", "Blur atrás"], ["centrado", "Centrado"]]
+        .map(([v, n]) => `<button class="chip" data-modo="${v}">${n}</button>`).join("")}</div>
+      <button class="btn" onclick="edATodos()">Aplicar a todos</button>
+      ${esVideo(o.archivo) ? "" : `<label>Movimiento <select data-campo-ed="mov" style="width:auto">${opciones([["", "Automático"], ["zoom_in", "Zoom in"],
+        ["zoom_out", "Zoom out"], ["pan_der", "Paneo →"], ["pan_izq", "Paneo ←"], ["pan_arriba", "Paneo ↑"], ["pan_abajo", "Paneo ↓"]], o.mov || "")}</select></label>`}`;
+  } else if (tipo === "videos") {
+    h = `<div class="titulo-seccion">Video 2</div>
+      <select data-campo-ed="archivo">${opciones(mats, o.archivo)}</select>
+      <label>Tamaño <input type="range" min="10" max="100" value="${Math.round(o.w * 100)}" data-campo-ed="w"></label>
+      <p class="ayuda" style="margin:0">Arrastralo en la vista final para ubicarlo.</p>`;
+  } else if (tipo === "audios") {
+    h = `<div class="titulo-seccion">Audio 2</div>
+      <select data-campo-ed="archivo">${opciones(ep.audios_extra.map(a => [a, a]), o.archivo)}</select>
+      <button class="btn" onclick="$('#subir-audio').click()">Subir audio</button>
+      <label>Volumen <input type="range" min="0" max="200" value="${Math.round((o.vol ?? 1) * 100)}" data-campo-ed="vol"></label>`;
+  } else {
+    const e = o.estilo, cols = e.degrade_colores || [];
+    h = (tipo === "subtitulos"
+      ? `<div class="titulo-seccion">Subtítulos</div>
+        <label>Estilo propio <input type="checkbox" ${o.activo ? "checked" : ""} data-campo-ed="activo"></label>
+        <p class="ayuda" style="margin:0">Sin tildar salen con el estilo común. El texto se corrige en Asignación.</p>`
+      : `<div class="titulo-seccion">Texto</div>
+        <textarea class="chico" data-campo-ed="texto">${esc(o.texto)}</textarea>`) + `
+      <div class="chips" style="margin:0"><button class="chip" onclick="estiloSD('principal')">Estilo principal</button>
+        <button class="chip" onclick="estiloSD('secundario')">Estilo secundario</button></div>
+      <label>Mis estilos <select id="mis-estilos" style="flex:1"><option value="">Elegir…</option>${opciones(Object.keys(E.misEstilos).map(n => [n, n]), "")}</select></label>
+      <button class="btn" onclick="guardarMiEstilo()">Guardar este estilo</button>
+      <label>Fuente <input type="text" list="lista-fuentes" value="${esc(e.fuente)}" data-est="fuente" style="flex:1"></label>
+      <datalist id="lista-fuentes">${Object.keys(FUENTES_LOCALES).concat(listaGoogle || []).map(f => `<option value="${esc(f)}">`).join("")}</datalist>
+      <label>Tamaño <input type="number" min="8" max="400" value="${e.tamano}" data-est="tamano"></label>
+      <label>Color <input type="color" value="${e.color}" data-est="color"></label>
+      <label>Negrita <input type="checkbox" ${e.negrita ? "checked" : ""} data-est="negrita"></label>
+      <label>Cursiva <input type="checkbox" ${e.cursiva ? "checked" : ""} data-est="cursiva"></label>
+      <label>Mayúsculas <input type="checkbox" ${e.mayusculas ? "checked" : ""} data-est="mayusculas"></label>
+      <label>Degradé <input type="checkbox" ${e.degrade ? "checked" : ""} data-est="degrade"></label>
+      ${e.degrade ? `<label>Tipo <select data-est="degrade_tipo" style="width:auto">${opciones([["vertical", "Vertical"], ["horizontal", "Horizontal"], ["diagonal", "Diagonal"], ["radial", "Radial"]], e.degrade_tipo)}</select></label>
+        <div class="colores-deg">${cols.map((c, i) => `<input type="color" value="${c}" data-deg="${i}">`).join("")}
+          <button class="btn" onclick="colorDeg(1)">+</button><button class="btn" onclick="colorDeg(-1)">−</button></div>` : ""}
+      <label>Sombra <input type="checkbox" ${e.sombra ? "checked" : ""} data-est="sombra"></label>
+      <label>Posición <select data-est="posicion" style="width:auto">${opciones(POSICIONES, e.posicion)}</select></label>
+      ${e.posicion !== "libre" ? `<label>Margen X <input type="number" value="${e.margen_x}" data-est="margen_x"></label>
+        <label>Margen Y <input type="number" value="${e.margen_y}" data-est="margen_y"></label>` : ""}`;
+  }
+  h += `<hr class="linea" style="margin:6px 0">
+    <button class="btn" onclick="editarConClaude('mio')">Editar con Claude</button> <button class="btn primario" onclick="editarConClaude('gratis')">Editar con Claude gratis</button>
+    <button class="btn" onclick="edReiniciar()">Volver a la asignación</button>
+    <button class="btn verde" onclick="edArmar()">OK · Armar video</button>`;
+  $("#ed-lado").innerHTML = h;
+  marcarModo();
+  if (tipo === "textos" && !listaGoogle) fetch("/web/fuentes/google_fonts.json").then(r => r.json()).then(l => { listaGoogle = l; E.panelFirma = null; edLado(); });
+}
+function marcarModo() { const o = selObj(); $$("#ed-modos .chip").forEach(b => b.classList.toggle("sel", o && b.dataset.modo === o.modo)); }
+$("#ed-lado").addEventListener("click", e => {
+  const b = e.target.closest("#ed-modos .chip");
+  if (b) { ponerModo(E.segs[E.sel], b.dataset.modo); edRender(); edGuardar(); }
+});
+$("#ed-lado").addEventListener("input", e => {
+  const el = e.target, o = selObj();
+  if (!o) return;
+  const valor = el.type === "checkbox" ? el.checked : el.type === "number" || el.type === "range" ? +el.value : el.value;
+  let rehacerPanel = false;
+  if (el.dataset.campoEd) {
+    const campo = el.dataset.campoEd;
+    if (campo === "w") { o.w = valor / 100; ajustarAlto(o); }
+    else if (campo === "vol") o.vol = valor / 100;
+    else o[campo] = valor;
+    if (campo === "archivo" && !E.selCapa) { o.crop = null; cargarDims(o.archivo); if (o.modo === "recorte") o.crop = recorteInicial(o.archivo); }
+    if (campo === "archivo" && E.selCapa && E.selCapa.tipo === "videos") { cargarDims(o.archivo); ajustarAlto(o); }
+  } else if (el.dataset.est) {
+    o.estilo[el.dataset.est] = valor;
+    if (el.dataset.est === "fuente") cargarFuente(valor);
+    if (el.dataset.est === "degrade" && valor && (o.estilo.degrade_colores || []).length < 2) o.estilo.degrade_colores = [o.estilo.color, "#9e9e9e"];
+    rehacerPanel = ["degrade", "posicion"].includes(el.dataset.est);
+  } else if (el.dataset.deg !== undefined) o.estilo.degrade_colores[+el.dataset.deg] = valor;
+  else return;
+  if (rehacerPanel) E.panelFirma = null;
+  tlRender(); edLado(); edOriginal(); edFinal(true); edGuardar();
+});
+function colorDeg(n) {
+  const e = selObj().estilo, cols = e.degrade_colores || (e.degrade_colores = []);
+  if (n > 0 && cols.length < 6) cols.push(cols[cols.length - 1] || "#ffffff");
+  if (n < 0 && cols.length > 2) cols.pop();
+  E.panelFirma = null; edLado(); edTextos(); edGuardar();
+}
+async function guardarMiEstilo() {
+  const nombre = (prompt("Nombre del estilo:") || "").trim();
+  if (!nombre) return;
+  const { x, y, ...estilo } = selObj().estilo;
+  E.misEstilos = await api("/api/mis_estilos?e=" + encodeURIComponent(slug), { nombre, estilo });
+  E.panelFirma = null; edLado(); msg(`Estilo "${nombre}" guardado.`);
+}
+$("#ed-lado").addEventListener("change", e => {
+  if (e.target.id !== "mis-estilos" || !e.target.value) return;
+  const o = selObj();
+  o.estilo = { ...o.estilo, ...E.misEstilos[e.target.value] };
+  cargarFuente(o.estilo.fuente);
+  E.panelFirma = null; edLado(); edTextos(); tlRender(); edGuardar();
+});
+function estiloSD(cual) {
+  const o = selObj(), e = estiloBase(cual);
+  o.estilo = { ...e, x: o.estilo.x, y: o.estilo.y, envolver: o.estilo.envolver };
+  cargarFuente(o.estilo.fuente);
+  E.panelFirma = null; edLado(); edTextos(); tlRender(); edGuardar();
+}
+function ponerModo(s, modo) { s.modo = modo; if (modo === "recorte" && !s.crop) s.crop = recorteInicial(s.archivo); }
+function edATodos() { const modo = E.segs[E.sel].modo; E.segs.forEach(s => ponerModo(s, modo)); edRender(); edGuardar(); msg("Encuadre aplicado a todos los cortes."); }
+async function edReiniciar() {
+  if (!confirm("¿Volver a los cortes de la asignación? (los textos, videos y audios extra se quedan)")) return;
+  clearTimeout(E.reloj); E.reloj = null;
+  await api("/api/edicion?e=" + encodeURIComponent(slug), { segmentos: [], capas: E.capas });
+  E.firma = null; await refrescar();
+}
+async function edArmar() {
+  clearTimeout(E.reloj); E.reloj = null;
+  await api("/api/edicion?e=" + encodeURIComponent(slug), { segmentos: E.segs, capas: E.capas });
+  const cv = document.createElement("canvas"); cv.width = 1080; cv.height = 1920;
+  for (const tx of E.capas.textos) {  // cada texto se dibuja en tamaño real, igual que en la vista
+    await cargarFuente(tx.estilo.fuente);
+    const g = cv.getContext("2d"); g.clearRect(0, 0, 1080, 1920);
+    dibujarTexto(g, tx, 1080, 1920);
+    await api("/api/texto_png?e=" + encodeURIComponent(slug), { id: tx.id, png: cv.toDataURL("image/png") });
+  }
+  if (E.capas.subtitulos.activo) {
+    await cargarFuente(E.capas.subtitulos.estilo.fuente);
+    const subs = subsTiempos();
+    for (let n = 0; n < subs.length; n++) {
+      msg(`Preparando subtítulos ${n + 1}/${subs.length}…`);
+      const g = cv.getContext("2d"); g.clearRect(0, 0, 1080, 1920);
+      dibujarTexto(g, { texto: subs[n].texto, estilo: E.capas.subtitulos.estilo }, 1080, 1920);
+      await api("/api/texto_png?e=" + encodeURIComponent(slug), { id: "sub_" + n, png: cv.toDataURL("image/png") });
+    }
+  }
+  lanzar("armar");
+}
+
+// ---- monitores
+function medio(a, estilo) {
+  const src = url("material/" + a);
+  return esVideo(a) ? `<video src="${src}" muted playsinline preload="auto" style="${estilo}"></video>` : `<img src="${src}" alt="" style="${estilo}">`;
+}
+function edOriginal() {  // el archivo del corte elegido, con el recuadro si es "Recorte"
+  const caja = $("#ed-original");
+  const o = E.selCapa && E.selCapa.tipo === "videos" ? E.capas.videos[E.selCapa.i] : E.segs[E.sel];
+  const d = o && E.dims[o.archivo];
+  if (!d) { caja.style.width = "360px"; caja.style.height = "240px"; caja.innerHTML = ""; return; }
+  let w = Math.min(420, d.w), h = w * d.h / d.w;
+  if (h > 300) { h = 300; w = h * d.w / d.h; }
+  const k = w / d.w, s = o;
+  caja.style.width = w + "px"; caja.style.height = h + "px";
+  caja.innerHTML = medio(s.archivo, "") + (!E.selCapa && s.modo === "recorte" && s.crop
+    ? `<div class="crop-box" style="left:${s.crop.x * d.w * k}px;top:${s.crop.y * d.h * k}px;width:${s.crop.w * d.w * k}px;height:${s.crop.h * d.h * k}px">
+         <span>9:16</span><div class="crop-resize"></div></div>` : "");
+  const box = caja.querySelector(".crop-box");
+  if (!box) return;
+  box.onmousedown = e => {
+    e.preventDefault();
+    const agrandar = e.target.classList.contains("crop-resize");
+    const x0 = e.clientX, y0 = e.clientY, c0 = { ...s.crop };
+    arrastrar(m => {
+      const dx = (m.clientX - x0) / k / d.w, dy = (m.clientY - y0) / k / d.h;
+      if (agrandar) {  // mismo 9:16, sin salirse del original
+        let cw = Math.max(0.05, c0.w + dx), ch = cw * d.w * 16 / 9 / d.h;
+        if (c0.x + cw > 1) { cw = 1 - c0.x; ch = cw * d.w * 16 / 9 / d.h; }
+        if (c0.y + ch > 1) { ch = 1 - c0.y; cw = ch * d.h * 9 / 16 / d.w; }
+        s.crop = { ...c0, w: cw, h: ch };
+      } else {
+        s.crop = { ...c0, x: Math.min(1 - c0.w, Math.max(0, c0.x + dx)), y: Math.min(1 - c0.h, Math.max(0, c0.y + dy)) };
+      }
+      box.style.left = s.crop.x * d.w * k + "px"; box.style.top = s.crop.y * d.h * k + "px";
+      box.style.width = s.crop.w * d.w * k + "px"; box.style.height = s.crop.h * d.h * k + "px";
+      edFinal(true);
+    }, () => edGuardar());
+  };
+}
+function edFinal(forzar) {  // lo que va a salir en el video, en el segundo del cabezal
+  const i = segEn(ahora()), s = E.segs[i], caja = $("#ed-base"), d = E.dims[s.archivo];
+  const firma = JSON.stringify([i, s, !!d]);
+  if (forzar || firma !== E.vistaFirma) {
+    E.vistaFirma = firma;
+    const W = 202;
+    if (s.modo === "recorte" && s.crop && d) {
+      const k = W / (s.crop.w * d.w);
+      caja.innerHTML = medio(s.archivo, `position:absolute;max-width:none;width:${d.w * k}px;height:${d.h * k}px;left:${-s.crop.x * d.w * k}px;top:${-s.crop.y * d.h * k}px`);
+    } else {
+      caja.innerHTML = (s.modo === "blur" ? medio(s.archivo, "position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:blur(14px);transform:scale(1.15)") : "")
+        + medio(s.archivo, "position:absolute;inset:0;width:100%;height:100%;object-fit:contain");
+    }
+    caja.querySelectorAll("video").forEach(v => { v.currentTime = Math.max(0, ahora() - s.t); if (E.audio && !E.audio.paused) v.play().catch(() => {}); });
+  } else if (E.audio && E.audio.paused) {
+    caja.querySelectorAll("video").forEach(v => { v.currentTime = Math.max(0, ahora() - s.t); });
+  }
+  edCapas(forzar); edTextos();
+}
+function edCapas(forzar) {  // videos/fotos de la línea "Video 2" activos en este segundo
+  const x = ahora(), caja = $("#ed-capas"), W = 202, H = 360;
+  const activos = E.capas.videos.map((c, i) => [c, i]).filter(([c]) => x >= c.ini && x < c.fin);
+  const firma = JSON.stringify(activos.map(([c]) => c));
+  if (forzar || firma !== E.capasFirma) {
+    E.capasFirma = firma;
+    caja.innerHTML = activos.map(([c, i]) => `<div data-i="${i}" style="position:absolute;left:${c.x * W}px;top:${c.y * H}px;width:${c.w * W}px;height:${c.h * H}px">
+      ${medio(c.archivo, "width:100%;height:100%;object-fit:fill;display:block")}</div>`).join("");
+    caja.querySelectorAll("video").forEach((v, n) => { v.currentTime = Math.max(0, x - activos[n][0].ini); if (E.audio && !E.audio.paused) v.play().catch(() => {}); });
+  }
+}
+$("#ed-textos").addEventListener("mousedown", e => {  // arrastrar textos y videos encima en la vista final
+  const r = e.target.getBoundingClientRect(), px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height, x = ahora();
+  const dentro = b => b && px >= b.left && px <= b.left + b.w && py >= b.top && py <= b.top + b.h;
+  let tipo = null, i = -1;
+  E.capas.textos.forEach((t, k) => { if (((x >= t.ini && x < t.fin) || (E.selCapa && E.selCapa.tipo === "textos" && E.selCapa.i === k)) && dentro(t._caja)) { tipo = "textos"; i = k; } });
+  if (!tipo) E.capas.videos.forEach((c, k) => { if (x >= c.ini && x < c.fin && dentro({ left: c.x, top: c.y, w: c.w, h: c.h })) { tipo = "videos"; i = k; } });
+  if (!tipo) return;
+  e.preventDefault();
+  seleccionar_(tipo, i);
+  const o = E.capas[tipo][i];
+  if (tipo === "textos") { o.estilo.x = o._caja.left; o.estilo.y = o._caja.top; if (o.estilo.posicion !== "libre") { o.estilo.posicion = "libre"; E.panelFirma = null; edLado(); } }
+  const x0 = e.clientX, y0 = e.clientY, p0 = tipo === "textos" ? { x: o.estilo.x, y: o.estilo.y } : { x: o.x, y: o.y };
+  arrastrar(m => {
+    const nx = p0.x + (m.clientX - x0) / r.width, ny = p0.y + (m.clientY - y0) / r.height;
+    if (tipo === "textos") { o.estilo.x = nx; o.estilo.y = ny; edTextos(); }
+    else { o.x = Math.min(1 - o.w, Math.max(0, nx)); o.y = Math.min(1 - o.h, Math.max(0, ny)); edCapas(true); }
+  }, () => edGuardar());
+});
+
+// ---------------------------------------------------------------- bloques del guion
+const TIPOS = ["Breaking news", "Historia humana", "Reconstrucción"];
+let metaFirma = null;
+function pintarMeta(m) {
+  const firma = JSON.stringify(m);
+  if (firma === metaFirma) return;
+  metaFirma = firma;
+  const hay = Object.keys(m).length > 0;
+  const conLinks = s => esc(s).replace(/(https?:\/\/[^\s)<]+)/g, '<a href="$1" target="_blank" style="color:var(--acento2)">$1</a>');
+  const comentarios = [["Redactó", m.redactor], ["Tensión", m.tension], ["Datos esenciales", m.datos], ["Observaciones para el editor", m.observaciones],
+                       ["Notas de la revisión completa", m.notas_revision]]
+    .filter(([, v]) => v).map(([k, v]) => `<div style="white-space:pre-wrap"><b>${k}</b>${conLinks(v)}</div>`).join("");
+  $("#meta-arriba").innerHTML = `
+    <div class="titulo-seccion">Tipo de noticia</div>
+    <div class="chips">${TIPOS.map(x => `<button class="chip ${m.tipo === x ? "sel" : ""}" onclick="elegirTipo('${x}')">${x}</button>`).join("")}</div>`;
+  const verifs = m.verificar || [], titulos = m.titulos || [];
+  $("#meta-abajo").innerHTML = !hay ? "" : `
+    ${comentarios ? `<div class="titulo-seccion">Comentarios de la IA</div><div class="comentarios">${comentarios}</div>` : ""}
+    ${verifs.length ? `<div class="titulo-seccion">Verificaciones pendientes <span style="color:var(--tenue)">· ${verifs.filter(v => !v.ok).length} de ${verifs.length}</span></div>
+      <div class="verifs">${verifs.map((v, i) => `<div class="verif ${v.ok ? "ok" : ""}">
+        <span>${esc(v.texto.replace(/^\[?VERIFICAR:\s*/i, "").replace(/\]$/, ""))}</span>
+        <button onclick="alternarVerif(${i})">${v.ok ? "✓ VERIFICADA" : "✕ PENDIENTE"}</button></div>`).join("")}</div>` : ""}
+    ${titulos.length ? `<div class="titulo-seccion">Títulos sugeridos</div>
+      <div class="titulos">${titulos.map((x, i) => `<button class="titulo-btn" onclick="copiarTitulo(${i})">${esc(x)}
+        <small>${[...x].length}/60 · clic para copiar</small></button>`).join("")}</div>` : ""}`;
+}
+async function metaAccion(datos) {
+  try { const r = await api("/api/meta?e=" + encodeURIComponent(slug), datos); ep.meta = r.meta; pintarMeta(r.meta); }
+  catch (e) { msg(e.message); }
+}
+const alternarVerif = i => metaAccion({ accion: "verificar", i });
+function elegirTipo(tipo) { metaAccion({ accion: "tipo", tipo }); msg(`Tipo: ${tipo}. La próxima redacción usa esta estructura.`); }
+function copiarTitulo(i) { const x = ep.meta.titulos[i]; navigator.clipboard.writeText(x).then(() => msg("Título copiado: " + x)); }
+
+// ---------------------------------------------------------------- editar prompts
+let prompts = [], promptSel = null;
+async function abrirPrompts() {
+  prompts = await api("/api/prompts");
+  promptSel = promptSel || prompts[0].id;
+  $("#prompts-panel").classList.add("visible");
+  pintarPrompts(true);
+}
+function cerrarPrompts() {
+  const p = prompts.find(x => x.id === promptSel);
+  if (p && $("#prompt-texto").value !== p.texto && !confirm("Hay cambios sin guardar. ¿Cerrar igual?")) return;
+  $("#prompts-panel").classList.remove("visible");
+}
+function pintarPrompts(cargarTexto) {
+  const p = prompts.find(x => x.id === promptSel);
+  $("#lista-prompts").innerHTML = prompts.map(x =>
+    `<button class="chip ${x.id === promptSel ? "sel" : ""} ${x.tocado ? "tocado" : ""}" onclick="elegirPrompt('${x.id}')">${esc(x.nombre)}</button>`).join("");
+  $("#prompt-ayuda").textContent = `Archivo: ${p.archivo}${p.tocado ? " · editado (● = distinto del original)" : ""}`;
+  $("#btn-restaurar").disabled = !p.tocado;
+  if (cargarTexto) $("#prompt-texto").value = p.texto;
+}
+function elegirPrompt(id) {
+  const p = prompts.find(x => x.id === promptSel);
+  if (p && $("#prompt-texto").value !== p.texto && !confirm("Hay cambios sin guardar en este prompt. ¿Cambiar igual?")) return;
+  promptSel = id; pintarPrompts(true);
+}
+async function guardarPrompt() {
+  prompts = (await api("/api/prompts", { id: promptSel, texto: $("#prompt-texto").value })).prompts;
+  pintarPrompts(false); msg("Prompt guardado. Se usa desde la próxima vez que corras ese paso.");
+}
+async function restaurarPrompt() {
+  if (!confirm("¿Volver al texto original de este prompt? Se pierden tus cambios.")) return;
+  prompts = (await api("/api/prompts", { id: promptSel, restaurar: true })).prompts;
+  pintarPrompts(true); msg("Prompt restaurado.");
+}
+
+// ---------------------------------------------------------------- apariencia (como StreamDash)
+const TEMA_BASE = { modo: "oscuro", c1: "#e93f3f", c2: "#f3903c" };  // perfil de Jordy en StreamDash
+function aplicarTema(cambios) {
+  let tema = { ...TEMA_BASE };
+  try { if (Object.keys(cambios).length) tema = { ...tema, ...JSON.parse(localStorage.getItem("tema") || "{}"), ...cambios }; } catch (e) {}
+  const raiz = document.documentElement;
+  raiz.dataset.tema = tema.modo;
+  raiz.style.setProperty("--acento", tema.c1);
+  raiz.style.setProperty("--acento2", tema.c2);
+  $("#color1").value = tema.c1; $("#color2").value = tema.c2;
+  $$("#modos .chip").forEach(b => b.classList.toggle("sel", b.dataset.modo === tema.modo));
+  try { localStorage.setItem("tema", JSON.stringify(tema)); } catch (e) {}
+}
+$$("#modos .chip").forEach(b => b.onclick = () => aplicarTema({ modo: b.dataset.modo }));
+$("#color1").oninput = e => aplicarTema({ c1: e.target.value });
+$("#color2").oninput = e => aplicarTema({ c2: e.target.value });
+try { aplicarTema(JSON.parse(localStorage.getItem("tema") || "{}")); } catch (e) { aplicarTema({}); }
+document.addEventListener("click", e => {
+  if (!e.target.closest("#apariencia, #btn-apariencia")) $("#apariencia").classList.remove("visible");
+});
+
+// ---------------------------------------------------------------- investigación
+const IAS = { chatgpt: "ChatGPT", gemini: "Gemini", claude: "Claude" };
+let iasElegidas = new Set((guardado("ias") || "chatgpt").split(",").filter(x => IAS[x]));
+
+function iaDisponible(ia) {
+  const clave = ia === "chatgpt" ? "codex" : ia;
+  return !!(herr[clave] && herr[clave + "_login"]);
+}
+let iaGuion = guardado("ia_guion") || "chatgpt";
+function pintarSelectorGuion() {
+  if (!iaDisponible(iaGuion)) iaGuion = "chatgpt";
+  $$("#ia-guion .chip").forEach(b => {
+    const ok = iaDisponible(b.dataset.ia);
+    b.classList.toggle("sel", b.dataset.ia === iaGuion);
+    b.style.opacity = ok ? "" : ".4";
+    b.title = ok ? `Redacta ${IAS[b.dataset.ia]}` : `${IAS[b.dataset.ia]} no está conectado`;
+  });
+}
+$$("#ia-guion .chip").forEach(b => b.onclick = () => {
+  if (!iaDisponible(b.dataset.ia)) { msg(`${IAS[b.dataset.ia]} no está conectado.`); return; }
+  iaGuion = b.dataset.ia; guardado("ia_guion", iaGuion); pintarSelectorGuion();
+});
+function pintarSelectorIA() {
+  pintarSelectorGuion();
+  $$(".ia-op").forEach(b => {
+    const ia = b.dataset.ia, ok = iaDisponible(ia);
+    if (!ok) iasElegidas.delete(ia);
+    b.classList.toggle("apagada", !ok);
+    b.classList.toggle("sel", iasElegidas.has(ia));
+    b.title = ok ? "" : ia === "claude" ? "Claude necesita el plan Pro: es opcional" : `${IAS[ia]} no está conectado (mirá el aviso de arriba)`;
+    b.querySelector("[data-sub]").textContent = ok
+      ? { chatgpt: "con búsqueda web", gemini: "con Google", claude: "con búsqueda web" }[ia]
+      : ia === "claude" ? "opcional (plan Pro)" : ia === "gemini" ? "opcional (sin conectar)" : "sin conectar";
+  });
+}
+$$(".ia-op").forEach(b => b.onclick = () => {
+  const ia = b.dataset.ia;
+  if (!iaDisponible(ia)) {
+    msg(ia === "claude" ? "Claude necesita el plan Pro. No hace falta: con ChatGPT alcanza."
+      : ia === "gemini" ? "Gemini no está conectado. No hace falta: con ChatGPT alcanza."
+                        : `${IAS[ia]} no está conectado: mirá el aviso de arriba.`);
+    return;
+  }
+  iasElegidas.has(ia) ? iasElegidas.delete(ia) : iasElegidas.add(ia);
+  guardado("ias", [...iasElegidas].join(","));
+  pintarSelectorIA();
+});
+
+async function comenzarInvestigacion() {
+  if (!iasElegidas.size) { msg("Elegí al menos una IA."); return; }
+  if (!$("#tema").value.trim() && !ep.fuentes.length) { msg("Escribí el tema o agregá una fuente."); return; }
+  await guardarCampo("tema", $("#tema").value);
+  await guardarCampo("eje", $("#eje").value);
+  const pisa = [...iasElegidas].filter(ia => ep.investigaciones[ia]);
+  if (pisa.length && !confirm(`Ya hay investigación de ${pisa.map(ia => IAS[ia]).join(" y ")}. ¿La rehago?`)) return;
+  lanzar("investigar", { ias: [...iasElegidas] });
+}
+
+async function agregarFuente() {
+  const el = $("#nueva-fuente"), texto = el.value.trim();
+  if (!texto) return;
+  try {
+    const r = await api("/api/fuentes?e=" + encodeURIComponent(slug), { accion: "agregar", texto });
+    el.value = ""; ep.fuentes = r.fuentes; pintarFuentes(true); msg("Fuente agregada.");
+  } catch (e) { msg(e.message); }
+}
+async function borrarFuente(i) {
+  if (!confirm("¿Quitar esta fuente?")) return;
+  const r = await api("/api/fuentes?e=" + encodeURIComponent(slug), { accion: "borrar", i });
+  ep.fuentes = r.fuentes; pintarFuentes(true);
+}
+function pintarFuentes(forzar = false) {
+  const cont = $("#lista-fuentes"), firma = JSON.stringify(ep.fuentes);
+  if (!forzar && cont.dataset.firma === firma) return;
+  cont.dataset.firma = firma;
+  $("#n-fuentes").textContent = ep.fuentes.length ? `· ${ep.fuentes.length}` : "";
+  cont.innerHTML = ep.fuentes.map((f, i) => `
+    <div class="fuente"><span class="n">${i + 1}</span>
+      <span class="que">${f.tipo === "link"
+        ? `🔗 <a href="${esc(f.url)}" target="_blank">${esc(f.url)}</a>`
+        : `📄 ${esc(f.titulo || "Nota pegada")}`}</span>
+      ${f.tipo === "texto" ? `<span class="tam">${f.texto.length.toLocaleString("es-AR")} caracteres</span>` : ""}
+      <button class="x" title="Quitar" onclick="borrarFuente(${i})">✕</button></div>`).join("");
+}
+
+function partesInvestigacion() {
+  const t = ep.tarea;
+  return t && t.tarea === "investigar" && t.partes ? t.partes : {};
+}
+function pintarResultados() {
+  const partes = partesInvestigacion(), cont = $("#resultados");
+  const ias = Object.keys(IAS).filter(ia => ep.investigaciones[ia] || partes[ia]);
+  const firma = JSON.stringify(ias.map(ia => [ia, partes[ia] || "", !!ep.investigaciones[ia]]));
+  if (cont.dataset.firma !== firma) {
+    cont.dataset.firma = firma;
+    cont.innerHTML = ias.map(ia => {
+      const est = partes[ia];
+      const texto = est === "corriendo" ? `<span class="girando"></span>investigando…`
+        : est === "error" ? "✗ no pudo (mirá el detalle arriba)" : ep.investigaciones[ia] ? "✓ generada" : "";
+      return `<div class="inv-card"><div class="cab"><span class="logo chico logo-${ia}"><i></i></span>
+        <b>Investigación de ${IAS[ia]}</b><span class="est ${est === "error" ? "error" : ep.investigaciones[ia] ? "ok" : ""}">${texto}</span></div>
+        ${ep.investigaciones[ia] ? `<textarea data-campo="investigacion_${ia}" id="inv-${ia}"></textarea>` : ""}</div>`;
+    }).join("");
+  }
+  for (const ia of ias) {
+    const el = $("#inv-" + ia);
+    if (el && document.activeElement !== el && !el.dataset.sucio) el.value = ep.investigaciones[ia] || "";
+  }
+}
+function pintarEstadoInvestigacion() {
+  const caja = $("#estado-inv"), t = ep && ep.tarea;
+  const enProceso = t && t.tarea === "investigar" && t.estado === "corriendo";
+  const hechas = Object.keys(ep.investigaciones).map(ia => IAS[ia]);
+  if (enProceso) {
+    caja.className = "estado-inv proceso";
+    caja.innerHTML = `<span class="girando"></span>Investigación en proceso…`;
+  } else if (hechas.length) {
+    caja.className = "estado-inv lista";
+    caja.innerHTML = `✓ Investigación generada · ${hechas.join(", ")}`;
+  } else {
+    caja.className = "estado-inv";
+    caja.innerHTML = `Investigación pendiente <button class="btn" onclick="elegirVista('investigacion')">Ir a investigar</button>`;
+  }
+  $("#btn-ortografia").disabled = $("#btn-completa").disabled = !!(t && t.estado === "corriendo") || !ep.guion.trim();
+  const btn = $('[data-tarea="guion"]');
+  btn.disabled = btn.disabled || enProceso || !hechas.length;
+  btn.title = hechas.length ? "" : "Se habilita cuando la investigación está generada";
+}
+
+// ---------------------------------------------------------------- voz y material
+function pintarMaterial() {
+  const d = ep;
+  let html = "";
+  if (d.voz) {
+    html += `<div class="caja voz-fila"><span>🎙 <b>${esc(d.voz)}</b></span>
+      <button class="btn" onclick="$('#elegir-voz').click()">Cambiar</button></div>`;
+  } else {
+    html += `<div class="zona" id="zona-voz"><b>Arrastrá acá tu grabación</b> (mp3, m4a, wav…) o hacé clic para elegirla</div>`;
+  }
+  if (d.audios_sueltos.length) {
+    html += `<div class="caja">Encontré ${d.audios_sueltos.length > 1 ? "estos audios" : "este audio"} en la carpeta. ¿Cuál es la voz?
+      <div class="fila" style="margin:8px 0 0">${d.audios_sueltos.map(a =>
+        `<button class="btn" onclick="elegirVoz('${esc(a)}')">${esc(a)}</button>`).join("")}</div></div>`;
+  }
+  $("#voz-caja").innerHTML = html;
+  vcCargar(d);
+  const zv = $("#zona-voz");
+  if (zv) prepararZona(zv, "voz", $("#elegir-voz"));
+
+  const sinMirar = d.material.some(m => m.tipo === "video" && !m.descripcion);
+  $("#fila-describir").style.display = sinMirar && herr.gemini ? "flex" : "none";
+  $("#grilla").innerHTML = d.material.map(m => `
+    <div class="mini" title="${esc(m.nombre + (m.fuente ? " · " + m.fuente : "") + (m.descripcion ? "\n\n" + m.descripcion : ""))}">
+      ${m.descripcion ? '<span class="ojo">visto</span>' : ""}
+      <div class="img" style="${m.mini ? `background-image:url('${url(m.mini)}')` : ""}"></div>
+      ${m.tipo === "video" ? '<span class="tipo">▶ video</span>' : ""}
+      <button class="x" title="Quitar" onclick="borrar('${esc(m.nombre)}')">✕</button>
+      <div class="nombre">${esc(m.nombre)}</div>
+    </div>`).join("");
+}
+
+// ---- cortar la grabación (la onda y las manijas de la botonera de StreamDash, con varios cortes como el editor)
+const VC = { src: null, buf: null, picos: null, audio: null, pps: 0, sel: null, cortes: [], atras: [] };
+function vcCargar(d) {
+  $("#voz-cortes").style.display = d.voz ? "block" : "none";
+  if (!d.voz) return;
+  $("#vc-restaurar").style.display = d.voz_original ? "" : "none";
+  const src = url(d.voz) + "?v=" + d.voz_v;
+  if (VC.src === src) return;
+  if (VC.audio) VC.audio.pause();
+  Object.assign(VC, { src, buf: null, picos: null, sel: null, cortes: [], atras: [], pps: 0, audio: new Audio(src) });
+  fetch(src).then(r => r.arrayBuffer()).then(b => decodificar(b)).then(buf => {
+    const datos = buf.getChannelData(0), paso = Math.floor(buf.sampleRate / 100), picos = new Float32Array(Math.ceil(datos.length / paso));
+    for (let i = 0; i < picos.length; i++) { let m = 0; for (let j = i * paso; j < Math.min(datos.length, (i + 1) * paso); j++) m = Math.max(m, Math.abs(datos[j])); picos[i] = m; }
+    VC.buf = buf; VC.picos = picos; vcDibujar();
+  }).catch(() => { $("#vc-info").textContent = "No se pudo leer el audio."; });
+}
+const vcTotal = () => (VC.buf ? VC.buf.duration : 0);
+const vcFmt = s => `${Math.floor(s / 60)}:${(s % 60).toFixed(1).padStart(4, "0")}`;
+function vcDibujar() {
+  const cv = $("#vc-onda"), sc = $("#vc-scroll");
+  if (!VC.buf || !cv) return;
+  if (!VC.pps) VC.pps = Math.max(1, (sc.clientWidth - 2) / vcTotal());
+  cv.width = Math.max(sc.clientWidth - 2, Math.ceil(vcTotal() * VC.pps));
+  const g = cv.getContext("2d"), H = cv.height, css = getComputedStyle(document.documentElement);
+  const acento = css.getPropertyValue("--acento2").trim() || "#f3903c", apagado = css.getPropertyValue("--muted").trim() || "#8a8398";
+  g.clearRect(0, 0, cv.width, H);
+  const quitado = x => VC.cortes.some(([a, b]) => x >= a && x < b);
+  for (let x = 0; x < cv.width; x++) {
+    const t0 = x / VC.pps, t1 = (x + 1) / VC.pps;
+    let v = 0;
+    for (let i = Math.floor(t0 * 100); i <= Math.floor(t1 * 100) && i < VC.picos.length; i++) v = Math.max(v, VC.picos[i]);
+    const h = Math.max(1, Math.min(1, v * 1.4) * (H - 10));
+    g.globalAlpha = quitado(t0) ? 0.25 : 1; g.fillStyle = quitado(t0) ? apagado : acento;
+    g.fillRect(x, (H - h) / 2, 1, h);
+  }
+  g.globalAlpha = 1;
+  for (const [a, b] of VC.cortes) { g.fillStyle = "rgba(232,63,63,.28)"; g.fillRect(a * VC.pps, 0, (b - a) * VC.pps, H); }
+  if (VC.sel) {  // la selección, con sus manijas (como en StreamDash)
+    const [a, b] = VC.sel;
+    g.fillStyle = "rgba(255,255,255,.12)"; g.fillRect(a * VC.pps, 0, (b - a) * VC.pps, H);
+    for (const x of [a * VC.pps, b * VC.pps]) {
+      g.fillStyle = "#fff"; g.fillRect(x - 1.5, 0, 3, H);
+      for (const cy of [5, H - 5]) { g.beginPath(); g.arc(x, cy, 5.5, 0, Math.PI * 2); g.fill(); }
+    }
+  }
+  const x = (VC.audio ? VC.audio.currentTime : 0) * VC.pps;
+  g.fillStyle = "#fff"; g.fillRect(x - 1, 0, 2, H);
+  g.beginPath(); g.moveTo(x - 5, 0); g.lineTo(x + 5, 0); g.lineTo(x, 7); g.closePath(); g.fill();
+  const quita = VC.cortes.reduce((s, [a, b]) => s + b - a, 0);
+  $("#vc-tiempo").textContent = vcFmt(VC.audio ? VC.audio.currentTime : 0);
+  $("#vc-info").textContent = VC.cortes.length
+    ? `${VC.cortes.length} corte${VC.cortes.length > 1 ? "s" : ""} · queda ${vcFmt(vcTotal() - quita)} de ${vcFmt(vcTotal())}`
+    : VC.sel ? `Selección ${vcFmt(VC.sel[0])} – ${vcFmt(VC.sel[1])}` : "Arrastrá sobre la onda para elegir lo que querés sacar.";
+}
+function vcTiempo(clientX) { const r = $("#vc-onda").getBoundingClientRect(); return Math.min(vcTotal(), Math.max(0, (clientX - r.left) / VC.pps)); }
+$("#vc-onda").addEventListener("mousedown", e => {
+  if (!VC.buf) return;
+  e.preventDefault();
+  const t = vcTiempo(e.clientX), tol = 8 / VC.pps;
+  const manija = VC.sel && Math.abs(t - VC.sel[0]) < tol ? 0 : VC.sel && Math.abs(t - VC.sel[1]) < tol ? 1 : null;
+  if (manija === null) { VC.sel = null; VC.audio.currentTime = t; }
+  arrastrar(m => {
+    const x = vcTiempo(m.clientX);
+    if (manija !== null) { VC.sel[manija] = x; VC.sel.sort((a, b) => a - b); }
+    else if (Math.abs(x - t) * VC.pps > 4) VC.sel = [Math.min(t, x), Math.max(t, x)];
+    vcDibujar();
+  }, () => vcDibujar());
+  vcDibujar();
+});
+function vcZoom(f) { const sc = $("#vc-scroll"), c = (sc.scrollLeft + sc.clientWidth / 2) / VC.pps; VC.pps = Math.min(400, Math.max(1, VC.pps * f)); vcDibujar(); sc.scrollLeft = c * VC.pps - sc.clientWidth / 2; }
+function vcPlay() {
+  if (!VC.audio) return;
+  if (VC.audio.paused) {
+    VC.audio.play();
+    const paso = () => {
+      if (VC.audio.paused) return;
+      const c = VC.cortes.find(([a, b]) => VC.audio.currentTime >= a && VC.audio.currentTime < b);
+      if (c) VC.audio.currentTime = c[1];  // se escucha como va a quedar
+      vcDibujar(); requestAnimationFrame(paso);
+    };
+    requestAnimationFrame(paso);
+  } else VC.audio.pause();
+  $("#vc-play").textContent = VC.audio.paused ? "▶" : "❚❚";
+}
+function vcMarcar(cual) {
+  const x = VC.audio ? VC.audio.currentTime : 0;
+  VC.sel = VC.sel || [x, x];
+  VC.sel[cual === "ini" ? 0 : 1] = x; VC.sel.sort((a, b) => a - b); vcDibujar();
+}
+function vcQuitar() {
+  if (!VC.sel || VC.sel[1] - VC.sel[0] < 0.05) { msg("Primero elegí qué parte sacar."); return; }
+  VC.atras.push(JSON.stringify(VC.cortes));
+  VC.cortes.push(VC.sel.map(x => +x.toFixed(3))); VC.cortes.sort((a, b) => a[0] - b[0]);
+  VC.sel = null; vcDibujar();
+}
+function vcDeshacer() { if (VC.atras.length) { VC.cortes = JSON.parse(VC.atras.pop()); vcDibujar(); } }
+function vcExportar() {  // baja la grabación como quedó (con los cortes ya aplicados)
+  if (VC.cortes.length) { msg("Tenés cortes sin aplicar: tocá “Aplicar cortes” primero."); return; }
+  const a = document.createElement("a");
+  a.href = url(ep.voz) + "?v=" + ep.voz_v;
+  a.download = `${slug}-voz${ep.voz.slice(ep.voz.lastIndexOf("."))}`;
+  document.body.appendChild(a); a.click(); a.remove();
+  msg("Audio exportado (quedó en Descargas).");
+}
+function vcSoltar() {  // que el navegador suelte el archivo antes de reemplazarlo
+  for (const a of [VC.audio, E.audio]) if (a) { a.pause(); a.removeAttribute("src"); a.load(); }
+  VC.src = null; E.vozSrc = null;
+}
+async function vcAplicar() {
+  if (!VC.cortes.length) { msg("No marcaste ningún corte."); return; }
+  if (!confirm("¿Cortar la grabación? La original queda guardada. Después tocá “Confirmar voz” para transcribir.")) return;
+  const quitar = VC.cortes; vcSoltar();
+  await api("/api/cortar_voz?e=" + encodeURIComponent(slug), { quitar });
+  await refrescar(true); msg("Grabación cortada. Cuando esté como querés, tocá “Confirmar voz”.");
+}
+async function vcRestaurar() {
+  if (!confirm("¿Volver a la grabación original, sin cortes?")) return;
+  vcSoltar();
+  await api("/api/cortar_voz?e=" + encodeURIComponent(slug), { restaurar: true });
+  await refrescar(true); msg("Grabación cortada. Cuando esté como querés, tocá “Confirmar voz”.");
+}
+document.addEventListener("keydown", e => {
+  if (vista !== "material" || e.target.closest("input, textarea, select, [contenteditable=true]") || !VC.buf) return;
+  const k = e.key.toLowerCase();
+  if ((e.ctrlKey || e.metaKey) && k === "z") { e.preventDefault(); vcDeshacer(); }
+  else if (k === "delete" || k === "backspace") { e.preventDefault(); vcQuitar(); }
+  else if (e.code === "Space") { e.preventDefault(); vcPlay(); }
+});
+
+// ---- paso Voz: confirmar (transcribe) y después corregir los subtítulos y elegir su formato
+let vozFirma = null;
+function pintarVoz() {
+  const d = ep, conf = $("#voz-confirmar"), caja = $("#subs-caja");
+  if (!d.voz) { conf.innerHTML = ""; caja.innerHTML = ""; return; }
+  if (!d.marcas.length) {
+    conf.innerHTML = `<div class="fila" style="margin-top:12px"><span class="ayuda crece" style="margin:0">Cortá lo que no va (si hace falta) y confirmá: ahí se transcribe.</span>
+      <button class="btn verde" data-tarea="transcribir">Confirmar voz</button></div>`;
+    caja.innerHTML = ""; pintarTarea(); return;
+  }
+  conf.innerHTML = "";
+  if (E.misSlug !== slug) {
+    E.misSlug = slug;
+    api("/api/mis_estilos?e=" + encodeURIComponent(slug), {}).then(r => { E.misEstilos = r; vozFirma = null; pintarVoz(); }).catch(() => {});
+  }
+  const st = (d.edicion && d.edicion.capas && d.edicion.capas.subtitulos) || {};
+  const actual = st.activo ? (st.nombre || "propio") : "comun";
+  const ops = [["comun", "Común"], ["principal", "Principal (StreamDash)"], ["secundario", "Secundario (StreamDash)"]]
+    .concat(Object.keys(E.misEstilos || {}).map(n => ["mis:" + n, n])).concat(actual === "propio" ? [["propio", "El del editor"]] : []);
+  caja.innerHTML = `<hr class="linea">
+    <div class="fila"><div class="titulo-seccion crece" style="margin:0">Subtítulos</div>
+      <label>Formato <select id="subs-formato" style="width:auto">${opciones(ops, actual)}</select></label></div>
+    <p class="ayuda">Corregí el texto acá: se guarda solo.</p>
+    <table class="asig"><tbody>${subsTiempos().map((s, i) => `<tr><td class="t">${fmtT(s.ini)}</td>
+      <td class="frase"><input type="text" class="frase-in" data-sub="${i}" value="${esc(s.texto)}"></td></tr>`).join("")}</tbody></table>`;
+  $("#subs-formato").onchange = e => ponerFormatoSubs(e.target.value);
+}
+async function ponerFormatoSubs(v) {
+  const d = ep, capas = JSON.parse(JSON.stringify((d.edicion && d.edicion.capas) || {}));
+  let st;
+  if (v === "comun") st = { activo: false, estilo: (capas.subtitulos && capas.subtitulos.estilo) || estiloSub() };
+  else if (v.startsWith("mis:")) st = { activo: true, nombre: v, estilo: { ...estiloSub(), ...E.misEstilos[v.slice(4)], envolver: true } };
+  else if (v === "propio") return;
+  else {
+    if (!E.estilosSD) E.estilosSD = await api("/api/estilos_streamdash?e=" + encodeURIComponent(slug), {}).catch(() => ({}));
+    st = { activo: true, nombre: v, estilo: { ...estiloBase(v), posicion: "abajo-centro", margen_x: 70, margen_y: 380, envolver: true } };
+  }
+  capas.subtitulos = st;
+  await api("/api/edicion?e=" + encodeURIComponent(slug), { segmentos: d.edicion && d.edicion.vigente ? d.edicion.segmentos : [], capas });
+  E.firma = null; await refrescar(); msg("Formato de subtítulos guardado.");
+}
+
+// ---- editar: manual, con tu Claude (rutina) o con Claude gratis (termina en el video final)
+let MODAL = null, relojModal = null;
+function editarManual() {
+  if (!Object.keys(ep.asignacion).length && !asigEditada) { msg("Primero asigná el material."); return; }
+  (asigEditada ? guardarAsignacion() : Promise.resolve()).then(() => elegirVista("editor"));
+}
+async function editarConClaude(modo) {
+  if (asigEditada) await guardarAsignacion();
+  MODAL = { modo, fase: modo === "gratis" ? "editar" : "pedido", inicio: Date.now() / 1000 - 2, visto: false };
+  $("#modal-claude").classList.add("visible");
+  clearInterval(relojModal);
+  if (modo === "mio") relojModal = setInterval(() => refrescar(), 20000);
+  pintarModal();
+  await lanzar(modo === "gratis" ? "editar" : "pedir");
+}
+function cerrarModal() { MODAL = null; clearInterval(relojModal); $("#modal-claude").classList.remove("visible"); }
+async function mcRefrescar() {
+  await refrescar(); pintarModal();
+  const pd = ep.pedido || {};
+  msg(pd.en_curso ? "Tu Claude ya arrancó." : pd.pendiente ? "Todavía no arrancó: espera la próxima revisión." : "");
+}
+async function mcArmar() {  // la edición está lista: se arma el video final sin pasar por el editor
+  MODAL.fase = "armar"; MODAL.inicio = Date.now() / 1000 - 2;
+  E.firma = null; await refrescar(true);
+  try { await edArmar(); } catch (e) { MODAL.error = e.message; }
+  pintarModal();
+}
+function pintarModal() {
+  if (!MODAL || !ep) return;
+  const t = ep.tarea && ep.tarea.inicio >= MODAL.inicio ? ep.tarea : null, log = t ? t.log : [];
+  let titulo, texto, pct;
+  if (MODAL.error || (t && t.estado === "error")) {
+    titulo = "Hubo un problema"; texto = MODAL.error || log.slice(-1)[0] || ""; pct = 0;
+  } else if (MODAL.fase === "armar") {
+    titulo = "Armando el video final"; texto = log.slice(-1)[0] || "Preparando…"; pct = t && t.estado === "ok" ? 100 : 85;
+    if (t && t.tarea === "armar" && t.estado === "ok") { cerrarModal(); elegirVista("video"); msg("Video listo."); return; }
+  } else if (MODAL.modo === "gratis") {
+    titulo = "Procesando con Claude (gratis)";
+    texto = log.slice(-1)[0] || "Arrancando…";
+    const imgs = log.filter(l => /generando imagen|Animando/.test(l)).length;
+    pct = !t ? 5 : Math.min(75, 15 + imgs * 8 + (log.some(l => /cortes,/.test(l)) ? 20 : 0));
+    if (t && t.tarea === "editar" && t.estado === "ok") { mcArmar(); return; }
+  } else {
+    const pd = ep.pedido || {};
+    if (pd.pendiente) MODAL.visto = true;
+    titulo = "Procesando con tu Claude";
+    if (MODAL.visto && !pd.pendiente) { mcArmar(); return; }
+    texto = pd.en_curso ? `Tu Claude está editando (arrancó ${pd.en_curso.slice(11)}).`
+      : "Pedido enviado. Tu Claude lo toma en la próxima revisión (cada 15 min) o escribile /pendientes en Claude. Podés cerrar esto.";
+    pct = pd.en_curso ? 50 : 15;
+  }
+  $("#mc-titulo").textContent = titulo;
+  $("#mc-texto").textContent = texto;
+  $("#mc-barra").style.width = pct + "%";
+  $("#mc-refrescar").style.display = MODAL.modo === "mio" && MODAL.fase === "pedido" ? "" : "none";
+}
+
+async function elegirVoz(nombre) {
+  await api(`/api/elegir_voz?e=${encodeURIComponent(slug)}&nombre=${encodeURIComponent(nombre)}`, {});
+  refrescar(true);
+}
+async function bajarLink() {
+  const b = $("#btn-link");
+  b.disabled = true; b.textContent = "Bajando…";
+  try {
+    const r = await api("/api/link?e=" + encodeURIComponent(slug), { url: $("#link-url").value, desde: $("#link-desde").value });
+    msg(r.log.at(-1) || "Listo."); $("#link-url").value = ""; $("#link-desde").value = "";
+    await refrescar();
+  } catch (e) { msg("No se pudo bajar: " + e.message); }
+  b.disabled = false; b.textContent = "Bajar";
+}
+async function borrar(nombre) {
+  if (!confirm(`¿Quitar ${nombre} del material? (se borra el archivo)`)) return;
+  await api(`/api/borrar?e=${encodeURIComponent(slug)}&nombre=${encodeURIComponent(nombre)}`, {});
+  refrescar();
+}
+
+async function subir(archivos, tipo) {
+  const lista = [...archivos];
+  for (let i = 0; i < lista.length; i++) {
+    const f = lista[i];
+    msg(`Subiendo ${f.name} (${i + 1}/${lista.length})…`);
+    const r = await fetch(`/api/subir?e=${encodeURIComponent(slug)}&tipo=${tipo}`, {
+      method: "POST", headers: { "X-Nombre": encodeURIComponent(f.name) }, body: f });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || j.error) { msg(j.error || "No se pudo subir " + f.name); await refrescar(); return; }
+    if (tipo === "voz") break;
+  }
+  msg(lista.length > 1 ? `Listo: ${lista.length} archivos.` : "Listo.");
+  refrescar();
+}
+
+function prepararZona(zona, tipo, input) {
+  zona.onclick = () => input.click();
+  zona.ondragover = e => { e.preventDefault(); zona.classList.add("encima"); };
+  zona.ondragleave = () => zona.classList.remove("encima");
+  zona.ondrop = e => { e.preventDefault(); zona.classList.remove("encima"); subir(e.dataTransfer.files, tipo); };
+}
+prepararZona($("#zona-material"), "material", $("#elegir-material"));
+$("#elegir-material").onchange = e => { subir(e.target.files, "material"); e.target.value = ""; };
+$("#elegir-voz").onchange = e => { subir(e.target.files, "voz"); e.target.value = ""; };
+// soltar archivos en cualquier lado de la pestaña 3 también sirve
+document.addEventListener("dragover", e => e.preventDefault());
+document.addEventListener("drop", e => {
+  if (e.defaultPrevented || vista !== "material" || !slug) return;
+  e.preventDefault();
+  const fs = [...e.dataTransfer.files];
+  const audios = fs.filter(f => f.type.startsWith("audio/") || /\.(m4a|opus|mp3|wav|ogg|aac)$/i.test(f.name));
+  if (audios.length) subir(audios.slice(0, 1), "voz");
+  const resto = fs.filter(f => !audios.includes(f));
+  if (resto.length) subir(resto, "material");
+});
+
+// ---------------------------------------------------------------- El Recorte
+async function cargarRecorte() {
+  let r;
+  try { r = await api("/api/recorte"); } catch (e) { return; }
+  const ya = new Set((ep ? ep.material : []).map(m => m.nombre));
+  $("#recorte-ayuda").textContent = r.archivos.length
+    ? "Tus últimos clips exportados. Clic en “Agregar” y pasan al material de este short."
+    : `Todavía no hay clips exportados en ${r.carpeta}.`;
+  $("#grilla-recorte").innerHTML = r.archivos.map(a => `
+    <div class="mini ${ya.has(a.nombre) ? "agregado" : ""}" title="${esc(a.nombre)} · ${a.fecha} · ${a.mb} MB">
+      <div class="img" style="${a.mini ? `background-image:url('/recorte-mini/${encodeURIComponent(a.nombre)}.jpg')` : ""}"></div>
+      <span class="tipo">▶ ${a.fecha}</span>
+      <button class="btn primario agregar" onclick="traerRecorte('${esc(a.nombre)}')">${ya.has(a.nombre) ? "Otra vez" : "Agregar"}</button>
+      <div class="nombre">${esc(a.nombre)}</div>
+    </div>`).join("");
+}
+async function traerRecorte(nombre) {
+  try {
+    const r = await api("/api/importar?e=" + encodeURIComponent(slug), { recorte: nombre });
+    msg("Agregado al material: " + r.nombre);
+    await refrescar();
+    cargarRecorte();
+  } catch (e) { msg(e.message); }
+}
+
+// ---------------------------------------------------------------- asignación
+function pintarAsignacion() {
+  const d = ep, cont = $("#asig-contenido");
+  asigEditada = false;
+  if (!d.voz || !d.marcas.length) { cont.innerHTML = `<div class="vacio">Primero confirmá tu grabación en el paso <b>Voz</b>.</div>`; return; }
+  const opciones = [["IA", "— IA (sin material: sigue el anterior)"], ["=", "= sigue el anterior"]]
+    .concat(d.material.map(m => [m.nombre, (m.tipo === "video" ? "▶ " : "") + m.nombre]));
+  const hayAsig = Object.keys(d.asignacion).length > 0;
+  const filas = d.marcas.map((m, i) => {
+    const actual = d.asignacion[m.t.toFixed(2)] ?? "";
+    return `<tr data-i="${i}">
+      <td class="t">${fmtT(m.t)}</td>
+      <td class="frase">${esc(m.texto)}</td>
+      <td class="pv"><div></div></td>
+      <td class="elige"><select>${actual ? "" : '<option value="">(elegí)</option>'}${opciones.map(([v, t]) =>
+        `<option value="${esc(v)}" ${v === actual ? "selected" : ""}>${esc(t)}</option>`).join("")}</select></td></tr>`;
+  }).join("");
+  cont.innerHTML = `
+    <div class="fila">
+      <button class="btn primario" data-tarea="asignar">${hayAsig ? "Reasignar" : "Asignar material"}<span class="ia" data-redactor></span></button>
+      <button class="btn" onclick="guardarAsignacion()">Guardar</button>
+      <span class="crece"></span>
+      <button class="btn" onclick="editarManual()">Editar manual</button>
+      <button class="btn" onclick="editarConClaude('mio')">Editar con Claude</button>
+      <button class="btn primario" onclick="editarConClaude('gratis')">Editar con Claude gratis</button>
+    </div>
+    <p class="ayuda">La IA mira cada foto y video y elige qué va en cada frase. Revisá, cambiá lo que quieras y dale OK.
+      ${d.material.length ? "" : "<b>No hay material todavía.</b>"}</p>
+    <table class="asig"><tbody>${filas}</tbody></table>`;
+  cont.querySelectorAll("tr[data-i]").forEach(tr => {
+    const sel = tr.querySelector("select");
+    const pv = () => {
+      const m = d.material.find(x => x.nombre === sel.value), box = tr.querySelector(".pv div");
+      box.style.backgroundImage = m && m.mini ? `url('${url(m.mini)}')` : "";
+      box.textContent = m ? "" : (sel.value === "=" ? "=" : sel.value === "IA" ? "IA" : "");
+    };
+    sel.onchange = () => { asigEditada = true; pv(); };
+    pv();
+  });
+  pintarTarea();
+}
+
+async function guardarSubtitulos() {
+  if (!ep.subtitulos.length) return;  // la lista se está redibujando: no guardar vacío
+  const items = ep.subtitulos.map((s, i) => { const el = $(`[data-sub="${i}"]`); return { tiempo: s.tiempo, texto: el ? el.value : s.texto }; });
+  try { await api("/api/subtitulos?e=" + encodeURIComponent(slug), { items }); msg("Subtítulos guardados."); await refrescar(); }
+  catch (e) { msg(e.message); }
+}
+document.addEventListener("change", e => { if (e.target.dataset.sub !== undefined) guardarSubtitulos(); });  // se guardan solos
+function filasAsignacion() {
+  return $$("#asig-contenido tr[data-i]").map(tr => {
+    const m = ep.marcas[+tr.dataset.i];
+    return { t: m.t, texto: m.texto, archivo: tr.querySelector("select").value || "IA" };
+  });
+}
+async function guardarAsignacion() {
+  try { await api("/api/asignacion?e=" + encodeURIComponent(slug), { filas: filasAsignacion() });
+        asigEditada = false; msg("Asignación guardada."); await refrescar(); }
+  catch (e) { msg(e.message); }
+}
+async function irAlEditor() {
+  if (asigEditada) await guardarAsignacion();
+  elegirVista("editor");
+}
+
+// ---------------------------------------------------------------- video
+function pintarVideo() {
+  const d = ep, cont = $("#video-contenido");
+  if (!d.video) {
+    cont.innerHTML = `<div class="vacio">Todavía no está el video.<br>Se arma desde el <b>Editor</b> con “OK · Armar video”.</div>`;
+    return;
+  }
+  cont.innerHTML = `<div class="reproductor">
+      <video controls preload="metadata" src="${url("short.mp4")}?v=${d.video_v}"></video>
+      <div class="acciones">
+        <button class="btn primario" onclick="abrir('video')">Abrir el video</button>
+        <button class="btn" onclick="abrir('carpeta')">Abrir carpeta</button>
+        <button class="btn" data-tarea="armar">Volver a armar</button>
+        <button class="btn" onclick="elegirVista('textos')">Seguir: textos →</button>
+      </div></div>`;
+  pintarTarea();
+}
+
+// ---------------------------------------------------------------- textos
+const SECCIONES_LIMITE = { "Título YouTube": 60, "Post X": 280 };
+function pintarTextos() {
+  const cont = $("#textos-contenido"), t = ep.textos.trim();
+  if (!t) { cont.innerHTML = `<div class="vacio">Cuando tengas el guion final, tocá “Escribir textos”.</div>`; return; }
+  const partes = t.split(/^###\s*/m).filter(p => p.trim());
+  const secciones = partes.map(p => { const [cab, ...resto] = p.split("\n"); return [cab.trim(), resto.join("\n").trim()]; });
+  cont.innerHTML = secciones.map(([cab, cuerpo], i) => `
+    <div class="texto-card">
+      <div class="cab"><span>${esc(cab)}<small class="cuenta"></small></span>
+        <button class="btn" onclick="copiar(${i})">Copiar</button></div>
+      <textarea data-cab="${esc(cab)}">${esc(cuerpo)}</textarea>
+    </div>`).join("");
+  cont.querySelectorAll("textarea").forEach(ta => {
+    const ajustar = () => {
+      ta.style.height = "auto"; ta.style.height = ta.scrollHeight + 4 + "px";
+      const lim = SECCIONES_LIMITE[ta.dataset.cab], n = [...ta.value].length;
+      ta.parentNode.querySelector(".cuenta").textContent = lim ? ` ${n}/${lim}` : "";
+      ta.parentNode.querySelector(".cuenta").style.color = lim && n > lim ? "var(--rojo)" : "";
+    };
+    ta.oninput = ajustar;
+    requestAnimationFrame(ajustar);
+  });
+}
+function copiar(i) {
+  const ta = $$("#textos-contenido textarea")[i];
+  navigator.clipboard.writeText(ta.value).then(() => msg("Copiado: " + ta.dataset.cab));
+}
+async function guardarTextos() {
+  const texto = $$("#textos-contenido textarea").map(ta => `### ${ta.dataset.cab}\n${ta.value.trim()}\n`).join("\n");
+  if (!texto) return;
+  await guardarCampo("textos", texto);
+  msg("Textos guardados.");
+}
+
+// ---------------------------------------------------------------- herramientas
+async function cargarHerramientas(refrescarlas = false) {
+  try { herr = await api("/api/herramientas" + (refrescarlas ? "?refrescar=1" : "")); } catch (e) { return; }
+  const punto = (id, ok) => { const p = $(id); p.className = "punto " + (ok ? "si" : "no"); };
+  punto("#p-codex", herr.codex && herr.codex_login);
+  punto("#p-claude", herr.claude && herr.claude_login);
+  if (!herr.claude_login) { $("#p-claude").className = "punto"; $("#p-claude").parentNode.title = "Opcional (plan Pro). Sin Claude, ChatGPT hace la asignación y los textos."; }
+  punto("#p-whisper", herr.whisper && herr.ffmpeg);
+  punto("#p-gemini", herr.gemini && herr.gemini_login);
+  if (!herr.gemini_login) $("#p-gemini").className = "punto";
+  pintarSelectorIA();
+  const faltan = [], sinInstalar = [];
+  if (!herr.codex) sinInstalar.push("ChatGPT (Codex)");
+  if (!herr.whisper || !herr.ffmpeg) sinInstalar.push("transcripción");
+  if (sinInstalar.length) faltan.push(`Falta instalar: <b>${sinInstalar.join(", ")}</b>. Doble clic en <code>INSTALAR.bat</code>, esperá que diga "Listo" y cerrá y abrí Estudio.`);
+  if (herr.codex && !herr.codex_login) faltan.push("ChatGPT sin sesión: abrí una terminal, escribí <code>codex login</code> y entrá con tu cuenta.");
+  const aviso = $("#aviso");
+  aviso.style.display = faltan.length ? "block" : "none";
+  aviso.innerHTML = faltan.join("<br>") + ' <button class="btn" id="ya-lo-hice" style="margin-left:8px" onclick="yaLoHice()">Ya lo hice</button>';
+}
+async function yaLoHice() {
+  const b = $("#ya-lo-hice");
+  b.disabled = true; b.textContent = "Revisando…";
+  await cargarHerramientas(true);
+  const todo = herr.codex_login && herr.whisper && herr.ffmpeg;
+  msg(todo ? "Todo conectado." : "Revisé de nuevo: todavía falta lo que dice el aviso.");
+}
+
+async function abrir(que) {
+  if (!slug) return;
+  try { await api(`/api/abrir?e=${encodeURIComponent(slug)}&que=${que}`, {}); } catch (e) { msg(e.message); }
+}
+
+// ---------------------------------------------------------------- arranque
+(async () => {
+  vista = guardado("vista") || "investigacion";
+  await cargarEpisodios();
+  cargarHerramientas();
+  const ultimo = guardado("slug");
+  const inicial = episodios.find(e => e.slug === ultimo) ? ultimo : (episodios[0] || {}).slug;
+  if (inicial) await seleccionar(inicial); else elegirVista(vista);
+})();
+
+// refresco: rápido mientras hay una tarea, lento el resto del tiempo
+let ultimoLento = 0, versionPantalla = null;
+setInterval(async () => {
+  fetch("/api/ping").then(r => r.json()).then(r => {  // pantalla actualizada: se recarga sola si no hay nada sin guardar
+    if (versionPantalla === null) versionPantalla = r.v;
+    else if (r.v !== versionPantalla && !E.reloj && !edSucio && !document.activeElement.closest("input, textarea, [contenteditable=true]")) location.reload();
+  }).catch(() => {});
+  const corriendo = ep && ep.tarea && ep.tarea.estado === "corriendo";
+  if (corriendo || Date.now() - ultimoLento > 5000) {
+    ultimoLento = Date.now();
+    await refrescar();
+    if (corriendo && !(ep.tarea && ep.tarea.estado === "corriendo")) cargarEpisodios();
+  }
+}, 1500);
+</script>
+</body>
+</html>

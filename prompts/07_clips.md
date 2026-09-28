@@ -10,9 +10,10 @@ Para cada tramo dame:
 2. Título corto y caption de 2 líneas que invite a ver el video completo.
 3. ¿Collab con El Recorte? Solo si el valor es un momento de Jordy.
 
-Después, para cada tramo, corré
-`python scripts/armar_video.py --audio <carpeta>/voz.<ext> --imagenes <carpeta>/imagenes --subs <carpeta>/voz.srt --desde <MM-SS> --hasta <MM-SS> --salida <carpeta>/clipN.mp4`
-y guardá los clips en la carpeta del video largo como `clip1.mp4`, `clip2.mp4`...
+Después corré `scripts/armar_video.py` con esos tramos (ver RUTINA.md) y guardá los clips en
+la carpeta del video largo como `clip1.mp4`, `clip2.mp4`...
+
+Sin gerundios, salvo los de los sentidos (viendo, oliendo, tocando, escuchando, comiendo, bebiendo) o dentro de una cita textual.
 
 MARCAS:
 <pegá la salida de srt_a_marcas.py del video largo>

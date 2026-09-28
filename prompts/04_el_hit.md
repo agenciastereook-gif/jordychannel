@@ -11,6 +11,8 @@ no de autor: sin opinión personal. Con el material de abajo, armá el formato q
 Reglas: solo lo que está en el material; si falta algo, `[VERIFICAR]`. Nombrar la fuente.
 Rumor = se dice que es rumor y quién lo instaló. Pedime foto real, no ilustración.
 
+Sin gerundios, salvo los de los sentidos (viendo, oliendo, tocando, escuchando, comiendo, bebiendo) o dentro de una cita textual.
+
 FORMATO: <placa / carrusel / breaking>
 MATERIAL:
 <pegá la nota o los datos>
