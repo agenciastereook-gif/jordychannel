@@ -17,6 +17,11 @@ Uso:
     python3 scripts/armar_video.py ... --subs voz.srt         # subtítulos quemados
     python3 scripts/armar_video.py ... --fondo white          # relleno blanco en vez de desenfocado
 
+Sonido original: un video nombrado <marca>+insertar.mp4 (lo crea asignar_material.py con la
+línea INSERTAR) corta la voz en esa marca, pasa el clip con su propio sonido y retoma la voz.
+Un archivo <marca>+insertar.rango con "desde hasta" en segundos ("-" = sin límite) usa solo ese
+tramo del clip.
+
 Clip vertical de un tramo del video largo (reusa los mismos archivos y el audio):
     python3 scripts/armar_video.py --audio voz.mp3 --imagenes imgs/ --subs voz.srt \\
         --desde 02-10 --hasta 03-05 --salida clip1.mp4
@@ -106,6 +111,72 @@ def filtro_encuadre(ancho, alto, fondo):
             f"pad={ancho}:{alto}:(ow-iw)/2:(oh-ih)/2:color={fondo},{fin}")
 
 
+def tiene_audio(ffmpeg, archivo):
+    salida = subprocess.run([ffmpeg, "-i", str(archivo)], capture_output=True, text=True).stderr
+    return "Audio:" in salida
+
+
+def correr(cmd, error):
+    r = subprocess.run(cmd, capture_output=True, text=True)
+    if r.returncode != 0:
+        print(r.stderr[-1500:])
+        sys.exit(error)
+
+
+def leer_rango(archivo):
+    """<marca>+insertar.rango -> (desde, hasta); None donde dice '-'."""
+    if not archivo.exists():
+        return (None, None)
+    vals = (archivo.read_text().split() + ["-", "-"])[:2]
+    return tuple(None if v == "-" else float(v) for v in vals)
+
+
+def insertar_clips(ffmpeg, narrado, insertos, vf, salida):
+    """Corta el video narrado en cada marca de inserción y mete ahí el clip con su sonido."""
+    tmp = narrado.parent
+    total = duracion(ffmpeg, narrado)
+    recodificar = ["-c:v", "libx264", "-preset", "veryfast", "-crf", "18", "-c:a", "aac"]
+    piezas, prev = [], 0.0
+    for i, (t, clip, (r_desde, r_hasta)) in enumerate(insertos):
+        if t > prev + 0.01:
+            parte = tmp / f"narr_{i:02d}.mp4"
+            correr([ffmpeg, "-y", "-ss", f"{prev:.3f}", "-to", f"{t:.3f}", "-i", str(narrado),
+                    *recodificar, str(parte)], "Falló el corte de la voz.")
+            piezas.append(parte)
+        entrada = []
+        if r_desde is not None:
+            entrada += ["-ss", f"{r_desde:.3f}"]
+        if r_hasta is not None:
+            entrada += ["-to", f"{r_hasta:.3f}"]
+        entrada += ["-i", str(clip)]
+        if tiene_audio(ffmpeg, clip):
+            mapeo = ["-map", "[v]", "-map", "0:a"]
+        else:
+            entrada += ["-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo"]
+            mapeo = ["-map", "[v]", "-map", "1:a", "-shortest"]
+        parte = tmp / f"clip_{i:02d}.mp4"
+        correr([ffmpeg, "-y", *entrada, "-filter_complex", f"[0:v]{vf}[v]", *mapeo,
+                *recodificar, str(parte)], f"Falló el clip {clip.name}.")
+        piezas.append(parte)
+        prev = t
+    if total > prev + 0.01:
+        parte = tmp / "narr_fin.mp4"
+        correr([ffmpeg, "-y", "-ss", f"{prev:.3f}", "-i", str(narrado), *recodificar, str(parte)],
+               "Falló el corte de la voz.")
+        piezas.append(parte)
+
+    entradas, filtros, unir = [], [], ""
+    for i, pz in enumerate(piezas):
+        entradas += ["-i", str(pz)]
+        filtros.append(f"[{i}:v]fps={FPS},format=yuv420p,setsar=1[v{i}]")
+        filtros.append(f"[{i}:a]aresample=48000,aformat=sample_fmts=fltp:channel_layouts=stereo[a{i}]")
+        unir += f"[v{i}][a{i}]"
+    filtros.append(f"{unir}concat=n={len(piezas)}:v=1:a=1[v][a]")
+    correr([ffmpeg, "-y", *entradas, "-filter_complex", ";".join(filtros), "-map", "[v]", "-map", "[a]",
+            "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-c:a", "aac", "-b:a", "192k",
+            "-movflags", "+faststart", str(salida)], "Falló la unión con los clips insertados.")
+
+
 def render_tramo(ffmpeg, archivo, dur, offset, salida, vf):
     """Renderiza un tramo mudo de `dur` segundos con un solo archivo."""
     if archivo.suffix.lower() in VIDEOS:
@@ -137,8 +208,13 @@ def main():
     a = p.parse_args()
 
     ffmpeg = ffmpeg_bin()
-    medios = []
+    medios, insertos = [], []
     for f in a.imagenes.iterdir():
+        if f.stem.endswith("+insertar"):
+            t = marca_de_nombre(f.stem[:-len("+insertar")])
+            if t is not None and f.suffix.lower() in VIDEOS:
+                insertos.append((t, f.resolve(), leer_rango(f.with_suffix(".rango"))))
+            continue
         if f.suffix.lower() in IMAGENES | VIDEOS:
             t = marca_de_nombre(f.stem)
             if t is None:
@@ -177,7 +253,9 @@ def main():
     vf = filtro_encuadre(ancho, alto, a.fondo)
     total = hasta - desde
     n_vid = sum(1 for f, *_ in tramos if f.suffix.lower() in VIDEOS)
-    print(f"Armando {a.salida} ({a.formato}, {len(tramos)} tramos, {n_vid} videos, {total:.1f}s)...")
+    insertos = sorted(((t - desde, f, r) for t, f, r in insertos if desde <= t < hasta), key=lambda x: x[0])
+    extra = f", {len(insertos)} clips con sonido original" if insertos else ""
+    print(f"Armando {a.salida} ({a.formato}, {len(tramos)} tramos, {n_vid} videos{extra}, {total:.1f}s)...")
 
     with tempfile.TemporaryDirectory() as tmp:
         tmp = Path(tmp)
@@ -203,13 +281,16 @@ def main():
                     "-c:v", "libx264", "-preset", "medium", "-crf", "20"]
         else:
             cmd += ["-c:v", "copy"]
-        cmd += ["-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", str(a.salida)]
+        narrado = tmp / "narrado.mp4" if insertos else a.salida
+        cmd += ["-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", str(narrado)]
         r = subprocess.run(cmd, capture_output=True, text=True)
         if r.returncode != 0:
             print(r.stderr[-2000:])
             if a.subs and "subtitles" in r.stderr:
                 print("\nTu ffmpeg no soporta subtítulos quemados; probá sin --subs o instalá ffmpeg completo.")
             sys.exit(1)
+        if insertos:
+            insertar_clips(ffmpeg, narrado, insertos, vf, a.salida)
     print("Listo.")
 
 

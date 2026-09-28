@@ -22,6 +22,10 @@ Doble clic en **`INSTALAR.bat`**. Si instala Python, cerrá la ventana y abrilo 
 La transcripción corre gratis en tu compu (reemplaza a TurboScribe). La primera vez baja el modelo
 de voz, unos 500 MB.
 
+**Sonido original:** cuando el guion tiene una línea `[SONIDO ORIGINAL]`, al grabar la salteás y
+seguís de corrido. Poné en `material/` el video que tiene ese sonido. Al armar, la voz se corta en
+ese punto, pasa el clip con su audio y después sigue tu voz; los subtítulos se corren solos.
+
 **IA (opcional, para más adelante):** si una frase no tiene material, en el plan visual y en
 `asignacion.txt` va como `IA`.
 Mientras no haya herramienta, queda la imagen anterior en pantalla. El día que la haya, la imagen
